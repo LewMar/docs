@@ -2,7 +2,7 @@
 
 - [Introduction - Wprowadzenie](#introduction)
 - [Lifecycle Overview - Przegląd cyklu życia](#lifecycle-overview)
-- [Focus On Service Providers](#focus-on-service-providers)
+- [Focus On Service Providers - Skoncentruj się na dostawcach usług](#focus-on-service-providers)
 
 <a name="introduction"></a>
 ## Introduction - Wprowadzenie
