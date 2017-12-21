@@ -1,31 +1,31 @@
 # Middleware
 
-- [Introduction](#introduction)
-- [Defining Middleware](#defining-middleware)
-- [Registering Middleware](#registering-middleware)
-    - [Global Middleware](#global-middleware)
-    - [Assigning Middleware To Routes](#assigning-middleware-to-routes)
-    - [Middleware Groups](#middleware-groups)
-- [Middleware Parameters](#middleware-parameters)
-- [Terminable Middleware](#terminable-middleware)
+- [Introduction - Wprowadzenie](#introduction)
+- [Defining Middleware - Definiowanie oprogramowania pośredniego](#defining-middleware)
+- [Registering Middleware - Rejestrowanie oprogramowania pośredniego](#registering-middleware)
+    - [Global Middleware - Globalne oprogramowanie pośredniczące](#global-middleware)
+    - [Assigning Middleware To Routes - Przypisywanie oprogramowania pośredniego do routingu (trasowania)](#assigning-middleware-to-routes)
+    - [Middleware Groups - Grupy oprogramowania pośredniego](#middleware-groups)
+- [Middleware Parameters - Parametry oprogramowania pośredniego](#middleware-parameters)
+- [Terminable Middleware - Oprogramowanie Posrednie po zakończeniu](#terminable-middleware)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-Middleware provide a convenient mechanism for filtering HTTP requests entering your application. For example, Laravel includes a middleware that verifies the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to the login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application.
+Oprogramowanie pośredniczące zapewnia wygodny mechanizm filtrowania żądań HTTP wprowadzanych do aplikacji. Na przykład Laravel zawiera oprogramowanie pośrednie, które sprawdza, czy użytkownik Twojej aplikacji jest uwierzytelniony. Jeśli użytkownik nie zostanie uwierzytelniony, oprogramowanie pośrednie przekieruje użytkownika na ekran logowania. Jeśli jednak użytkownik zostanie uwierzytelniony, oprogramowanie pośredniczące pozwoli mu przejść dalej do aplikacji.
 
-Of course, additional middleware can be written to perform a variety of tasks besides authentication. A CORS middleware might be responsible for adding the proper headers to all responses leaving your application. A logging middleware might log all incoming requests to your application.
+Oczywiście dodatkowe oprogramowanie pośrednie można dopisać, aby wykonać wiele zadań poza uwierzytelnianiem. Warstwa pośrednia CORS może być odpowiedzialna za dodanie odpowiednich nagłówków do wszystkich odpowiedzi opuszczających twoją aplikację. Oprogramowanie pośredniczące do rejestrowania może rejestrować wszystkie przychodzące żądania do aplikacji.
 
-There are several middleware included in the Laravel framework, including middleware for authentication and CSRF protection. All of these middleware are located in the `app/Http/Middleware` directory.
+Oprogramowanie Laravel zawiera kilka programów pośredniczących, w tym oprogramowanie pośrednie do uwierzytelniania i ochrony CSRF. Wszystkie te oprogramowanie pośrednie znajdują się w katalogu`app/Http/Middleware`.
 
 <a name="defining-middleware"></a>
-## Defining Middleware
+## Defining Middleware - Definiowanie oprogramowania pośredniego
 
-To create a new middleware, use the `make:middleware` Artisan command:
+Aby utworzyć nowe oprogramowanie pośrednie, użyj polecenia `make: middleware` Artisan:
 
     php artisan make:middleware CheckAge
 
-This command will place a new `CheckAge` class within your `app/Http/Middleware` directory. In this middleware, we will only allow access to the route if the supplied `age` is greater than 200. Otherwise, we will redirect the users back to the `home` URI.
+To polecenie umieści nową klasę `CheckAge` w twoim katalogu  `app/Http/Middleware`. W tym oprogramowaniu pośredniczącym umożliwiamy dostęp do trasy tylko wtedy, gdy podany `age` jest większy niż 200. W przeciwnym razie przekierowujemy użytkowników z powrotem na `home` URI.
 
     <?php
 
@@ -52,13 +52,13 @@ This command will place a new `CheckAge` class within your `app/Http/Middleware`
         }
     }
 
-As you can see, if the given `age` is less than or equal to `200`, the middleware will return an HTTP redirect to the client; otherwise, the request will be passed further into the application. To pass the request deeper into the application (allowing the middleware to "pass"), simply call the `$next` callback with the `$request`.
+Jak widać, jeśli podany `age` jest mniejszy lub równy `200`, oprogramowanie pośredniczące zwróci przekierowanie HTTP do klienta; w przeciwnym razie wniosek zostanie przekazany dalej do aplikacji. Aby przekazać żądanie głębiej do aplikacji (pozwalając oprogramowaniu pośredniczącemu "zaliczyć"), po prostu wywołaj funkcję zwrotną `$next` z parametrem ` $request`.
 
-It's best to envision middleware as a series of "layers" HTTP requests must pass through before they hit your application. Each layer can examine the request and even reject it entirely.
+Najlepiej wyobrazić sobie oprogramowanie pośredniczące, ponieważ serie "warstw" żądań HTTP muszą zaliczyć, zanim trafią do aplikacji. Każda warstwa może sprawdzić żądanie, a nawet całkowicie go odrzucić.
 
-### Before & After Middleware
+### Before & After Middleware - Przed i po oprogramowaniu pośrednim
 
-Whether a middleware runs before or after a request depends on the middleware itself. For example, the following middleware would perform some task **before** the request is handled by the application:
+To, czy oprogramowanie pośrednie działa przed czy po żądaniu, zależy od samego oprogramowania pośredniego. Na przykład poniższe oprogramowanie pośredniczące wykona jakieś zadanie **zanim (befor)** żądanie zostanie obsłużone przez aplikację:
 
     <?php
 
@@ -76,7 +76,7 @@ Whether a middleware runs before or after a request depends on the middleware it
         }
     }
 
-However, this middleware would perform its task **after** the request is handled by the application:
+Jednak to oprogramowanie pośrednie wykona swoje zadanie **po (after)** żądaniu obsłużenia przez aplikację:
 
     <?php
 
@@ -97,17 +97,17 @@ However, this middleware would perform its task **after** the request is handled
     }
 
 <a name="registering-middleware"></a>
-## Registering Middleware
+## Registering Middleware - Rejestrowanie oprogramowania pośredniego
 
 <a name="global-middleware"></a>
-### Global Middleware
+### Global Middleware - Globalne oprogramowanie pośredniczące
 
-If you want a middleware to run during every HTTP request to your application, simply list the middleware class in the `$middleware` property of your `app/Http/Kernel.php` class.
+Jeśli chcesz, aby oprogramowanie pośrednie działało podczas każdego żądania HTTP do twojej aplikacji, po prostu wpisz klasę middleware we właściwości `$middleware` twojej klasy `app/Http/Kernel.php`.
 
 <a name="assigning-middleware-to-routes"></a>
-### Assigning Middleware To Routes
+### Assigning Middleware To Routes - Przypisywanie oprogramowania pośredniego do routingu (trasowania)
 
-If you would like to assign middleware to specific routes, you should first assign the middleware a key in your `app/Http/Kernel.php` file. By default, the `$routeMiddleware` property of this class contains entries for the middleware included with Laravel. To add your own, simply append it to this list and assign it a key of your choosing. For example:
+Aby przypisać oprogramowanie pośrednie do określonych tras, należy najpierw przypisać oprogramowanie pośrednie do klucza w pliku `app/Http/Kernel.php`. Domyślnie właściwość `$routeMiddleware` tej klasy zawiera wpisy dla oprogramowania pośredniego dołączonego do Laravel. Aby dodać własny, wystarczy dołączyć go do tej listy i przypisać mu klucz do wyboru. Na przykład:
 
     // Within App\Http\Kernel Class...
 
@@ -120,19 +120,19 @@ If you would like to assign middleware to specific routes, you should first assi
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 
-Once the middleware has been defined in the HTTP kernel, you may use the `middleware` method to assign middleware to a route:
+Po zdefiniowaniu oprogramowania pośredniego w kernelu HTTP możesz użyć metody "middleware" do przydzielenia oprogramowania pośredniego do trasy:
 
     Route::get('admin/profile', function () {
         //
     })->middleware('auth');
 
-You may also assign multiple middleware to the route:
+Możesz także przypisać wiele programów pośredniczących do trasy:
 
     Route::get('/', function () {
         //
     })->middleware('first', 'second');
 
-When assigning middleware, you may also pass the fully qualified class name:
+Podczas przypisywania oprogramowania pośredniego można również przekazać pełną nazwę klasy:
 
     use App\Http\Middleware\CheckAge;
 
@@ -141,11 +141,11 @@ When assigning middleware, you may also pass the fully qualified class name:
     })->middleware(CheckAge::class);
 
 <a name="middleware-groups"></a>
-### Middleware Groups
+### Middleware Groups - Grupy oprogramowania pośredniego
 
-Sometimes you may want to group several middleware under a single key to make them easier to assign to routes. You may do this using the `$middlewareGroups` property of your HTTP kernel.
+Czasami możesz zgrupować kilka programów pośredniczących pod jednym kluczem, aby ułatwić ich przypisywanie do tras. Możesz to zrobić za pomocą właściwości `$middlewareGroups` swojego jądra HTTP.
 
-Out of the box, Laravel comes with `web` and `api` middleware groups that contains common middleware you may want to apply to your web UI and API routes:
+Po wyjęciu z pudełka, Laravel oferuje grupy oprogramowania pośredniczącego `web` i` api` zawierające wspólne oprogramowanie pośrednie, które możesz zastosować do tras interfejsu użytkownika i interfejsu API:
 
     /**
      * The application's route middleware groups.
@@ -168,7 +168,7 @@ Out of the box, Laravel comes with `web` and `api` middleware groups that contai
         ],
     ];
 
-Middleware groups may be assigned to routes and controller actions using the same syntax as individual middleware. Again, middleware groups simply make it more convenient to assign many middleware to a route at once:
+Grupy oprogramowania pośredniego mogą być przypisane do tras i działań kontrolerów przy użyciu tej samej składni, co indywidualne oprogramowanie pośrednie. Ponownie, grupy oprogramowania pośredniego po prostu ułatwiają przypisywanie wielu programów pośredniczących do trasy naraz:
 
     Route::get('/', function () {
         //
@@ -178,14 +178,14 @@ Middleware groups may be assigned to routes and controller actions using the sam
         //
     });
 
-> {tip} Out of the box, the `web` middleware group is automatically applied to your `routes/web.php` file by the `RouteServiceProvider`.
+> {tip} Po wyjęciu z pudełka grupa `web` oprogramowania pośredniego jest automatycznie stosowana do pliku `routes/web.php` przez `RouteServiceProvider`.
 
 <a name="middleware-parameters"></a>
-## Middleware Parameters
+## Middleware Parameters - Parametry oprogramowania pośredniego
 
-Middleware can also receive additional parameters. For example, if your application needs to verify that the authenticated user has a given "role" before performing a given action, you could create a `CheckRole` middleware that receives a role name as an additional argument.
+Oprogramowanie pośrednie może również otrzymywać dodatkowe parametry. Na przykład, jeśli aplikacja musi zweryfikować, czy uwierzytelniony użytkownik ma określoną rolę przed wykonaniem danej czynności, można utworzyć oprogramowanie pośrednie `CheckRole`, które odbiera nazwę roli jako dodatkowy argument.
 
-Additional middleware parameters will be passed to the middleware after the `$next` argument:
+Dodatkowe parametry oprogramowania pośredniego zostaną przekazane do oprogramowania pośredniego po argumencie `$next`:
 
     <?php
 
@@ -214,16 +214,16 @@ Additional middleware parameters will be passed to the middleware after the `$ne
 
     }
 
-Middleware parameters may be specified when defining the route by separating the middleware name and parameters with a `:`. Multiple parameters should be delimited by commas:
+Parametry oprogramowania pośredniego można określić podczas definiowania trasy, oddzielając nazwę oprogramowania pośredniego od parametrów za pomocą `:`. Wiele parametrów należy rozdzielać przecinkami:
 
     Route::put('post/{id}', function ($id) {
         //
     })->middleware('role:editor');
 
 <a name="terminable-middleware"></a>
-## Terminable Middleware
+## Terminable Middleware - Oprogramowanie Posrednie po zakończeniu
 
-Sometimes a middleware may need to do some work after the HTTP response has been sent to the browser. For example, the "session" middleware included with Laravel writes the session data to storage after the response has been sent to the browser. If you define a `terminate` method on your middleware, it will automatically be called after the response is sent to the browser.
+Czasami oprogramowanie pośrednie może wymagać trochę pracy po wysłaniu odpowiedzi HTTP do przeglądarki. Na przykład oprogramowanie pośredniczące "session" dołączone do Laravel zapisuje dane sesji do pamięci po wysłaniu odpowiedzi do przeglądarki. Jeśli zdefiniujesz metodę `terminate` w oprogramowaniu pośredniczącym, zostanie ona automatycznie wywołana po wysłaniu odpowiedzi do przeglądarki.
 
     <?php
 
@@ -244,6 +244,6 @@ Sometimes a middleware may need to do some work after the HTTP response has been
         }
     }
 
-The `terminate` method should receive both the request and the response. Once you have defined a terminable middleware, you should add it to the list of route or global middleware in the `app/Http/Kernel.php` file.
+Metoda `terminate` powinna otrzymać zarówno żądanie, jak i odpowiedź. Po zdefiniowaniu terminatora oprogramowania pośredniego należy go dodać do listy routingu lub globalnego oprogramowania pośredniego w pliku `app/Http/Kernel.php`.
 
-When calling the `terminate` method on your middleware, Laravel will resolve a fresh instance of the middleware from the [service container](/docs/{{version}}/container). If you would like to use the same middleware instance when the `handle` and `terminate` methods are called, register the middleware with the container using the container's `singleton` method.
+Wywołując metodę `terminate` w oprogramowaniu pośredniczącym, Laravel rozwiąże nową instancję oprogramowania pośredniego z [service container (kontenera usług)](/docs/{{version}}/container). Jeśli chcesz użyć tej samej instancji oprogramowania pośredniego, gdy wywoływane są metody `handle` i` terminate`, zarejestruj oprogramowanie pośredniczące z kontenerem, używając metody `singleton` kontenera.
