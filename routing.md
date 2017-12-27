@@ -1,46 +1,47 @@
 # Routing
 
-- [Basic Routing](#basic-routing)
-    - [Redirect Routes](#redirect-routes)
-    - [View Routes](#view-routes)
-- [Route Parameters](#route-parameters)
-    - [Required Parameters](#required-parameters)
-    - [Optional Parameters](#parameters-optional-parameters)
-    - [Regular Expression Constraints](#parameters-regular-expression-constraints)
-- [Named Routes](#named-routes)
-- [Route Groups](#route-groups)
-    - [Middleware](#route-group-middleware)
-    - [Namespaces](#route-group-namespaces)
-    - [Sub-Domain Routing](#route-group-sub-domain-routing)
-    - [Route Prefixes](#route-group-prefixes)
-- [Route Model Binding](#route-model-binding)
-    - [Implicit Binding](#implicit-binding)
-    - [Explicit Binding](#explicit-binding)
-- [Form Method Spoofing](#form-method-spoofing)
-- [Accessing The Current Route](#accessing-the-current-route)
+- [Basic Routing - Podstawowy routing](#basic-routing)
+    - [Redirect Routes - Przekierowania tras](#redirect-routes)
+    - [View Routes - Widok trasy](#view-routes)
+- [Route Parameters - Parametry trasy](#route-parameters)
+    - [Required Parameters - Wymagane parametry](#required-parameters)
+    - [Optional Parameters - Opcjonalne parametry](#parameters-optional-parameters)
+    - [Regular Expression Constraints - Ograniczanie wyrażeniam regularnymi](#parameters-regular-expression-constraints)
+- [Named Routes - Nazwane trasy](#named-routes)
+- [Route Groups - Grupy tras](#route-groups)
+    - [Middleware - Oprogramowanie pośrednie](#route-group-middleware)
+    - [Namespaces - Przestrzenie nazw](#route-group-namespaces)
+    - [Sub-Domain Routing - Ruting poddomeny](#route-group-sub-domain-routing)
+    - [Route Prefixes - Prefiksy tras](#route-group-prefixes)
+- [Route Model Binding - Wiązanie modelu trasy](#route-model-binding)
+    - [Implicit Binding - Niejawne powiązania](#implicit-binding)
+    - [Explicit Binding - Jawne powiązania](#explicit-binding)
+- [Form Method Spoofing - Podszywanie się pod Metody Form-a](#form-method-spoofing)
+- [Accessing The Current Route - Dostęp do aktualnej trasy](#accessing-the-current-route)
 
 <a name="basic-routing"></a>
-## Basic Routing
+## Basic Routing - Podstawowy routing
 
 The most basic Laravel routes simply accept a URI and a `Closure`, providing a very simple and expressive method of defining routes:
+Najbardziej podstawowe trasy Laravel po prostu akceptują URI i `Closure`, zapewniając bardzo prostą i ekspresywną metodę definiowania tras:
 
     Route::get('foo', function () {
         return 'Hello World';
     });
 
-#### The Default Route Files
+#### The Default Route Files - Domyślne pliki trasy
 
-All Laravel routes are defined in your route files, which are located in the `routes` directory. These files are automatically loaded by the framework. The `routes/web.php` file defines routes that are for your web interface. These routes are assigned the `web` middleware group, which provides features like session state and CSRF protection. The routes in `routes/api.php` are stateless and are assigned the `api` middleware group.
+Wszystkie trasy Laravel są zdefiniowane w twoich plikach tras, które znajdują się w katalogu `routes`. Te pliki są automatycznie ładowane przez framework. Plik `routes/web.php` określa trasy dla twojego interfejsu sieciowego. Te trasy mają przypisaną grupę oprogramowania `web`, która zapewnia funkcje takie jak stan sesji i ochrona CSRF. Trasy w `routes/api.php` są bezstanowe i mają przypisaną grupę oprogramowania pośredniego `api`.
 
-For most applications, you will begin by defining routes in your `routes/web.php` file. The routes defined in `routes/web.php` may be accessed by entering the defined route's URL in your browser. For example, you may access the following route by navigating to `http://your-app.dev/user` in your browser:
+W przypadku większości aplikacji zaczniesz od zdefiniowania tras w pliku `routes/web.php`. Trasy zdefiniowane w `routes/web.php` mogą być dostępne po wprowadzeniu adresu URL zdefiniowanej trasy w przeglądarce. Na przykład możesz uzyskać dostęp do poniższej trasy, przechodząc do `http://twoja-aplikacja.dev/user` w swojej przeglądarce:
 
     Route::get('/user', 'UserController@index');
 
-Routes defined in the `routes/api.php` file are nested within a route group by the `RouteServiceProvider`. Within this group, the `/api` URI prefix is automatically applied so you do not need to manually apply it to every route in the file. You may modify the prefix and other route group options by modifying your `RouteServiceProvider` class.
+Trasy zdefiniowane w pliku `routes/api.php` są zagnieżdżone w grupie tras przez `RouteServiceProvider`. W tej grupie prefiks URI `/api` jest automatycznie stosowany, więc nie trzeba ręcznie stosować go do każdej trasy w pliku. Możesz zmodyfikować prefiks i inne opcje grupy tras, modyfikując klasę `RouteServiceProvider`.
 
-#### Available Router Methods
+#### Available Router Methods - Dostępne metody routera
 
-The router allows you to register routes that respond to any HTTP verb:
+Router umożliwia rejestrowanie tras odpowiadających na dowolny czyności HTTP:
 
     Route::get($uri, $callback);
     Route::post($uri, $callback);
@@ -49,7 +50,7 @@ The router allows you to register routes that respond to any HTTP verb:
     Route::delete($uri, $callback);
     Route::options($uri, $callback);
 
-Sometimes you may need to register a route that responds to multiple HTTP verbs. You may do so using the `match` method. Or, you may even register a route that responds to all HTTP verbs using the `any` method:
+Czasami może zajść potrzeba zarejestrowania trasy, która odpowiada na wiele czynności HTTP. Możesz to zrobić za pomocą metody `any`. Lub możesz nawet zarejestrować trasę, która odpowiada na wszystkie czasowniki HTTP za pomocą metody `any`:
 
     Route::match(['get', 'post'], '/', function () {
         //
@@ -59,9 +60,9 @@ Sometimes you may need to register a route that responds to multiple HTTP verbs.
         //
     });
 
-#### CSRF Protection
+#### CSRF Protection - Ochrona CSRF
 
-Any HTML forms pointing to `POST`, `PUT`, or `DELETE` routes that are defined in the `web` routes file should include a CSRF token field. Otherwise, the request will be rejected. You can read more about CSRF protection in the [CSRF documentation](/docs/{{version}}/csrf):
+Wszelkie formularze HTML wskazujące na trasy `POST`, `PUT`, lub `DELETE` zdefiniowane w pliku tras `web` powinny zawierać pole tokenu CSRF. W przeciwnym razie prośba zostanie odrzucona. Więcej informacji na temat ochrony CSRF można znaleźć w [dokumentacji CSRF](/docs/{{version}}/csrf):
 
     <form method="POST" action="/profile">
         {{ csrf_field() }}
@@ -69,45 +70,45 @@ Any HTML forms pointing to `POST`, `PUT`, or `DELETE` routes that are defined in
     </form>
 
 <a name="redirect-routes"></a>
-### Redirect Routes
+### Redirect Routes - Przekierowania tras
 
-If you are defining a route that redirects to another URI, you may use the `Route::redirect` method. This method provides a convenient shortcut so that you do not have to define a full route or controller for performing a simple redirect:
+Jeśli definiujesz trasę, która przekierowuje do innego URI, możesz użyć metody `Route::redirect`. Ta metoda zapewnia wygodny skrót, dzięki czemu nie trzeba definiować pełnej trasy ani kontrolera do wykonywania prostego przekierowania:
 
-    Route::redirect('/here', '/there', 301);
+    Route::redirect('/to', '/tam', 301);
 
 <a name="view-routes"></a>
-### View Routes
+### View Routes - Widok trasy
 
-If your route only needs to return a view, you may use the `Route::view` method. Like the `redirect` method, this method provides a simple shortcut so that you do not have to define a full route or controller. The `view` method accepts a URI as its first argument and a view name as its second argument. In addition, you may provide an array of data to pass to the view as an optional third argument:
+Jeśli twoja trasa musi tylko zwrócić widok, możesz użyć metody `Route::view`. Podobnie jak w przypadku metody `redirect`, ta metoda zapewnia prosty skrót, dzięki czemu nie trzeba definiować pełnej trasy ani kontrolera. Metoda `view` akceptuje URI jako swój pierwszy argument, a nazwę widoku jako drugi argument. Ponadto możesz podać tablicę danych do przekazania do widoku jako opcjonalnego trzeciego argumentu:
 
     Route::view('/welcome', 'welcome');
 
     Route::view('/welcome', 'welcome', ['name' => 'Taylor']);
 
 <a name="route-parameters"></a>
-## Route Parameters
+## Route Parameters - Parametry trasy
 
 <a name="required-parameters"></a>
-### Required Parameters
+### Required Parameters - Wymagane parametry
 
-Of course, sometimes you will need to capture segments of the URI within your route. For example, you may need to capture a user's ID from the URL. You may do so by defining route parameters:
+Oczywiście czasami będziesz musiał przechwycić segmenty URI na swojej trasie. Na przykład może być konieczne przechwycenie identyfikatora (ID) użytkownika z adresu URL. Możesz to zrobić, definiując parametry trasy:
 
     Route::get('user/{id}', function ($id) {
         return 'User '.$id;
     });
 
-You may define as many route parameters as required by your route:
+Możesz zdefiniować tyle parametrów trasy, ile wymaga twoja trasa:
 
     Route::get('posts/{post}/comments/{comment}', function ($postId, $commentId) {
         //
     });
 
-Route parameters are always encased within `{}` braces and should consist of alphabetic characters, and may not contain a `-` character. Instead of using the `-` character, use an underscore (`_`). Route parameters are injected into route callbacks / controllers based on their order - the names of the callback / controller arguments do not matter.
+Parametry trasy są zawsze zamknięte w nawiasach klamrowych `{}` i powinny składać się ze znaków alfabetu i niemogą zawierać znaku `-`. Zamiast używać znaku `-`, użyj znaku podkreślenia (`_`). Parametry trasy są wprowadzane do wywołań zwrotnych / kontrolerów trasy w zależności od ich kolejności - nazwy argumentów wywołania zwrotnego / kontrolera nie mają znaczenia.
 
 <a name="parameters-optional-parameters"></a>
-### Optional Parameters
+### Optional Parameters - Opcjonalne parametry
 
-Occasionally you may need to specify a route parameter, but make the presence of that route parameter optional. You may do so by placing a `?` mark after the parameter name. Make sure to give the route's corresponding variable a default value:
+Czasami konieczne może być określenie parametru trasy, ale obcionalnie dla tej trasy. Możesz to zrobić umieszczając znak `?` Po nazwie parametru. Upewnij się, że przypisana zmienna trasy jest wartością domyślną:
 
     Route::get('user/{name?}', function ($name = null) {
         return $name;
@@ -118,9 +119,9 @@ Occasionally you may need to specify a route parameter, but make the presence of
     });
 
 <a name="parameters-regular-expression-constraints"></a>
-### Regular Expression Constraints
+### Regular Expression Constraints - Ograniczanie wyrażeniam regularnymi
 
-You may constrain the format of your route parameters using the `where` method on a route instance. The `where` method accepts the name of the parameter and a regular expression defining how the parameter should be constrained:
+Możesz ograniczyć format parametrów trasy, używając metody `where` na instancji trasy. Metoda `where` akceptuje nazwę parametru i wyrażenie regularne definiujące sposób ograniczenia parametru:
 
     Route::get('user/{name}', function ($name) {
         //
@@ -135,9 +136,9 @@ You may constrain the format of your route parameters using the `where` method o
     })->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
 
 <a name="parameters-global-constraints"></a>
-#### Global Constraints
+#### Global Constraints - Ograniczanie globalnie
 
-If you would like a route parameter to always be constrained by a given regular expression, you may use the `pattern` method. You should define these patterns in the `boot` method of your `RouteServiceProvider`:
+Jeśli chcesz, aby parametr trasy był zawsze ograniczony przez dane wyrażenie regularne, możesz użyć metody `pattern`. Powinieneś zdefiniować te wzorce w metodzie `boot` twojego` RouteServiceProvider`:
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -151,28 +152,28 @@ If you would like a route parameter to always be constrained by a given regular 
         parent::boot();
     }
 
-Once the pattern has been defined, it is automatically applied to all routes using that parameter name:
+Po zdefiniowaniu wzoru jest on automatycznie stosowany do wszystkich tras z użyciem tej nazwy parametru:
 
     Route::get('user/{id}', function ($id) {
         // Only executed if {id} is numeric...
     });
 
 <a name="named-routes"></a>
-## Named Routes
+## Named Routes - Nazwane trasy
 
-Named routes allow the convenient generation of URLs or redirects for specific routes. You may specify a name for a route by chaining the `name` method onto the route definition:
+Nazwane trasy umożliwiają wygodne generowanie adresów URL lub przekierowań dla określonych tras. Możesz określić nazwę trasy, łącząc metodę `name` z definicją trasy:
 
     Route::get('user/profile', function () {
         //
     })->name('profile');
 
-You may also specify route names for controller actions:
+Możesz również określić nazwy tras dla działań kontrolera:
 
     Route::get('user/profile', 'UserController@showProfile')->name('profile');
 
-#### Generating URLs To Named Routes
+#### Generating URLs To Named Routes - Generowanie adresów URL dla nazwanych tras
 
-Once you have assigned a name to a given route, you may use the route's name when generating URLs or redirects via the global `route` function:
+Po przypisaniu nazwy do danej trasy możesz użyć nazwy trasy podczas generowania adresów URL lub przekierowań za pośrednictwem globalnej funkcji `route`:
 
     // Generating URLs...
     $url = route('profile');
@@ -180,7 +181,7 @@ Once you have assigned a name to a given route, you may use the route's name whe
     // Generating Redirects...
     return redirect()->route('profile');
 
-If the named route defines parameters, you may pass the parameters as the second argument to the `route` function. The given parameters will automatically be inserted into the URL in their correct positions:
+Jeśli nazwana trasa definiuje parametry, możesz przekazać parametry jako drugi argument funkcji `route`. Podane parametry zostaną automatycznie wstawione do adresu URL na ich właściwych pozycjach:
 
     Route::get('user/{id}/profile', function ($id) {
         //
@@ -188,9 +189,9 @@ If the named route defines parameters, you may pass the parameters as the second
 
     $url = route('profile', ['id' => 1]);
 
-#### Inspecting The Current Route
+#### Inspecting The Current Route - Sprawdzanie aktualnej trasy
 
-If you would like to determine if the current request was routed to a given named route, you may use the `named` method on a Route instance. For example, you may check the current route name from a route middleware:
+Jeśli chcesz sprawdzić, czy bieżące żądanie zostało skierowane do podanej trasy, możesz użyć metody `named` na instancji Route. Na przykład możesz sprawdzić nazwę aktualnej trasy z oprogramowania pośredniego trasy:
 
     /**
      * Handle an incoming request.
@@ -209,14 +210,14 @@ If you would like to determine if the current request was routed to a given name
     }
 
 <a name="route-groups"></a>
-## Route Groups
+## Route Groups - Grupy tras
 
-Route groups allow you to share route attributes, such as middleware or namespaces, across a large number of routes without needing to define those attributes on each individual route. Shared attributes are specified in an array format as the first parameter to the `Route::group` method.
+Grupy tras umożliwiają udostępnianie atrybutów trasy, takich jak oprogramowanie pośrednie lub przestrzenie nazw, na wielu trasach bez konieczności definiowania tych atrybutów na każdej pojedynczej trasie. Wspólne atrybuty są określane w formacie tablicowym jako pierwszy parametr metody `Route::group`.
 
 <a name="route-group-middleware"></a>
-### Middleware
+### Middleware - Oprogramowanie pośrednie
 
-To assign middleware to all routes within a group, you may use the `middleware` method before defining the group. Middleware are executed in the order they are listed in the array:
+Aby przypisać oprogramowanie pośrednie do wszystkich tras w grupie, przed zdefiniowaniem grupy można użyć metody `middleware`. Oprogramowanie pośrednie są wykonywane w kolejności, w jakiej są wymienione w tablicy:
 
     Route::middleware(['first', 'second'])->group(function () {
         Route::get('/', function () {
@@ -229,20 +230,20 @@ To assign middleware to all routes within a group, you may use the `middleware` 
     });
 
 <a name="route-group-namespaces"></a>
-### Namespaces
+### Namespaces - Przestrzenie nazw
 
-Another common use-case for route groups is assigning the same PHP namespace to a group of controllers using the `namespace` method:
+Innym częstym przypadkiem użycia dla grup tras jest przypisanie tej samej przestrzeni nazw PHP do grupy kontrolerów używających metody `namespace`:
 
     Route::namespace('Admin')->group(function () {
         // Controllers Within The "App\Http\Controllers\Admin" Namespace
     });
 
-Remember, by default, the `RouteServiceProvider` includes your route files within a namespace group, allowing you to register controller routes without specifying the full `App\Http\Controllers` namespace prefix. So, you only need to specify the portion of the namespace that comes after the base `App\Http\Controllers` namespace.
+Pamiętaj, domyślnie, `RouteServiceProvider` zawiera pliki tras w grupie przestrzeni nazw, co pozwala ci rejestrować trasy kontrolerów bez określania pełnego przedrostka przestrzeni nazw `App\Http\Controllers`. Musisz tylko określić część przestrzeni nazw, która pochodzi od podstawowej przestrzeni nazw `App\Http\Controllers`.
 
 <a name="route-group-sub-domain-routing"></a>
-### Sub-Domain Routing
+### Sub-Domain Routing - Ruting poddomeny
 
-Route groups may also be used to handle sub-domain routing. Sub-domains may be assigned route parameters just like route URIs, allowing you to capture a portion of the sub-domain for usage in your route or controller. The sub-domain may be specified by calling the `domain` method before defining the group:
+Grupy tras mogą być również używane do obsługi routingu poddomeny. Subdomeny mogą mieć przypisane parametry trasy, podobnie jak identyfikatory URI trasy, pozwalające na przechwycenie części subdomen do wykorzystania na trasie lub kontrolerze. Poddomena może być określona przez wywołanie metody `domain` przed zdefiniowaniem grupy:
 
     Route::domain('{account}.myapp.com')->group(function () {
         Route::get('user/{id}', function ($account, $id) {
@@ -251,9 +252,9 @@ Route groups may also be used to handle sub-domain routing. Sub-domains may be a
     });
 
 <a name="route-group-prefixes"></a>
-### Route Prefixes
+### Route Prefixes - Prefiksy tras
 
-The `prefix` method may be used to prefix each route in the group with a given URI. For example, you may want to prefix all route URIs within the group with `admin`:
+Metodę `prefix` można użyć do prefiksowania każdej trasy w grupie z danym URI. Na przykład możesz dodać przedrostek wszystkich identyfikatorów URI trasy w grupie za pomocą `admin`:
 
     Route::prefix('admin')->group(function () {
         Route::get('users', function () {
@@ -262,24 +263,24 @@ The `prefix` method may be used to prefix each route in the group with a given U
     });
 
 <a name="route-model-binding"></a>
-## Route Model Binding
+## Route Model Binding - Wiązanie modelu trasy
 
-When injecting a model ID to a route or controller action, you will often query to retrieve the model that corresponds to that ID. Laravel route model binding provides a convenient way to automatically inject the model instances directly into your routes. For example, instead of injecting a user's ID, you can inject the entire `User` model instance that matches the given ID.
+Po wprowadzeniu ID modelu do trasy lub działania kontrolera, często będziesz wyszukiwał model, który odpowiada temu ID. Wiązanie modelu trasy Laravel zapewnia wygodny sposób automatycznego wstrzykiwania instancji modelu bezpośrednio do twoich tras. Na przykład, zamiast wstrzykiwać identyfikator użytkownika, można wstrzyknąć całą instancję modelu `User`, która pasuje do podanego ID.
 
 <a name="implicit-binding"></a>
-### Implicit Binding
+### Implicit Binding - Niejawne powiązania
 
-Laravel automatically resolves Eloquent models defined in routes or controller actions whose type-hinted variable names match a route segment name. For example:
+Laravel automatycznie rozpoznaje Wymowne modele zdefiniowane w trasach lub akcjach kontrolerów, których nazwy zmiennych wskazane przez typ pasują do nazwy segmentu trasy. Na przykład:
 
     Route::get('api/users/{user}', function (App\User $user) {
         return $user->email;
     });
 
-Since the `$user` variable is type-hinted as the `App\User` Eloquent model and the variable name matches the `{user}` URI segment, Laravel will automatically inject the model instance that has an ID matching the corresponding value from the request URI. If a matching model instance is not found in the database, a 404 HTTP response will automatically be generated.
+Ponieważ zmienna `$user` ma typ wskazujący na Wymowny model `App\User` i nazwa zmiennej pasuje do segmentu URI `{user}`, Laravel automatycznie wstrzykuje instancję modelu, która ma ID pasujące do odpowiadającej wartości z identyfikatora URI danego żądania. Jeśli odpowiednia instancja modelu nie zostanie znaleziona w bazie danych, automatycznie wygenerowana zostanie odpowiedź HTTP 404.
 
-#### Customizing The Key Name
+#### Customizing The Key Name - Dostosowywanie nazwy klucza
 
-If you would like model binding to use a database column other than `id` when retrieving a given model class, you may override the `getRouteKeyName` method on the Eloquent model:
+Jeśli chcesz, aby powiązanie modelu korzystało z kolumny bazy danych innej niż `id` podczas pobierania danej klasy modelu, możesz zastąpić metodę `getRouteKeyName` w modelu Eloquent:
 
     /**
      * Get the route key for the model.
@@ -292,9 +293,9 @@ If you would like model binding to use a database column other than `id` when re
     }
 
 <a name="explicit-binding"></a>
-### Explicit Binding
+### Explicit Binding - Jawne powiązania
 
-To register an explicit binding, use the router's `model` method to specify the class for a given parameter. You should define your explicit model bindings in the `boot` method of the `RouteServiceProvider` class:
+Aby zarejestrować jawne powiązanie, użyj metody `model` routera, aby określić klasę dla danego parametru. Powinieneś zdefiniować swoje jawne powiązania modelu w metodzie `boot` klasy` RouteServiceProvider`:
 
     public function boot()
     {
@@ -303,19 +304,19 @@ To register an explicit binding, use the router's `model` method to specify the 
         Route::model('user', App\User::class);
     }
 
-Next, define a route that contains a `{user}` parameter:
+Następnie zdefiniuj trasę zawierającą parametr `{user}`:
 
     Route::get('profile/{user}', function (App\User $user) {
         //
     });
 
-Since we have bound all `{user}` parameters to the `App\User` model, a `User` instance will be injected into the route. So, for example, a request to `profile/1` will inject the `User` instance from the database which has an ID of `1`.
+Ponieważ przywiązaliśmy wszystkie parametry `{user}` do modelu `App\User`, do trasy zostanie wprowadzona instancja `User`. Tak więc, na przykład, żądanie do `profile/1` wstrzyknie instancję `User` z bazy danych o identyfikatorze `1`.
 
-If a matching model instance is not found in the database, a 404 HTTP response will be automatically generated.
+Jeśli odpowiednia instancja modelu nie zostanie znaleziona w bazie danych, automatycznie wygenerowana zostanie odpowiedź HTTP 404.
 
-#### Customizing The Resolution Logic
+#### Customizing The Resolution Logic - Dostosowywanie logiki decyzyjnej
 
-If you wish to use your own resolution logic, you may use the `Route::bind` method. The `Closure` you pass to the `bind` method will receive the value of the URI segment and should return the instance of the class that should be injected into the route:
+Jeśli chcesz użyć własnej logiki decyzyjnej, możesz użyć metody `Route::bind`. `Closure`, które przekazujesz do metody `bind`, otrzyma wartość segmentu URI i powinno zwrócić instancję klasy, która ma zostać wstrzyknięta do trasy:
 
     public function boot()
     {
@@ -327,23 +328,23 @@ If you wish to use your own resolution logic, you may use the `Route::bind` meth
     }
 
 <a name="form-method-spoofing"></a>
-## Form Method Spoofing
+## Form Method Spoofing - Podszywanie się pod Metody Form-a
 
-HTML forms do not support `PUT`, `PATCH` or `DELETE` actions. So, when defining `PUT`, `PATCH` or `DELETE` routes that are called from an HTML form, you will need to add a hidden `_method` field to the form. The value sent with the `_method` field will be used as the HTTP request method:
+Formularze HTML nie obsługują akcji `PUT`, ` PATCH` lub `DELETE`. Tak więc, definiując trasy `PUT`, ` PATCH` lub `DELETE`, które są wywoływane z formularza HTML, musisz dodać ukryte pole `_method` do formularza. Wartość przesłana za pomocą pola `_method` będzie używana jako metoda żądania HTTP:
 
     <form action="/foo/bar" method="POST">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     </form>
 
-You may use the `method_field` helper to generate the `_method` input:
+Możesz użyć helpera `method_field` do wygenerowania wejścia` _method`:
 
     {{ method_field('PUT') }}
 
 <a name="accessing-the-current-route"></a>
-## Accessing The Current Route
+## Accessing The Current Route - Dostęp do aktualnej trasy
 
-You may use the `current`, `currentRouteName`, and `currentRouteAction` methods on the `Route` facade to access information about the route handling the incoming request:
+Możesz użyć metod `current`, `currentRouteName` oraz `currentRouteAction` na elewacji `Route`, aby uzyskać dostęp do informacji o trasie obsługującej przychodzące żądanie:
 
     $route = Route::current();
 
@@ -351,4 +352,4 @@ You may use the `current`, `currentRouteName`, and `currentRouteAction` methods 
 
     $action = Route::currentRouteAction();
 
-Refer to the API documentation for both the [underlying class of the Route facade](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html) and [Route instance](https://laravel.com/api/{{version}}/Illuminate/Routing/Route.html) to review all accessible methods.
+Zapoznaj się z dokumentacją interfejsu API dla [podstawowej klasy fasady trasy](https://laravel.com/api/5.5/Illuminate/Routing/Router.html) i [instancja trasy](https://laravel.com/api/5.5/Illuminate/Routing/Route.html), aby przejrzeć wszystkie dostępne metody.
