@@ -7,6 +7,7 @@
 - [Redirects - Przekierowania](#redirects)
     - [Redirecting To Named Routes - Przekierowanie do nazwanych tras](#redirecting-named-routes)
     - [Redirecting To Controller Actions - Przekierowanie do akcji kontrolera](#redirecting-controller-actions)
+    - [Redirecting To External Domains - Przekierowanie do domen zewnętrznych](#redirecting-external-domains)
     - [Redirecting With Flashed Session Data - Przekierowanie z migawką danych sesji](#redirecting-with-flashed-session-data)
 - [Other Response Types - Inne typy odpowiedzi](#other-response-types)
     - [View Responses - Wyświetl odpowiedzi](#view-responses)
@@ -159,6 +160,13 @@ Jeśli twoja trasa kontrolera wymaga parametrów, możesz przekazać je jako dru
     return redirect()->action(
         'UserController@profile', ['id' => 1]
     );
+
+<a name="redirecting-external-domains"></a>
+### Redirecting To External Domains - Przekierowanie do domen zewnętrznych
+
+Czasami może zajść konieczność przekierowania do domeny spoza Twojej aplikacji. Możesz to zrobić, wywołując metodę `away`, która tworzy` RedirectResponse` bez dodatkowego kodowania, sprawdzania poprawności lub weryfikacji:
+
+    return redirect()->away('https://www.google.com');
 
 <a name="redirecting-with-flashed-session-data"></a>
 ### Redirecting With Flashed Session Data - Przekierowanie z migawką danych sesji
