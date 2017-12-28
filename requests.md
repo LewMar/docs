@@ -1,21 +1,21 @@
 # HTTP Requests
 
-- [Accessing The Request](#accessing-the-request)
-    - [Request Path & Method](#request-path-and-method)
-    - [PSR-7 Requests](#psr7-requests)
-- [Input Trimming & Normalization](#input-trimming-and-normalization)
-- [Retrieving Input](#retrieving-input)
-    - [Old Input](#old-input)
-    - [Cookies](#cookies)
-- [Files](#files)
-    - [Retrieving Uploaded Files](#retrieving-uploaded-files)
-    - [Storing Uploaded Files](#storing-uploaded-files)
-- [Configuring Trusted Proxies](#configuring-trusted-proxies)
+- [Accessing The Request - Dostęp do żądania](#accessing-the-request)
+    - [Request Path & Method - ścieżka żadania i metody](#request-path-and-method)
+    - [PSR-7 Requests - Żądania PSR-7](#psr7-requests)
+- [Input Trimming & Normalization - Przycinanie wejścia i normalizacja](#input-trimming-and-normalization)
+- [Retrieving Input - Pobieranie danych wejściowych](#retrieving-input)
+    - [Old Input - Stare wejście](#old-input)
+    - [Cookies - Ciasteczka](#cookies)
+- [Files - Pliki](#files)
+    - [Retrieving Uploaded Files - Uzyskiwanie pobranych plików](#retrieving-uploaded-files)
+    - [Storing Uploaded Files - Przechowywanie przesłanych plików](#storing-uploaded-files)
+- [Configuring Trusted Proxies - Konfigurowanie zaufanych serwerów proxy](#configuring-trusted-proxies)
 
 <a name="accessing-the-request"></a>
-## Accessing The Request
+## Accessing The Request - Dostęp do żądania
 
-To obtain an instance of the current HTTP request via dependency injection, you should type-hint the `Illuminate\Http\Request` class on your controller method. The incoming request instance will automatically be injected by the [service container](/docs/{{version}}/container):
+Aby uzyskać wystąpienie bieżącego żądania HTTP przez wstrzyknięcie zależności, należy wpisać wskazówkę klasy `Illuminate\Http\Request` na swojej metodzie sterownika. Instancja przychodzącego żądania zostanie automatycznie wprowadzona przez [kontener usług](/docs/{{version}}/container):
 
     <?php
 
@@ -39,13 +39,13 @@ To obtain an instance of the current HTTP request via dependency injection, you 
         }
     }
 
-#### Dependency Injection & Route Parameters
+#### Dependency Injection & Route Parameters - Wstrzykiwanie zależności & Parametry trasy
 
-If your controller method is also expecting input from a route parameter you should list your route parameters after your other dependencies. For example, if your route is defined like so:
+Jeśli twoja metoda kontrolera oczekuje również wprowadzenia z parametru trasy, powinieneś podać parametry swojej trasy po innych zależnościach. Na przykład, jeśli twoja trasa jest zdefiniowana w następujący sposób:
 
     Route::put('user/{id}', 'UserController@update');
 
-You may still type-hint the `Illuminate\Http\Request` and access your route parameter `id` by defining your controller method as follows:
+Nadal możesz wpisać wskazówkę `Illuminate\Http\Request` i uzyskać dostęp do parametru trasy `id`, definiując swoją metodę kontrolera w następujący sposób:
 
     <?php
 
@@ -68,9 +68,9 @@ You may still type-hint the `Illuminate\Http\Request` and access your route para
         }
     }
 
-#### Accessing The Request Via Route Closures
+#### Accessing The Request Via Route Closures - Uzyskiwanie dostępu do żądania za pośrednictwem Closures tras
 
-You may also type-hint the `Illuminate\Http\Request` class on a route Closure. The service container will automatically inject the incoming request into the Closure when it is executed:
+Możesz również wpisać wskazówki klasy `Illuminate\Http\Request` na Closure trasy. Kontener usług automatycznie wstrzykuje przychodzące żądanie do Closure po jego wykonaniu:
 
     use Illuminate\Http\Request;
 
@@ -79,25 +79,25 @@ You may also type-hint the `Illuminate\Http\Request` class on a route Closure. T
     });
 
 <a name="request-path-and-method"></a>
-### Request Path & Method
+### Request Path & Method - ścieżka żadania i metody
 
-The `Illuminate\Http\Request` instance provides a variety of methods for examining the HTTP request for your application and extends the `Symfony\Component\HttpFoundation\Request` class. We will discuss a few of the most important methods below.
+Instancja `Illuminate\Http\Request` udostępnia różne metody sprawdzania żądania HTTP dla aplikacji i rozszerza klasę `Symfony\Component\HttpFoundation\Request`. Omówimy kilka najważniejszych metod poniżej.
 
-#### Retrieving The Request Path
+#### Retrieving The Request Path - Pobieranie ścieżki żądania
 
-The `path` method returns the request's path information. So, if the incoming request is targeted at `http://domain.com/foo/bar`, the `path` method will return `foo/bar`:
+Metoda `path` zwraca informacje o ścieżce żądania. Tak więc, jeśli przychodzące żądanie jest kierowane na `http://domain.com/foo/bar`, metoda` path` zwróci `foo/bar`:
 
     $uri = $request->path();
 
-The `is` method allows you to verify that the incoming request path matches a given pattern. You may use the `*` character as a wildcard when utilizing this method:
+Metoda `is` pozwala sprawdzić, czy ścieżka przychodzącego żądania pasuje do danego wzorca. Podczas korzystania z tej metody możesz użyć znaku `*` jako symbolu wieloznacznego:
 
     if ($request->is('admin/*')) {
         //
     }
 
-#### Retrieving The Request URL
+#### Retrieving The Request URL - Pobieranie adresu URL żądania
 
-To retrieve the full URL for the incoming request you may use the `url` or `fullUrl` methods. The `url` method will return the URL without the query string, while the `fullUrl` method includes the query string:
+Aby pobrać pełny adres URL dla przychodzącego żądania, możesz użyć metod `url` lub` fullUrl`. Metoda `url` zwróci adres URL bez ciągu zapytania, natomiast metoda` fullUrl` zawiera ciąg zapytania:
 
     // Without Query String...
     $url = $request->url();
@@ -105,9 +105,9 @@ To retrieve the full URL for the incoming request you may use the `url` or `full
     // With Query String...
     $url = $request->fullUrl();
 
-#### Retrieving The Request Method
+#### Retrieving The Request Method - Pobieranie metody żądania
 
-The `method` method will return the HTTP verb for the request. You may use the `isMethod` method to verify that the HTTP verb matches a given string:
+Metoda `method` zwróci akcje HTTP dla żądania. Możesz użyć metody `isMethod`, aby sprawdzić, czy akcja HTTP pasuje do danego ciągu znaków:
 
     $method = $request->method();
 
@@ -116,14 +116,14 @@ The `method` method will return the HTTP verb for the request. You may use the `
     }
 
 <a name="psr7-requests"></a>
-### PSR-7 Requests
+### PSR-7 Requests - Żądania PSR-7
 
-The [PSR-7 standard](http://www.php-fig.org/psr/psr-7/) specifies interfaces for HTTP messages, including requests and responses. If you would like to obtain an instance of a PSR-7 request instead of a Laravel request, you will first need to install a few libraries. Laravel uses the *Symfony HTTP Message Bridge* component to convert typical Laravel requests and responses into PSR-7 compatible implementations:
+[Standard PSR-7](http://www.php-fig.org/psr/psr-7/) określa interfejsy dla komunikatów HTTP, w tym żądania i odpowiedzi. Jeśli chcesz uzyskać wystąpienie żądania PSR-7 zamiast żądania Laravel, najpierw musisz zainstalować kilka bibliotek. Laravel używa komponentu *Symfony HTTP Message Bridge* do konwersji typowych żądań i odpowiedzi Laravel do implementacji zgodnych z PSR-7:
 
     composer require symfony/psr-http-message-bridge
     composer require zendframework/zend-diactoros
 
-Once you have installed these libraries, you may obtain a PSR-7 request by type-hinting the request interface on your route Closure or controller method:
+Po zainstalowaniu tych bibliotek, możesz otrzymać żądanie PSR-7, wpisując w interfejsie żądania na swojej trasie Closure lub metodę kontrolera:
 
     use Psr\Http\Message\ServerRequestInterface;
 
@@ -131,71 +131,71 @@ Once you have installed these libraries, you may obtain a PSR-7 request by type-
         //
     });
 
-> {tip} If you return a PSR-7 response instance from a route or controller, it will automatically be converted back to a Laravel response instance and be displayed by the framework.
+> {tip} Jeśli zwrócisz instancję odpowiedzi PSR-7 z trasy lub kontrolera, zostanie ona automatycznie przekonwertowana z powrotem na instancję odpowiedzi Laravel i zostanie wyświetlona przez framework.
 
 <a name="input-trimming-and-normalization"></a>
-## Input Trimming & Normalization
+## Input Trimming & Normalization - Przycinanie wejścia i normalizacja
 
-By default, Laravel includes the `TrimStrings` and `ConvertEmptyStringsToNull` middleware in your application's global middleware stack. These middleware are listed in the stack by the `App\Http\Kernel` class. These middleware will automatically trim all incoming string fields on the request, as well as convert any empty string fields to `null`. This allows you to not have to worry about these normalization concerns in your routes and controllers.
+Domyślnie Laravel zawiera oprogramowanie pośredniczące `TrimStrings` i `ConvertEmptyStringsToNull` w globalnym stosie oprogramowania pośredniego twojej aplikacji. Te oprogramowanie pośrednie są wymienione w stosie przez klasę `App\Http\Kernel`. Te programy pośredniczące automatycznie usuwają wszystkie przychodzące pola tekstowe na żądanie, a także konwertują dowolne puste pola tekstowe na `null`. Dzięki temu nie musisz martwić się o problemy związane z normalizacją na trasach i kontrolerach.
 
-If you would like to disable this behavior, you may remove the two middleware from your application's middleware stack by removing them from the `$middleware` property of your `App\Http\Kernel` class.
+Jeśli chcesz wyłączyć to zachowanie, możesz usunąć dwa oprogramowanie pośrednie ze stosu oprogramowania pośredniego aplikacji, usuwając je z właściwości `$middleware` klasy `App\Http\Kernel`.
 
 <a name="retrieving-input"></a>
-## Retrieving Input
+## Retrieving Input - Pobieranie danych wejściowych
 
-#### Retrieving All Input Data
+#### Retrieving All Input Data - Pobieranie wszystkich danych wejściowych
 
-You may also retrieve all of the input data as an `array` using the `all` method:
+Możesz także pobrać wszystkie dane wejściowe jako `array` używając metody` all`:
 
     $input = $request->all();
 
-#### Retrieving An Input Value
+#### Retrieving An Input Value - Pobieranie wartości wejściowej
 
-Using a few simple methods, you may access all of the user input from your `Illuminate\Http\Request` instance without worrying about which HTTP verb was used for the request. Regardless of the HTTP verb, the `input` method may be used to retrieve user input:
+Używając kilku prostych metod, możesz uzyskać dostęp do wszystkich danych wejściowych użytkownika z instancji `Illuminate\Http\Request`, nie martwiąc się, który akcje HTTP został użyty dla żądania. Bez względu na akcje HTTP, metoda `input` może być użyta do pobrania danych wejściowych użytkownika:
 
     $name = $request->input('name');
 
-You may pass a default value as the second argument to the `input` method. This value will be returned if the requested input value is not present on the request:
+Możesz przekazać wartość domyślną jako drugi argument metody `input`. Ta wartość zostanie zwrócona, jeśli żądana wartość wejściowa nie jest obecna w żądaniu:
 
     $name = $request->input('name', 'Sally');
 
-When working with forms that contain array inputs, use "dot" notation to access the arrays:
+Podczas pracy z formularzami, które zawierają wejścia tablicowe, należy użyć zapisu "kropka", aby uzyskać dostęp do tablic:
 
     $name = $request->input('products.0.name');
 
     $names = $request->input('products.*.name');
 
-#### Retrieving Input From The Query String
+#### Retrieving Input From The Query String - Pobieranie danych wejściowych z ciągu zapytania
 
-While the `input` method retrieves values from entire request payload (including the query string), the `query` method will only retrieve values from the query string:
+Podczas gdy metoda `input` pobiera wartości z całego ładunku żądania (w tym ciągu zapytania), metoda` query` pobiera tylko wartości z ciągu zapytania:
 
     $name = $request->query('name');
 
-If the requested query string value data is not present, the second argument to this method will be returned:
+Jeśli żądane dane wartości ciągu zapytania nie są obecne, zostanie zwrócony drugi argument tej metody:
 
     $name = $request->query('name', 'Helen');
 
-You may call the `query` method without any arguments in order to retrieve all of the query string values as an associative array:
+Możesz wywołać metodę `query` bez żadnych argumentów, aby pobrać wszystkie wartości ciągu zapytania jako tablicę asocjacyjną:
 
     $query = $request->query();
 
-#### Retrieving Input Via Dynamic Properties
+#### Retrieving Input Via Dynamic Properties - Pobieranie danych wejściowych za pośrednictwem właściwości dynamicznych
 
-You may also access user input using dynamic properties on the `Illuminate\Http\Request` instance. For example, if one of your application's forms contains a `name` field, you may access the value of the field like so:
+Możesz również uzyskać dostęp do danych wprowadzanych przez użytkownika za pomocą właściwości dynamicznych w instancji `Illuminate\Http\Request`. Na przykład, jeśli jeden z formularzy aplikacji zawiera pole `name`, możesz uzyskać dostęp do wartości pola w następujący sposób:
 
     $name = $request->name;
 
-When using dynamic properties, Laravel will first look for the parameter's value in the request payload. If it is not present, Laravel will search for the field in the route parameters.
+Podczas korzystania z właściwości dynamicznych Laravel najpierw szuka wartości parametru w ładunku żądania. Jeśli nie jest obecny, Laravel wyszuka pole w parametrach trasy.
 
-#### Retrieving JSON Input Values
+#### Retrieving JSON Input Values - Pobieranie wartości wejściowych JSON
 
-When sending JSON requests to your application, you may access the JSON data via the `input` method as long as the `Content-Type` header of the request is properly set to `application/json`. You may even use "dot" syntax to dig into JSON arrays:
+Wysyłając żądania JSON do aplikacji, możesz uzyskać dostęp do danych JSON za pomocą metody `input`, o ile nagłówek `Content-Type` jest prawidłowo ustawiony na `application/json`. Możesz nawet użyć składni "kropka", aby zagłębić się w tablice JSON:
 
     $name = $request->input('user.name');
 
-#### Retrieving A Portion Of The Input Data
+#### Retrieving A Portion Of The Input Data - Pobieranie części danych wejściowych
 
-If you need to retrieve a subset of the input data, you may use the `only` and `except` methods. Both of these methods accept a single `array` or a dynamic list of arguments:
+Jeśli potrzebujesz pobrać podzbiór danych wejściowych, możesz użyć metod `only` i` except`. Obie te metody akceptują pojedynczą tablicę `array` lub dynamiczną listę argumentów:
 
     $input = $request->only(['username', 'password']);
 
@@ -205,48 +205,50 @@ If you need to retrieve a subset of the input data, you may use the `only` and `
 
     $input = $request->except('credit_card');
 
-> {tip} The `only` method returns all of the key / value pairs that you request; however, it will not return key / values pairs that are not present on the request.
+> {tip} Metoda `only` zwraca wszystkie żądane pary klucz / wartość; jednak nie będzie zwracać par klucz / wartość, które nie są obecne w żądaniu.
 
-#### Determining If An Input Value Is Present
+#### Determining If An Input Value Is Present - Określanie, czy wartość wejściowa jest obecna
 
-You should use the `has` method to determine if a value is present on the request. The `has` method returns `true` if the value is present on the request:
+Powinieneś użyć metody `has`, aby określić, czy wartość jest obecna w żądaniu. Metoda `has` zwraca` true`, jeśli wartość jest obecna na żądanie:
 
     if ($request->has('name')) {
         //
     }
 
-When given an array, the `has` method will determine if all of the specified values are present:
+Gdy podana zostanie tablica, metoda `has` określi, czy wszystkie podane wartości są obecne:
+
 
     if ($request->has(['name', 'email'])) {
         //
     }
 
-If you would like to determine if a value is present on the request and is not empty, you may use the `filled` method:
+Jeśli chcesz określić, czy wartość jest obecna na żądanie i nie jest pusta, możesz użyć metody `filled`:
 
     if ($request->filled('name')) {
         //
     }
 
 <a name="old-input"></a>
-### Old Input
+### Old Input - Stare wejście
 
-Laravel allows you to keep input from one request during the next request. This feature is particularly useful for re-populating forms after detecting validation errors. However, if you are using Laravel's included [validation features](/docs/{{version}}/validation), it is unlikely you will need to manually use these methods, as some of Laravel's built-in validation facilities will call them automatically.
+Laravel pozwala zachować dane wejściowe z jednego żądania podczas następnego żądania. Ta funkcja jest szczególnie przydatna do ponownego wypełniania formularzy po wykryciu błędów sprawdzania poprawności. Jeśli jednak używasz Laravel w opcji [funkcje sprawdzania poprawności](/docs/{{version}}/validation), jest mało prawdopodobne, że będziesz musiał ręcznie korzystać z tych metod, ponieważ niektóre z wbudowanych funkcji sprawdzania autentyczności Laravel będą je automatycznie wywoływać .
 
-#### Flashing Input To The Session
+#### Flashing Input To The Session - Migawka danych wejściowych do sesji
 
-The `flash` method on the `Illuminate\Http\Request` class will flash the current input to the [session](/docs/{{version}}/session) so that it is available during the user's next request to the application:
+Metoda `flash` na klasie `Illuminate\Http\Request` wyświetli bieżące dane wejściowe do [sesji](/docs/{{version}}/session), dzięki czemu będzie dostępna podczas następnego żądania użytkownika do aplikacji :
 
     $request->flash();
 
-You may also use the `flashOnly` and `flashExcept` methods to flash a subset of the request data to the session. These methods are useful for keeping sensitive information such as passwords out of the session:
+Możesz także użyć metod `flashOnly` i `flashExcept` do flashowania podzbioru danych żądania do sesji. Metody te są przydatne do przechowywania poufnych informacji, takich jak hasła z sesji:
 
     $request->flashOnly(['username', 'email']);
 
     $request->flashExcept('password');
 
-#### Flashing Input Then Redirecting
+#### Flashing Input Then Redirecting - igawka danych wejściowych, a póżniej przekierowanie
 
 Since you often will want to flash input to the session and then redirect to the previous page, you may easily chain input flashing onto a redirect using the `withInput` method:
+Ponieważ często będziesz chciał wczytać dane wejściowe do sesji, a następnie przekierować na poprzednią stronę, możesz łatwo włączyć flashowanie wejścia na przekierowanie za pomocą metody `withInput`:
 
     return redirect('form')->withInput();
 
@@ -254,120 +256,121 @@ Since you often will want to flash input to the session and then redirect to the
         $request->except('password')
     );
 
-#### Retrieving Old Input
+#### Retrieving Old Input - Pobieranie starego wejścia
 
-To retrieve flashed input from the previous request, use the `old` method on the `Request` instance. The `old` method will pull the previously flashed input data from the [session](/docs/{{version}}/session):
+Aby pobrać dane z poprzedniego żądania, użyj metody `old` w instancji `Request`. Metoda `old` spowoduje pobranie wcześniej przesłanych danych wejściowych z [sesji](/docs/{{version}}/session):
 
     $username = $request->old('username');
 
-Laravel also provides a global `old` helper. If you are displaying old input within a [Blade template](/docs/{{version}}/blade), it is more convenient to use the `old` helper. If no old input exists for the given field, `null` will be returned:
+Laravel zapewnia także globalnego `old` pomocnika. Jeśli wyświetlasz stare dane wejściowe w [szablonie Blade](/docs/{{version}}/blade), wygodniej jest użyć `old` pomocnika. Jeśli dla danego pola nie istnieje stare dane wejściowe, zwracana będzie wartość "null":
 
     <input type="text" name="username" value="{{ old('username') }}">
 
 <a name="cookies"></a>
-### Cookies
+### Cookies - Ciasteczka
 
-#### Retrieving Cookies From Requests
+#### Retrieving Cookies From Requests - Pobieranie Ciasteczek z żądania.
 
-All cookies created by the Laravel framework are encrypted and signed with an authentication code, meaning they will be considered invalid if they have been changed by the client. To retrieve a cookie value from the request, use the `cookie` method on a `Illuminate\Http\Request` instance:
+Wszystkie pliki cookie utworzone przez frameworki Laravel są szyfrowane i podpisywane za pomocą kodu uwierzytelniającego, co oznacza, że zostaną uznane za nieważne, jeśli zostały zmienione przez klienta. Aby pobrać wartość cookie z żądania, użyj metody `cookie` na instancji `Illuminate\Http\Request`:
 
     $value = $request->cookie('name');
 
-Alternatively, you may use the `Cookie` facade to access cookie values:
+Alternatywnie możesz użyć elewacji `Cookie`, aby uzyskać dostęp do wartości plików cookie:
 
     $value = Cookie::get('name');
 
-#### Attaching Cookies To Responses
+#### Attaching Cookies To Responses - Dołączanie plików cookie do odpowiedzi
 
-You may attach a cookie to an outgoing `Illuminate\Http\Response` instance using the `cookie` method. You should pass the name, value, and number of minutes the cookie should be considered valid to this method:
+Możesz dołączyć plik cookie do wychodzącej instancji `Illuminate\Http\Response` za pomocą metody `cookie`. Należy podać nazwę, wartość i liczbę minut, które ciasteczko powinno być uznane za ważne dla tej metody:
 
     return response('Hello World')->cookie(
         'name', 'value', $minutes
     );
 
-The `cookie` method also accepts a few more arguments which are used less frequently. Generally, these arguments have the same purpose and meaning as the arguments that would be given to PHP's native [setcookie](https://secure.php.net/manual/en/function.setcookie.php) method:
+Metoda `cookie` przyjmuje również kilka argumentów, które są rzadziej używane. Ogólnie rzecz biorąc, te argumenty mają ten sam cel i znaczenie, co argumenty, które zostaną podane do natywnej metody [setcookie](https://secure.php.net/manual/en/function.setcookie.php) PHP:
 
     return response('Hello World')->cookie(
         'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
     );
 
-Alternatively, you can use the `Cookie` facade to "queue" cookies for attachment to the outgoing response from your application. The `queue` method accepts a `Cookie` instance or the arguments needed to create a `Cookie` instance. These cookies will be attached to the outgoing response before it is sent to the browser:
+Możesz też użyć fasady `Cookie` do umieszczenia w "kolejce" plików cookie w celu dołączenia do odpowiedzi wychodzącej z aplikacji. Metoda `queue` akceptuje instancję `Cookie` lub argumenty potrzebne do utworzenia instancji `Cookie`. Te ciasteczka zostaną dołączone do odpowiedzi wychodzącej, zanim zostaną przesłane do przeglądarki:
 
     Cookie::queue(Cookie::make('name', 'value', $minutes));
 
     Cookie::queue('name', 'value', $minutes);
 
-#### Generating Cookie Instances
+#### Generating Cookie Instances - Generowanie ciastek
 
-If you would like to generate a `Symfony\Component\HttpFoundation\Cookie` instance that can be given to a response instance at a later time, you may use the global `cookie` helper. This cookie will not be sent back to the client unless it is attached to a response instance:
+Jeśli chcesz wygenerować instancję `Symfony\Component\HttpFoundation\Cookie`, która może zostać przekazana do instancji odpowiedzi w późniejszym czasie, możesz użyć globalnego helpera `cookie`. Ten plik cookie nie zostanie odesłany do klienta, chyba że jest dołączony do instancji odpowiedzi:
 
     $cookie = cookie('name', 'value', $minutes);
 
     return response('Hello World')->cookie($cookie);
 
 <a name="files"></a>
-## Files
+## Files - Pliki
 
 <a name="retrieving-uploaded-files"></a>
-### Retrieving Uploaded Files
+### Retrieving Uploaded Files - Uzyskiwanie pobranych plików
 
-You may access uploaded files from a `Illuminate\Http\Request` instance using the `file` method or using dynamic properties. The `file` method returns an instance of the `Illuminate\Http\UploadedFile` class, which extends the PHP `SplFileInfo` class and provides a variety of methods for interacting with the file:
+Możesz uzyskać dostęp do przesłanych plików z instancji `Illuminate\Http\Request` za pomocą metody `file` lub używając właściwości dynamicznych. Metoda `file` zwraca instancję klasy `Illuminate\Http\UploadedFile`, która rozszerza klasę PHP `SplFileInfo` i udostępnia różne metody interakcji z plikiem:
 
     $file = $request->file('photo');
 
     $file = $request->photo;
 
-You may determine if a file is present on the request using the `hasFile` method:
+Możesz określić, czy plik jest obecny w żądaniu, używając metody `hasFile`:
 
     if ($request->hasFile('photo')) {
         //
     }
 
-#### Validating Successful Uploads
+#### Validating Successful Uploads - Sprawdzanie poprawności przesłanych plików
 
-In addition to checking if the file is present, you may verify that there were no problems uploading the file via the `isValid` method:
+Oprócz sprawdzenia, czy plik jest obecny, możesz sprawdzić, czy nie wystąpiły problemy z przesłaniem pliku za pomocą metody `isValid`:
 
     if ($request->file('photo')->isValid()) {
         //
     }
 
-#### File Paths & Extensions
+#### File Paths & Extensions - Ścieżki plików i rozszerzenia
 
-The `UploadedFile` class also contains methods for accessing the file's fully-qualified path and its extension. The `extension` method will attempt to guess the file's extension based on its contents. This extension may be different from the extension that was supplied by the client:
+Klasa `UploadedFile` zawiera również metody dostępu do pełnej ścieżki pliku i jego rozszerzenia. Metoda `extension` spróbuje odgadnąć rozszerzenie pliku na podstawie jego zawartości. To rozszerzenie może być inne niż rozszerzenie dostarczone przez klienta:
 
     $path = $request->photo->path();
 
     $extension = $request->photo->extension();
 
-#### Other File Methods
+#### Other File Methods - Inne metody plików
 
-There are a variety of other methods available on `UploadedFile` instances. Check out the [API documentation for the class](http://api.symfony.com/3.0/Symfony/Component/HttpFoundation/File/UploadedFile.html) for more information regarding these methods.
+W instancjach `UploadedFile` dostępnych jest wiele innych metod. Sprawdź [dokumentację API dla klasy](http://api.symfony.com/3.0/Symfony/Component/HttpFoundation/File/UploadedFile.html), aby uzyskać więcej informacji na temat tych metod.
 
 <a name="storing-uploaded-files"></a>
-### Storing Uploaded Files
+### Storing Uploaded Files - Przechowywanie przesłanych plików
 
-To store an uploaded file, you will typically use one of your configured [filesystems](/docs/{{version}}/filesystem). The `UploadedFile` class has a `store` method which will move an uploaded file to one of your disks, which may be a location on your local filesystem or even a cloud storage location like Amazon S3.
+Aby zapisać przesłany plik, zwykle używasz jednego ze skonfigurowanych [systemów plików](/docs/{{version}}/filesystem). Klasa `UploadedFile` ma metodę `store`, która przenosi przesłany plik na jeden z dysków, który może być lokalizacją w lokalnym systemie plików lub nawet w miejscu przechowywania w chmurze, takim jak Amazon S3.
 
-The `store` method accepts the path where the file should be stored relative to the filesystem's configured root directory. This path should not contain a file name, since a unique ID will automatically be generated to serve as the file name.
+Metoda `store` akceptuje ścieżkę, w której plik powinien być przechowywany względem skonfigurowanego katalogu głównego systemu plików. Ta ścieżka nie powinna zawierać nazwy pliku, ponieważ unikalny identyfikator zostanie automatycznie wygenerowany, aby służyć jako nazwa pliku.
 
-The `store` method also accepts an optional second argument for the name of the disk that should be used to store the file. The method will return the path of the file relative to the disk's root:
+Metoda `store` przyjmuje również opcjonalny drugi argument dla nazwy dysku, który powinien zostać użyty do przechowywania pliku. Metoda zwróci ścieżkę pliku względem katalogu głównego dysku:
+
 
     $path = $request->photo->store('images');
 
     $path = $request->photo->store('images', 's3');
 
-If you do not want a file name to be automatically generated, you may use the `storeAs` method, which accepts the path, file name, and disk name as its arguments:
+Jeśli nie chcesz, aby nazwa pliku była generowana automatycznie, możesz użyć metody `storeAs`, która akceptuje ścieżkę, nazwę pliku i nazwę dysku jako swoje argumenty:
 
     $path = $request->photo->storeAs('images', 'filename.jpg');
 
     $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 
 <a name="configuring-trusted-proxies"></a>
-## Configuring Trusted Proxies
+## Configuring Trusted Proxies - Konfigurowanie zaufanych serwerów proxy
 
-When running your applications behind a load balancer that terminates TLS / SSL certificates, you may notice your application sometimes does not generate HTTPS links. Typically this is because your application is being forwarded traffic from your load balancer on port 80 and does not know it should generate secure links.
+Podczas uruchamiania aplikacji za modułem równoważenia obciążenia, który nadaje certyfikaty TLS / SSL, możesz zauważyć, że aplikacja czasami nie generuje linków HTTPS. Zazwyczaj dzieje się tak dlatego, że Twoja aplikacja jest przekierowywana z systemu równoważenia obciążenia na porcie 80 i nie wie, że powinna generować bezpieczne linki.
 
-To solve this, you may use the `App\Http\Middleware\TrustProxies` middleware that is included in your Laravel application, which allows you to quickly customize the load balancers or proxies that should be trusted by your application. Your trusted proxies should be listed as an array on the `$proxies` property of this middleware. In addition to configuring the trusted proxies, you may configure the headers that are being sent by your proxy with information about the original request:
+Aby rozwiązać ten problem, można użyć oprogramowania pośredniego `App\Http\Middleware\TrustProxies`, które jest zawarte w aplikacji Laravel, co pozwala szybko dostosować ustawienia równoważenia obciążenia lub serwery proxy, które powinny być zaufane przez aplikację. Twój zaufany serwer proxy powinien być wymieniony jako tablica we właściwości `$proxies` tego oprogramowania pośredniego. Oprócz konfiguracji zaufanych serwerów proxy możesz skonfigurować nagłówki wysyłane przez serwer proxy z informacjami o pierwotnym żądaniu:
 
     <?php
 
@@ -402,9 +405,10 @@ To solve this, you may use the `App\Http\Middleware\TrustProxies` middleware tha
         ];
     }
 
-#### Trusting All Proxies
+#### Trusting All Proxies - Ufając wszystkim serwerom proxy
 
 If you are using Amazon AWS or another "cloud" load balancer provider, you may not know the IP addresses of your actual balancers. In this case, you may use `**` to trust all proxies:
+Jeśli korzystasz z usługi Amazon AWS lub innego dostawcy usług równoważenia obciążenia "w chmurze", możesz nie znać adresów IP rzeczywistych równoważników. W takim przypadku możesz użyć `**` do zaufania wszystkim proxy:
 
     /**
      * The trusted proxies for this application.
