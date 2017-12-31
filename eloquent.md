@@ -60,8 +60,7 @@ Teraz spójrzmy na przykładowy model `Flight`, który użyjemy do pobierania i 
         //
     }
 
-
-#### Table Names - Nazwy tabel
+#### Table Names
 
 Zwróć uwagę, że nie powiedzieliśmy Eloquent-owi, która tabela ma być używana w naszym modelu `Flight`. Zgodnie z konwencją "snake case", nazwa w liczbie mnogiej klasy, będzie używana jako nazwa tabeli, chyba że inna nazwa zostanie jawnie określona. Tak więc w tym przypadku, Eloquent weźmie model `Flight` i przechowa zapisy w tabeli `flights`. Możesz określić niestandardową tabelę, definiując właściwość `table` w swoim modelu:
 

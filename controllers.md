@@ -196,7 +196,7 @@ Podczas deklarowania trasy zasobu możesz określić podzestaw działań, które
 Podczas deklarowania tras zasobów, które będą używane przez interfejsy API, zwykle chcesz wykluczyć trasy, które przedstawiają szablony HTML, takie jak `create` i `edit`. Dla wygody możesz użyć metody `apiResource`, aby automatycznie wykluczyć te dwie trasy:
 
     Route::apiResource('photo', 'PhotoController');
-    
+
 Możesz zarejestrować wiele kontrolerów zasobów API jednocześnie, przekazując tablicę do metody `apiResources`:
 
     Route::apiResources([

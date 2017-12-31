@@ -324,7 +324,7 @@ Jeśli nie chcesz używać metody `validate` na żądaniu, możesz utworzyć ins
 
 Pierwszym argumentem przekazanym do metody `make` są dane podlegające walidacji. Drugi argument to zasady walidacji, które należy zastosować do danych.
 
-Po sprawdzeniu, czy sprawdzanie poprawności żądania nie powiodło się, możesz użyć metody `withErrors`, aby przesłać komunikaty o błędach do sesji. Podczas korzystania z tej metody zmienna `$errors` zostanie automatycznie udostępniona Twoim widokom po przekierowaniu, co pozwala łatwo wyświetlić je ponownie użytkownikowi. Metoda `withErrors` akceptuje walidator, `MessageBag` lub  tablicę `array` PHP.
+Po sprawdzeniu, czy sprawdzanie poprawności żądania nie powiodło się, możesz użyć metody `withErrors`, aby przesłać komunikaty o błędach do sesji. Podczas korzystania z tej metody zmienna `$errors` zostanie automatycznie udostępniona Twoim widokom po przekierowaniu, co pozwala łatwo wyświetlić je ponownie użytkownikowi. Metoda `withErrors` akceptuje walidator, `MessageBag` lub tablicę `array` PHP.
  
 <a name="automatic-redirection"></a>
 ### Automatic Redirection - Automatyczne przekierowanie
@@ -925,7 +925,7 @@ Jeśli twoja tabela używa podstawowej nazwy kolumny klucza innej niż `id`, mo�
 
 **Dodawanie dodatkowych klauzul gdzie:**
 
-Możesz również określić dodatkowe ograniczenia zapytania, dostosowując zapytanie za pomocą metody `where`. Na przykład dodajmy ograniczenie, które weryfikuje  `account_id` to `1`:
+Możesz również określić dodatkowe ograniczenia zapytania, dostosowując zapytanie za pomocą metody `where`. Na przykład dodajmy ograniczenie, które weryfikuje `account_id` to `1`:
 
     'email' => Rule::unique('users')->where(function ($query) {
         return $query->where('account_id', 1);
@@ -1008,7 +1008,7 @@ Laravel oferuje szereg pomocnych reguł walidacji; możesz jednak podać własne
 
     php artisan make:rule Uppercase
 
-Po utworzeniu reguły jesteśmy gotowi zdefiniować jej zachowanie. Obiekt reguły zawiera dwie metody: `passses` i` message`. Metoda `passes` przyjmuje wartość atrybutu i nazwę i powinna zwracać wartość `true` lub `false` w zależności od tego, czy wartość atrybutu jest poprawna czy nie. Metoda `message` powinna zwrócić komunikat o błędzie sprawdzania poprawności, który powinien zostać użyty podczas niepowodzenia sprawdzania poprawności:
+Po utworzeniu reguły jesteśmy gotowi zdefiniować jej zachowanie. Obiekt reguły zawiera dwie metody: `passses` i `message`. Metoda `passes` przyjmuje wartość atrybutu i nazwę i powinna zwracać wartość `true` lub `false` w zależności od tego, czy wartość atrybutu jest poprawna czy nie. Metoda `message` powinna zwrócić komunikat o błędzie sprawdzania poprawności, który powinien zostać użyty podczas niepowodzenia sprawdzania poprawności:
 
     <?php
 
