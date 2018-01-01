@@ -1,18 +1,18 @@
 # Localization
 
-- [Introduction](#introduction)
-- [Defining Translation Strings](#defining-translation-strings)
-    - [Using Short Keys](#using-short-keys)
-    - [Using Translation Strings As Keys](#using-translation-strings-as-keys)
-- [Retrieving Translation Strings](#retrieving-translation-strings)
-    - [Replacing Parameters In Translation Strings](#replacing-parameters-in-translation-strings)
-    - [Pluralization](#pluralization)
-- [Overriding Package Language Files](#overriding-package-language-files)
+- [Introduction - Wprowadzenie](#introduction)
+- [Defining Translation Strings - Definiowanie łańcuchów translacji](#defining-translation-strings)
+    - [Using Short Keys - Używanie krótkich klawiszy](#using-short-keys)
+    - [Using Translation Strings As Keys - Używanie łańcuchów translacji jako kluczy](#using-translation-strings-as-keys)
+- [Retrieving Translation Strings - Pobieranie ciągów translacji](#retrieving-translation-strings)
+    - [Replacing Parameters In Translation Strings - Zastępowanie parametrów w łańcuchach translacji](#replacing-parameters-in-translation-strings)
+    - [Pluralization - Liczba mnoga](#pluralization)
+- [Overriding Package Language Files - Nadpisywanie plików językowych pakietów](#overriding-package-language-files)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-Laravel's localization features provide a convenient way to retrieve strings in various languages, allowing you to easily support multiple languages within your application. Language strings are stored in files within the `resources/lang` directory. Within this directory there should be a subdirectory for each language supported by the application:
+Funkcje lokalizacji Laravel zapewniają wygodny sposób pobierania ciągów znaków w różnych językach, co pozwala w łatwy sposób obsługiwać wiele języków w obrębie aplikacji. Łańcuchy językowe są przechowywane w plikach w katalogu `resources/lang`. W tym katalogu powinien znajdować się podkatalog dla każdego języka obsługiwanego przez aplikację:
 
     /resources
         /lang
@@ -21,7 +21,7 @@ Laravel's localization features provide a convenient way to retrieve strings in 
             /es
                 messages.php
 
-All language files simply return an array of keyed strings. For example:
+Wszystkie pliki językowe po prostu zwracają tablicę ciągów z kluczami. Na przykład:
 
     <?php
 
@@ -29,9 +29,9 @@ All language files simply return an array of keyed strings. For example:
         'welcome' => 'Welcome to our application'
     ];
 
-### Configuring The Locale
+### Configuring The Locale - Konfigurowanie ustawień regionalnych
 
-The default language for your application is stored in the `config/app.php` configuration file. Of course, you may modify this value to suit the needs of your application. You may also change the active language at runtime using the `setLocale` method on the `App` facade:
+Domyślny język aplikacji jest przechowywany w pliku konfiguracyjnym `config/app.php`. Oczywiście możesz modyfikować tę wartość, aby dostosować ją do potrzeb aplikacji. Możesz również zmienić aktywny język w środowisku wykonawczym, używając metody `setLocale` na elewacji `App`:
 
     Route::get('welcome/{locale}', function ($locale) {
         App::setLocale($locale);
@@ -39,13 +39,13 @@ The default language for your application is stored in the `config/app.php` conf
         //
     });
 
-You may configure a "fallback language", which will be used when the active language does not contain a given translation string. Like the default language, the fallback language is also configured in the `config/app.php` configuration file:
+Możesz skonfigurować "język zapasowy", który będzie używany, gdy aktywny język nie zawiera danego ciągu tłumaczenia. Podobnie jak język domyślny, język zapasowy jest również skonfigurowany w pliku konfiguracyjnym `config/app.php`:
 
     'fallback_locale' => 'en',
 
-#### Determining The Current Locale
+#### Determining The Current Locale - Określanie bieżących ustawień regionalnych
 
-You may use the `getLocale` and `isLocale` methods on the `App` facade to determine the current locale or check if the locale is a given value:
+Możesz użyć metod `getLocale` i `isLocale` na elewacji `App`, aby określić bieżące ustawienia regionalne lub sprawdzić, czy ustawienia narodowe mają określoną wartość:
 
     $locale = App::getLocale();
 
@@ -54,12 +54,12 @@ You may use the `getLocale` and `isLocale` methods on the `App` facade to determ
     }
 
 <a name="defining-translation-strings"></a>
-## Defining Translation Strings
+## Defining Translation Strings - Definiowanie łańcuchów translacji
 
 <a name="using-short-keys"></a>
-### Using Short Keys
+### Using Short Keys - Używanie krótkich klawiszy
 
-Typically, translation strings are stored in files within the `resources/lang` directory. Within this directory there should be a subdirectory for each language supported by the application:
+Zazwyczaj ciągi tłumaczenia są przechowywane w plikach w katalogu `resources/lang`. W tym katalogu powinien znajdować się podkatalog dla każdego języka obsługiwanego przez aplikację:
 
     /resources
         /lang
@@ -68,7 +68,7 @@ Typically, translation strings are stored in files within the `resources/lang` d
             /es
                 messages.php
 
-All language files simply return an array of keyed strings. For example:
+Wszystkie pliki językowe po prostu zwracają tablicę ciągów z kluczami. Na przykład:
 
     <?php
 
@@ -79,67 +79,67 @@ All language files simply return an array of keyed strings. For example:
     ];
 
 <a name="using-translation-strings-as-keys"></a>
-### Using Translation Strings As Keys
+### Using Translation Strings As Keys - Używanie łańcuchów translacji jako kluczy
 
-For applications with heavy translation requirements, defining every string with a "short key" can become quickly confusing when referencing them in your views. For this reason, Laravel also provides support for defining translation strings using the "default" translation of the string as the key.
+W przypadku aplikacji o dużych wymaganiach dotyczących tłumaczenia zdefiniowanie każdego ciągu za pomocą "krótkiego klucza" może szybko stać się mylące, gdy odwołuje się do nich w swoich widokach. Z tego powodu Laravel zapewnia również obsługę definiowania ciągów translacji przy użyciu "domyślnego" tłumaczenia ciągu znaków jako klucza.
 
-Translation files that use translation strings as keys are stored as JSON files in the `resources/lang` directory. For example, if your application has a Spanish translation, you should create a `resources/lang/es.json` file:
+Pliki tłumaczeń używające łańcuchów translacji jako kluczy są przechowywane jako pliki JSON w katalogu `resources/lang`. Na przykład, jeśli twoja aplikacja ma tłumaczenie na hiszpański, powinieneś utworzyć plik `resources/lang/es.json`:
 
     {
         "I love programming.": "Me encanta programar."
     }
 
 <a name="retrieving-translation-strings"></a>
-## Retrieving Translation Strings
+## Retrieving Translation Strings - Pobieranie ciągów translacji
 
-You may retrieve lines from language files using the `__` helper function. The `__` method accepts the file and key of the translation string as its first argument. For example, let's retrieve the `welcome` translation string from the `resources/lang/messages.php` language file:
+Możesz pobierać linie z plików językowych za pomocą funkcji pomocniczej `__`. Metoda `__` akceptuje plik i klucz łańcucha tłumaczenia jako swój pierwszy argument. Na przykład pobierzmy łańcuch tłumaczenia `welcome` z pliku językowego `resources/lang/messages.php`:
 
     echo __('messages.welcome');
 
     echo __('I love programming.');
 
-Of course if you are using the [Blade templating engine](/docs/{{version}}/blade), you may use the `{{ }}` syntax to echo the translation string or use the `@lang` directive:
+Oczywiście, jeśli używasz [silnika szablonów Blade](/docs/{{version}}/blade), możesz użyć składni `{{ }}` do wyświetlenia ciągu tłumaczenia lub użyć dyrektywy `@lang`:
 
     {{ __('messages.welcome') }}
 
     @lang('messages.welcome')
 
-If the specified translation string does not exist, the `__` function will simply return the translation string key. So, using the example above, the `__` function would return `messages.welcome` if the translation string does not exist.
+Jeśli podany łańcuch translacji nie istnieje, funkcja `__` po prostu zwróci klucz łańcucha tłumaczenia. Tak więc, używając powyższego przykładu, funkcja `__` zwróci komunikat `messages.welcome`, jeśli ciąg tłumaczenia nie istnieje.
 
 <a name="replacing-parameters-in-translation-strings"></a>
-### Replacing Parameters In Translation Strings
+### Replacing Parameters In Translation Strings - Zastępowanie parametrów w łańcuchach translacji
 
-If you wish, you may define place-holders in your translation strings. All place-holders are prefixed with a `:`. For example, you may define a welcome message with a place-holder name:
+Jeśli chcesz, możesz zdefiniować zmienne w swoich ciągach translacji. Wszyscy posiadacze miejsc mają przedrostek  `:`. Na przykład możesz zdefiniować wiadomość powitalną z nazwą właściciela miejsca:
 
     'welcome' => 'Welcome, :name',
 
-To replace the place-holders when retrieving a translation string, pass an array of replacements as the second argument to the `__` function:
+Aby zamienić elementy zastępcze podczas pobierania ciągu translacji, należy przekazać tablicę zastępczą jako drugi argument funkcji `__`:
 
     echo __('messages.welcome', ['name' => 'dayle']);
 
-If your place-holder contains all capital letters, or only has its first letter capitalized, the translated value will be capitalized accordingly:
+Jeśli Twój posiadacz-miejsce zawiera wszystkie wielkie litery lub ma tylko pierwszą literę wielką, przetłumaczona wartość zostanie odpowiednio zamieniona na:
 
     'welcome' => 'Welcome, :NAME', // Welcome, DAYLE
     'goodbye' => 'Goodbye, :Name', // Goodbye, Dayle
 
 <a name="pluralization"></a>
-### Pluralization
+### Pluralization - Liczba mnoga
 
-Pluralization is a complex problem, as different languages have a variety of complex rules for pluralization. By using a "pipe" character, you may distinguish singular and plural forms of a string:
+Pluralizacja jest złożonym problemem, ponieważ różne języki mają wiele złożonych reguł dla pluralizacji. Używając znaku "potoku" możesz rozróżniać formy w liczbie pojedynczej i mnogiej ciągu:
 
     'apples' => 'There is one apple|There are many apples',
 
-You may even create more complex pluralization rules which specify translation strings for multiple number ranges:
+Możesz nawet utworzyć bardziej złożone reguły plurowania, które określają łańcuchy translacji dla wielu zakresów liczbowych:
 
     'apples' => '{0} There are none|[1,19] There are some|[20,*] There are many',
 
-After defining a translation string that has pluralization options, you may use the `trans_choice` function to retrieve the line for a given "count". In this example, since the count is greater than one, the plural form of the translation string is returned:
+Po zdefiniowaniu ciągu translacji, który ma opcje liczby mnogiej, możesz użyć funkcji `trans_choice` do pobrania linii dla danego "licznika". W tym przykładzie, ponieważ liczba jest większa niż jeden, zwracana jest liczba mnoga ciągu tłumaczenia:
 
     echo trans_choice('messages.apples', 10);
 
 <a name="overriding-package-language-files"></a>
-## Overriding Package Language Files
+## Overriding Package Language Files - Nadpisywanie plików językowych pakietów
 
-Some packages may ship with their own language files. Instead of changing the package's core files to tweak these lines, you may override them by placing files in the `resources/lang/vendor/{package}/{locale}` directory.
+Niektóre pakiety mogą być dostarczane z własnymi plikami językowymi. Zamiast zmieniać podstawowe pliki pakietu, aby poprawić te linie, możesz je zastąpić, umieszczając pliki w katalogu `resources/lang/vendor/{package}/{locale}`.
 
-So, for example, if you need to override the English translation strings in `messages.php` for a package named `skyrim/hearthfire`, you should place a language file at: `resources/lang/vendor/hearthfire/en/messages.php`. Within this file, you should only define the translation strings you wish to override. Any translation strings you don't override will still be loaded from the package's original language files.
+Tak więc, na przykład, jeśli chcesz przesłonić angielskie ciągi tłumaczenia w `messages.php` dla pakietu o nazwie `skyrim/hearthfire`, powinieneś umieścić plik językowy w: `resources/lang/vendor/hearthfire/en/messages.php`. W tym pliku należy tylko zdefiniować łańcuchy translacji, które mają zostać zastąpione. Wszystkie ciągi tłumaczenia, których nie zastąpisz, będą nadal ładowane z oryginalnych plików językowych pakietu.
