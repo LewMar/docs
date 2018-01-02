@@ -326,7 +326,7 @@ Możesz również użyć podstawowego uwierzytelniania HTTP bez ustawiania ciast
 
     <?php
 
-    namespace Illuminate\Auth\Middleware;
+    namespace App\Http\Middleware;
 
     use Illuminate\Support\Facades\Auth;
 
