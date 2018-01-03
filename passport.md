@@ -1,60 +1,60 @@
 # API Authentication (Passport)
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-    - [Frontend Quickstart](#frontend-quickstart)
-    - [Deploying Passport](#deploying-passport)
-- [Configuration](#configuration)
-    - [Token Lifetimes](#token-lifetimes)
-- [Issuing Access Tokens](#issuing-access-tokens)
-    - [Managing Clients](#managing-clients)
-    - [Requesting Tokens](#requesting-tokens)
-    - [Refreshing Tokens](#refreshing-tokens)
-- [Password Grant Tokens](#password-grant-tokens)
-    - [Creating A Password Grant Client](#creating-a-password-grant-client)
-    - [Requesting Tokens](#requesting-password-grant-tokens)
-    - [Requesting All Scopes](#requesting-all-scopes)
-- [Implicit Grant Tokens](#implicit-grant-tokens)
-- [Client Credentials Grant Tokens](#client-credentials-grant-tokens)
-- [Personal Access Tokens](#personal-access-tokens)
-    - [Creating A Personal Access Client](#creating-a-personal-access-client)
-    - [Managing Personal Access Tokens](#managing-personal-access-tokens)
-- [Protecting Routes](#protecting-routes)
-    - [Via Middleware](#via-middleware)
-    - [Passing The Access Token](#passing-the-access-token)
-- [Token Scopes](#token-scopes)
-    - [Defining Scopes](#defining-scopes)
-    - [Assigning Scopes To Tokens](#assigning-scopes-to-tokens)
-    - [Checking Scopes](#checking-scopes)
-- [Consuming Your API With JavaScript](#consuming-your-api-with-javascript)
-- [Events](#events)
-- [Testing](#testing)
+- [Introduction - Wprowadzenie](#introduction)
+- [Installation - Instalacja](#installation)
+    - [Frontend Quickstart - Fronend szybki start](#frontend-quickstart)
+    - [Deploying Passport - Wdrażanie Passport](#deploying-passport)
+- [Configuration - Konfiguracja](#configuration)
+    - [Token Lifetimes - Życia Tokenów](#token-lifetimes)
+- [Issuing Access Tokens - Wydawanie tokenów dostępu](#issuing-access-tokens)
+    - [Managing Clients - Zarządzanie klientami](#managing-clients)
+    - [Requesting Tokens - Żądanie tokenów](#requesting-tokens)
+    - [Refreshing Tokens - Odświeżanie tokenów](#refreshing-tokens)
+- [Password Grant Tokens - Żeton udzielania hasła](#password-grant-tokens)
+    - [Creating A Password Grant Client - Tworzenie żetonu udzielania hasła](#creating-a-password-grant-client)
+    - [Requesting Tokens - Żądanie tokenów](#requesting-password-grant-tokens)
+    - [Requesting All Scopes - Żądanie wszystkich zakresów](#requesting-all-scopes)
+- [Implicit Grant Tokens - Niejawny przyznawane tokeny](#implicit-grant-tokens)
+- [Client Credentials Grant Tokens - Żetony Grantów Poświadczających Klienta](#client-credentials-grant-tokens)
+- [Personal Access Tokens - Osobiste żetony dostępu](#personal-access-tokens)
+    - [Creating A Personal Access Client - Tworzenie osobistego klienta dostępu](#creating-a-personal-access-client)
+    - [Managing Personal Access Tokens - Zarządzanie osobistymi tokenami dostępu](#managing-personal-access-tokens)
+- [Protecting Routes - Ochrona tras](#protecting-routes)
+    - [Via Middleware - Przez oprogramowanie pośredniczące](#via-middleware)
+    - [Passing The Access Token  Przekazywanie tokena dostępu](#passing-the-access-token)
+- [Token Scopes - Zakresy żetonu](#token-scopes)
+    - [Defining Scopes - Definiowanie żetonu](#defining-scopes)
+    - [Assigning Scopes To Tokens - Przypisywanie zakresów do tokenów](#assigning-scopes-to-tokens)
+    - [Checking Scopes - Sprawdzanie zakresów](#checking-scopes)
+- [Consuming Your API With JavaScript - Spożywanie Twojego API za pomocą JavaScript](#consuming-your-api-with-javascript)
+- [Events - Zdarzenia](#events)
+- [Testing - Testowanie](#testing)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-Laravel already makes it easy to perform authentication via traditional login forms, but what about APIs? APIs typically use tokens to authenticate users and do not maintain session state between requests. Laravel makes API authentication a breeze using Laravel Passport, which provides a full OAuth2 server implementation for your Laravel application in a matter of minutes. Passport is built on top of the [League OAuth2 server](https://github.com/thephpleague/oauth2-server) that is maintained by Alex Bilbie.
+Laravel już ułatwia uwierzytelnianie za pomocą tradycyjnych formularzy logowania, ale co z API? Interfejsy API zazwyczaj używają tokenów do uwierzytelniania użytkowników i nie utrzymują stanu sesji między żądaniami. Laravel sprawia, że uwierzytelnianie za pomocą API jest proste dzięki użyciu Laravel Passport, który zapewnia pełną implementację serwera OAuth2 dla Twojej aplikacji Laravel w ciągu kilku minut. Passport jest zbudowany na serwerze [League OAuth2](https://github.com/thephpleague/oauth2-server) obsługiwanym przez Alex Bilbie.
 
-> {note} This documentation assumes you are already familiar with OAuth2. If you do not know anything about OAuth2, consider familiarizing yourself with the general terminology and features of OAuth2 before continuing.
+> {note} W tej dokumentacji założono, że znasz już OAuth2. Jeśli nie wiesz nic o OAuth2, rozważ zapoznanie się z ogólną terminologią i funkcjami OAuth2 przed kontynuowaniem.
 
 <a name="installation"></a>
-## Installation
+## Installation - Instalacja
 
-To get started, install Passport via the Composer package manager:
+Aby rozpocząć, zainstaluj usługę Passport za pomocą menedżera pakietów Composer:
 
     composer require laravel/passport
 
-The Passport service provider registers its own database migration directory with the framework, so you should migrate your database after registering the provider. The Passport migrations will create the tables your application needs to store clients and access tokens:
+Dostawca usługi Passport rejestruje swój własny katalog migracji bazy danych za pomocą frameworka, więc po zarejestrowaniu dostawcy należy przeprowadzić migrację bazy danych. Migracje Passport utworzą tabele potrzebne aplikacji do przechowywania klientów i tokenów dostępu:
 
     php artisan migrate
 
-> {note} If you are not going to use Passport's default migrations, you should call the `Passport::ignoreMigrations` method in the `register` method of your `AppServiceProvider`. You may export the default migrations using `php artisan vendor:publish --tag=passport-migrations`.
+> {note} Jeśli nie zamierzasz korzystać z domyślnych migracji usługi Passport, powinieneś wywołać metodę `Passport::ignoreMigrations` w metodzie `register` swojego `AppServiceProvider`. Możesz wyeksportować domyślne migracje za pomocą `php artisan vendor:publish --tag=passport-migrations`.
 
-Next, you should run the `passport:install` command. This command will create the encryption keys needed to generate secure access tokens. In addition, the command will create "personal access" and "password grant" clients which will be used to generate access tokens:
+Następnie uruchom polecenie `passport:install`. To polecenie utworzy klucze szyfrowania potrzebne do wygenerowania tokenów bezpiecznego dostępu. Ponadto polecenie utworzy klienty "dostęp osobisty(personal access)" i "udzielenie hasła(password grant)", które będą używane do generowania tokenów dostępu:
 
     php artisan passport:install
 
-After running this command, add the `Laravel\Passport\HasApiTokens` trait to your `App\User` model. This trait will provide a few helper methods to your model which allow you to inspect the authenticated user's token and scopes:
+Po uruchomieniu tego polecenia dodaj cechę `Laravel\Passport\HasApiTokens` do swojego modelu `App\User`. Ta cecha zapewni kilka metod pomocniczych dla Twojego modelu, które umożliwiają sprawdzanie tokena i zakresów uwierzytelnionego użytkownika:
 
     <?php
 
@@ -69,7 +69,7 @@ After running this command, add the `Laravel\Passport\HasApiTokens` trait to you
         use HasApiTokens, Notifiable;
     }
 
-Next, you should call the `Passport::routes` method within the `boot` method of your `AuthServiceProvider`. This method will register the routes necessary to issue access tokens and revoke access tokens, clients, and personal access tokens:
+Następnie powinieneś wywołać metodę `Passport::routes` w metodzie `boot` swojego `AuthServiceProvider`. Ta metoda rejestruje trasy niezbędne do wydawania tokenów dostępu i unieważnia tokeny dostępu, klientów i tokeny dostępu osobistego:
 
     <?php
 
@@ -103,7 +103,7 @@ Next, you should call the `Passport::routes` method within the `boot` method of 
         }
     }
 
-Finally, in your `config/auth.php` configuration file, you should set the `driver` option of the `api` authentication guard to `passport`. This will instruct your application to use Passport's `TokenGuard` when authenticating incoming API requests:
+Na koniec, w pliku konfiguracyjnym `config/auth.php`, powinieneś ustawić opcję `driver` dla `api` na `passport`. Spowoduje to, że twoja aplikacja użyje `TokenGuard` Passport-u podczas uwierzytelniania przychodzących żądań API:
 
     'guards' => [
         'web' => [
@@ -118,17 +118,17 @@ Finally, in your `config/auth.php` configuration file, you should set the `drive
     ],
 
 <a name="frontend-quickstart"></a>
-### Frontend Quickstart
+### Frontend Quickstart - Fronend szybki start
 
-> {note} In order to use the Passport Vue components, you must be using the [Vue](https://vuejs.org) JavaScript framework. These components also use the Bootstrap CSS framework. However, even if you are not using these tools, the components serve as a valuable reference for your own frontend implementation.
+> {note} Aby korzystać z komponentów Passport Vue, musisz używać struktury JavaScript [Vue](https://vuejs.org). Te komponenty również wykorzystują framework Bootstrap CSS. Jednak nawet jeśli nie korzystasz z tych narzędzi, komponenty służą jako cenne odniesienie do Twojej implementacji frontendu.
 
-Passport ships with a JSON API that you may use to allow your users to create clients and personal access tokens. However, it can be time consuming to code a frontend to interact with these APIs. So, Passport also includes pre-built [Vue](https://vuejs.org) components you may use as an example implementation or starting point for your own implementation.
+Usługa Passport jest dostarczana z interfejsem API JSON, którego możesz użyć do umożliwienia użytkownikom tworzenia klientów i tokenów dostępu osobistego. Jednak kodowanie interfejsu użytkownika do interakcji z tymi interfejsami API może być czasochłonne. W związku z tym w usłudze Passport uwzględnione są również gotowe komponenty [Vue](https://vuejs.org), których można użyć jako przykładu wdrożenia lub punktu wyjścia do własnej implementacji.
 
-To publish the Passport Vue components, use the `vendor:publish` Artisan command:
+Aby opublikować komponenty Passport Vue, użyj polecenia `vendor:publish` Artisan:
 
     php artisan vendor:publish --tag=passport-components
 
-The published components will be placed in your `resources/assets/js/components` directory. Once the components have been published, you should register them in your `resources/assets/js/app.js` file:
+Opublikowane komponenty zostaną umieszczone w katalogu  `resources/assets/js/components`. Po opublikowaniu komponentów należy je zarejestrować w pliku `resources/assets/js/app.js`:
 
     Vue.component(
         'passport-clients',
@@ -145,26 +145,26 @@ The published components will be placed in your `resources/assets/js/components`
         require('./components/passport/PersonalAccessTokens.vue')
     );
 
-After registering the components, make sure to run `npm run dev` to recompile your assets. Once you have recompiled your assets, you may drop the components into one of your application's templates to get started creating clients and personal access tokens:
+Po zarejestrowaniu komponentów upewnij się, że uruchom `npm run dev`, aby przekompilować swoje zasoby. Po ponownym skompilowaniu zasobów możesz upuścić komponenty do jednego z szablonów aplikacji, aby rozpocząć tworzenie klientów i tokenów dostępu osobistego:
 
     <passport-clients></passport-clients>
     <passport-authorized-clients></passport-authorized-clients>
     <passport-personal-access-tokens></passport-personal-access-tokens>
 
 <a name="deploying-passport"></a>
-### Deploying Passport
+### Deploying Passport - Wdrażanie Passport
 
-When deploying Passport to your production servers for the first time, you will likely need to run the `passport:keys` command. This command generates the encryption keys Passport needs in order to generate access token. The generated keys are not typically kept in source control:
+Podczas wdrażania usługi Passport na serwerach produkcyjnych po raz pierwszy najprawdopodobniej konieczne będzie uruchomienie polecenia `passport:keys`. To polecenie generuje klucze szyfrowania Passport potrzebne do wygenerowania tokenu dostępu. Wygenerowane klucze zazwyczaj nie są przechowywane w kontroli źródła:
 
     php artisan passport:keys
 
 <a name="configuration"></a>
-## Configuration
+## Configuration - Konfiguracja
 
 <a name="token-lifetimes"></a>
-### Token Lifetimes
+### Token Lifetimes - Życia Tokenów
 
-By default, Passport issues long-lived access tokens that never need to be refreshed. If you would like to configure a shorter token lifetime, you may use the `tokensExpireIn` and `refreshTokensExpireIn` methods. These methods should be called from the `boot` method of your `AuthServiceProvider`:
+Domyślnie w usłudze Passport wydawane są długoterminowe tokeny dostępu, które nigdy nie muszą być odświeżane. Jeśli chcesz skonfigurować krótszy okres istnienia tokenu, możesz użyć metod `tokensExpireIn` i `refreshTokensExpireIn`. Te metody powinny być wywoływane z metody `boot` twojego `AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -183,32 +183,32 @@ By default, Passport issues long-lived access tokens that never need to be refre
     }
 
 <a name="issuing-access-tokens"></a>
-## Issuing Access Tokens
+## Issuing Access Tokens - Wydawanie tokenów dostępu
 
-Using OAuth2 with authorization codes is how most developers are familiar with OAuth2. When using authorization codes, a client application will redirect a user to your server where they will either approve or deny the request to issue an access token to the client.
+Używanie protokołu OAuth2 z kodami autoryzacji to sposób, w jaki większość programistów zna OAuth2. Podczas korzystania z kodów autoryzacji aplikacja kliencka przekieruje użytkownika na serwer, gdzie może zatwierdzić lub odrzucić żądanie udostępnienia tokenu dostępu do klienta.
 
 <a name="managing-clients"></a>
-### Managing Clients
+### Managing Clients - Zarządzanie klientami
 
-First, developers building applications that need to interact with your application's API will need to register their application with yours by creating a "client". Typically, this consists of providing the name of their application and a URL that your application can redirect to after users approve their request for authorization.
+Po pierwsze, programiści tworzący aplikacje, które muszą wchodzić w interakcje z interfejsem API twojej aplikacji, będą musieli zarejestrować swoją aplikację przy pomocy swojego "klienta". Zazwyczaj polega to na podaniu nazwy aplikacji i adresu URL, na który aplikacja może przekierowywać po zatwierdzeniu przez użytkowników ich wniosku o autoryzację.
 
 #### The `passport:client` Command
 
-The simplest way to create a client is using the `passport:client` Artisan command. This command may be used to create your own clients for testing your OAuth2 functionality. When you run the `client` command, Passport will prompt you for more information about your client and will provide you with a client ID and secret:
+Najprostszym sposobem na utworzenie klienta jest użycie polecenia `passport:client` Artisan. To polecenie może być używane do tworzenia własnych klientów w celu testowania funkcjonalności OAuth2. Po uruchomieniu polecenia `client` program Passport wyświetli monit o więcej informacji o kliencie i udostępni identyfikator klienta oraz sekret:
 
     php artisan passport:client
 
 #### JSON API
 
-Since your users will not be able to utilize the `client` command, Passport provides a JSON API that you may use to create clients. This saves you the trouble of having to manually code controllers for creating, updating, and deleting clients.
+Ponieważ twoi użytkownicy nie będą mogli korzystać z polecenia `client`, Passport udostępnia interfejs API JSON, którego możesz użyć do tworzenia klientów. Pozwala to zaoszczędzić sobie trudu ręcznego kodowania kontrolerów w celu tworzenia, aktualizowania i usuwania klientów.
 
-However, you will need to pair Passport's JSON API with your own frontend to provide a dashboard for your users to manage their clients. Below, we'll review all of the API endpoints for managing clients. For convenience, we'll use [Axios](https://github.com/mzabriskie/axios) to demonstrate making HTTP requests to the endpoints.
+Konieczne będzie jednak sparowanie interfejsu JSON API usługi Passport z własnym interfejsem, aby udostępnić panel kontrolny dla użytkowników do zarządzania swoimi klientami. Poniżej opiszemy wszystkie punkty końcowe API do zarządzania klientami. Dla wygody użyjemy [Axios](https://github.com/mzabriskie/axios), aby zademonstrować wysyłanie żądań HTTP do punktów końcowych.
 
-> {tip} If you don't want to implement the entire client management frontend yourself, you can use the [frontend quickstart](#frontend-quickstart) to have a fully functional frontend in a matter of minutes.
+> {tip} Jeśli nie chcesz zaimplementować całego interfejsu klienta do zarządzania, możesz skorzystać z [szybkiego uruchomienia frontendu](#frontend-quickstart), aby w pełni funkcjonalny interfejs uruchomić w ciągu kilku minut.
 
 #### `GET /oauth/clients`
 
-This route returns all of the clients for the authenticated user. This is primarily useful for listing all of the user's clients so that they may edit or delete them:
+Ta trasa zwraca wszystkich klientów uwierzytelnionego użytkownika. Jest to przydatne przede wszystkim do wyświetlania wszystkich klientów użytkownika, aby mogli je edytować lub usunąć:
 
     axios.get('/oauth/clients')
         .then(response => {
@@ -217,9 +217,9 @@ This route returns all of the clients for the authenticated user. This is primar
 
 #### `POST /oauth/clients`
 
-This route is used to create new clients. It requires two pieces of data: the client's `name` and a `redirect` URL. The `redirect` URL is where the user will be redirected after approving or denying a request for authorization.
+Ta trasa służy do tworzenia nowych klientów. Wymaga dwóch danych: adresu URL `name` i `redirect`. Adres URL `redirect` to miejsce, w którym użytkownik zostanie przekierowany po zatwierdzeniu lub odrzuceniu wniosku o autoryzację.
 
-When a client is created, it will be issued a client ID and client secret. These values will be used when requesting access tokens from your application. The client creation route will return the new client instance:
+Po utworzeniu klienta zostanie mu nadany identyfikator klienta i tajny klucz klienta. Te wartości będą używane przy żądaniu tokenów dostępu z twojej aplikacji. Trasa tworzenia klienta zwróci nową instancję klienta:
 
     const data = {
         name: 'Client Name',
@@ -236,7 +236,7 @@ When a client is created, it will be issued a client ID and client secret. These
 
 #### `PUT /oauth/clients/{client-id}`
 
-This route is used to update clients. It requires two pieces of data: the client's `name` and a `redirect` URL. The `redirect` URL is where the user will be redirected after approving or denying a request for authorization. The route will return the updated client instance:
+Ta trasa służy do aktualizacji klientów. Wymaga dwóch danych: adresu URL `name` i `redirect`. Adres URL `redirect` to miejsce, w którym użytkownik zostanie przekierowany po zatwierdzeniu lub odrzuceniu wniosku o autoryzację. Trasa zwróci zaktualizowaną instancję klienta:
 
     const data = {
         name: 'New Client Name',
@@ -253,7 +253,7 @@ This route is used to update clients. It requires two pieces of data: the client
 
 #### `DELETE /oauth/clients/{client-id}`
 
-This route is used to delete clients:
+Ta trasa służy do usuwania klientów:
 
     axios.delete('/oauth/clients/' + clientId)
         .then(response => {
@@ -261,11 +261,11 @@ This route is used to delete clients:
         });
 
 <a name="requesting-tokens"></a>
-### Requesting Tokens
+### Requesting Tokens - Żądanie tokenów
 
-#### Redirecting For Authorization
+#### Redirecting For Authorization - Przekierowanie w celu autoryzacji
 
-Once a client has been created, developers may use their client ID and secret to request an authorization code and access token from your application. First, the consuming application should make a redirect request to your application's `/oauth/authorize` route like so:
+Po utworzeniu klienta programiści mogą używać swojego identyfikatora klienta i hasła, aby zażądać kodu autoryzacji i dostępu do tokena z aplikacji. Po pierwsze aplikacja pobierająca powinna przekierować żądanie do trasy `/oauth/authorize` aplikacji:
 
     Route::get('/redirect', function () {
         $query = http_build_query([
@@ -278,19 +278,20 @@ Once a client has been created, developers may use their client ID and secret to
         return redirect('http://your-app.com/oauth/authorize?'.$query);
     });
 
-> {tip} Remember, the `/oauth/authorize` route is already defined by the `Passport::routes` method. You do not need to manually define this route.
+> {tip} Pamiętaj, że trasa `/oauth/authorize` jest już zdefiniowana metodą  `Passport::routes`. Nie musisz ręcznie definiować tej trasy.
 
-#### Approving The Request
 
-When receiving authorization requests, Passport will automatically display a template to the user allowing them to approve or deny the authorization request. If they approve the request, they will be redirected back to the `redirect_uri` that was specified by the consuming application. The `redirect_uri` must match the `redirect` URL that was specified when the client was created.
+#### Approving The Request - Zatwierdzenie wniosku
 
-If you would like to customize the authorization approval screen, you may publish Passport's views using the `vendor:publish` Artisan command. The published views will be placed in `resources/views/vendor/passport`:
+Podczas odbierania wniosków o autoryzację, Passport automatycznie wyświetli szablon dla użytkownika, umożliwiając mu zatwierdzenie lub odrzucenie żądania autoryzacji. Jeśli zatwierdzą żądanie, zostaną przekierowani z powrotem do `redirect_uri`, który został określony przez aplikację korzystającą. `redirect_uri` musi pasować do adresu URL `redirect`, który został określony podczas tworzenia klienta.
+
+Jeśli chcesz dostosować ekran zatwierdzania autoryzacji, możesz opublikować widoki usługi Passport za pomocą komendy `vendor:publish` Artisan. Opublikowane widoki zostaną umieszczone w  `resources/views/vendor/passport`:
 
     php artisan vendor:publish --tag=passport-views
 
-#### Converting Authorization Codes To Access Tokens
+#### Converting Authorization Codes To Access Tokens - Konwersja kodów autoryzacyjnych w celu uzyskania dostępu do tokenów
 
-If the user approves the authorization request, they will be redirected back to the consuming application. The consumer should then issue a `POST` request to your application to request an access token. The request should include the authorization code that was issued by your application when the user approved the authorization request. In this example, we'll use the Guzzle HTTP library to make the `POST` request:
+Jeśli użytkownik zatwierdzi żądanie autoryzacji, zostanie przekierowany z powrotem do aplikacji korzystającej. Konsument powinien następnie wysłać do aplikacji żądanie `POST`, aby poprosić o token dostępu. Żądanie powinno zawierać kod autoryzacji, który został wydany przez aplikację po zatwierdzeniu przez użytkownika żądania autoryzacji. W tym przykładzie użyjemy biblioteki HTTP Guzzle do wykonania żądania `POST`:
 
     Route::get('/callback', function (Request $request) {
         $http = new GuzzleHttp\Client;
@@ -308,14 +309,14 @@ If the user approves the authorization request, they will be redirected back to 
         return json_decode((string) $response->getBody(), true);
     });
 
-This `/oauth/token` route will return a JSON response containing `access_token`, `refresh_token`, and `expires_in` attributes. The `expires_in` attribute contains the number of seconds until the access token expires.
+Ta trasa `/oauth/token` zwraca odpowiedź JSON zawierającą atrybuty `access_token`, `refresh_token` i `expires_in`. Atrybut `expires_in` zawiera liczbę sekund do wygaśnięcia tokena dostępu.
 
-> {tip} Like the `/oauth/authorize` route, the `/oauth/token` route is defined for you by the `Passport::routes` method. There is no need to manually define this route.
+> {tip} Podobnie jak w przypadku trasy `/oauth/authorize`, trasa `/oauth/token` jest zdefiniowana dla ciebie metodą `Passport::routes`. Nie ma potrzeby ręcznego definiowania tej trasy.
 
 <a name="refreshing-tokens"></a>
-### Refreshing Tokens
+### Refreshing Tokens - Odświeżanie tokenów
 
-If your application issues short-lived access tokens, users will need to refresh their access tokens via the refresh token that was provided to them when the access token was issued. In this example, we'll use the Guzzle HTTP library to refresh the token:
+Jeśli twoja aplikacja wyda żetony dostępu krótkotrwałego, użytkownicy będą musieli odświeżyć swoje tokeny dostępu za pomocą odświeżającego tokena, który został im dostarczony, gdy wydano token dostępu. W tym przykładzie użyjemy biblioteki HTTP Guzzle do odświeżenia tokena:
 
     $http = new GuzzleHttp\Client;
 
@@ -331,24 +332,24 @@ If your application issues short-lived access tokens, users will need to refresh
 
     return json_decode((string) $response->getBody(), true);
 
-This `/oauth/token` route will return a JSON response containing `access_token`, `refresh_token`, and `expires_in` attributes. The `expires_in` attribute contains the number of seconds until the access token expires.
+Ta trasa `/oauth/token` zwraca odpowiedź JSON zawierającą atrybuty `access_token`, `refresh_token` i `expires_in`. Atrybut `expires_in` zawiera liczbę sekund do wygaśnięcia tokena dostępu.
 
 <a name="password-grant-tokens"></a>
-## Password Grant Tokens
+## Password Grant Tokens - Żeton udzielania hasła
 
-The OAuth2 password grant allows your other first-party clients, such as a mobile application, to obtain an access token using an e-mail address / username and password. This allows you to issue access tokens securely to your first-party clients without requiring your users to go through the entire OAuth2 authorization code redirect flow.
+Przydzielenie hasła OAuth2 umożliwia innym klientom, takim jak aplikacja mobilna, uzyskanie tokenu dostępu za pomocą adresu e-mail / nazwy użytkownika i hasła. Dzięki temu możesz bezpiecznie wystawiać tokeny swoim klientom, nie wymagając od użytkowników przejścia przez cały proces przekierowania kodu autoryzacji OAuth2.
 
 <a name="creating-a-password-grant-client"></a>
-### Creating A Password Grant Client
+### Creating A Password Grant Client - Tworzenie żetonu udzielania hasła
 
-Before your application can issue tokens via the password grant, you will need to create a password grant client. You may do this using the `passport:client` command with the `--password` option. If you have already run the `passport:install` command, you do not need to run this command:
+Zanim aplikacja będzie mogła wydać tokeny poprzez przyznanie hasła, musisz utworzyć klienta przydziału haseł. Możesz to zrobić za pomocą polecenia `paszport:client` z opcją` --password`. Jeśli uruchomiłeś już polecenie `passport:install`, nie musisz uruchamiać tego polecenia:
 
     php artisan passport:client --password
 
 <a name="requesting-password-grant-tokens"></a>
-### Requesting Tokens
+### Requesting Tokens - Żądanie tokenów
 
-Once you have created a password grant client, you may request an access token by issuing a `POST` request to the `/oauth/token` route with the user's email address and password. Remember, this route is already registered by the `Passport::routes` method so there is no need to define it manually. If the request is successful, you will receive an `access_token` and `refresh_token` in the JSON response from the server:
+Po utworzeniu klienta do przydzielania haseł możesz zażądać tokenu dostępu, wysyłając żądanie `POST` do trasy `/oauth/token` za pomocą adresu e-mail użytkownika i hasła. Pamiętaj, że ta trasa jest już zarejestrowana metodą `Passport::routes`, więc nie ma potrzeby definiowania jej ręcznie. Jeśli żądanie zakończy się powodzeniem, otrzymasz od serwera odpowiedź: `access_token` oraz` refresh_token` w odpowiedzi JSON:
 
     $http = new GuzzleHttp\Client;
 
@@ -365,12 +366,12 @@ Once you have created a password grant client, you may request an access token b
 
     return json_decode((string) $response->getBody(), true);
 
-> {tip} Remember, access tokens are long-lived by default. However, you are free to [configure your maximum access token lifetime](#configuration) if needed.
+> {tip} Pamiętaj, że tokeny dostępu są domyślnie długie. Możesz jednak [skonfigurować maksymalny czas życia tokena dostępu](#configuration), jeśli to konieczne.
 
 <a name="requesting-all-scopes"></a>
-### Requesting All Scopes
+### Requesting All Scopes - Żądanie wszystkich zakresów
 
-When using the password grant, you may wish to authorize the token for all of the scopes supported by your application. You can do this by requesting the `*` scope. If you request the `*` scope, the `can` method on the token instance will always return `true`. This scope may only be assigned to a token that is issued using the `password` grant:
+Podczas korzystania z przyznawania haseł możesz chcieć autoryzować token dla wszystkich zakresów obsługiwanych przez aplikację. Możesz to zrobić, żądając zakresu `*`. Jeśli zażądasz zakresu `*`, metoda `can` na instancji tokena zawsze zwróci wartość `true`. Ten zakres może być przypisany tylko do tokena wystawionego przy użyciu przydziału `password`:
 
     $response = $http->post('http://your-app.com/oauth/token', [
         'form_params' => [
@@ -384,9 +385,9 @@ When using the password grant, you may wish to authorize the token for all of th
     ]);
 
 <a name="implicit-grant-tokens"></a>
-## Implicit Grant Tokens
+## Implicit Grant Tokens - Niejawny przyznawane tokeny
 
-The implicit grant is similar to the authorization code grant; however, the token is returned to the client without exchanging an authorization code. This grant is most commonly used for JavaScript or mobile applications where the client credentials can't be securely stored. To enable the grant, call the `enableImplicitGrant` method in your `AuthServiceProvider`:
+Niejawna dotacja jest podobna do przyznania kodu autoryzacyjnego; jednak token jest zwracany klientowi bez wymiany kodu autoryzacyjnego. Dotacja jest najczęściej używana w JavaScript lub aplikacjach mobilnych, w których poświadczenia klienta nie mogą być bezpiecznie przechowywane. Aby włączyć akceptację, wywołaj metodę `enableImplicitGrant` w swoim` AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -402,7 +403,7 @@ The implicit grant is similar to the authorization code grant; however, the toke
         Passport::enableImplicitGrant();
     }
 
-Once a grant has been enabled, developers may use their client ID to request an access token from your application. The consuming application should make a redirect request to your application's `/oauth/authorize` route like so:
+Po włączeniu grantu programiści mogą używać swojego identyfikatora klienta do żądania tokenu dostępu z aplikacji. Aplikacja zużywająca powinna przekierować żądanie do trasy `/oauth/authorize` aplikacji:
 
     Route::get('/redirect', function () {
         $query = http_build_query([
@@ -415,12 +416,12 @@ Once a grant has been enabled, developers may use their client ID to request an 
         return redirect('http://your-app.com/oauth/authorize?'.$query);
     });
 
-> {tip} Remember, the `/oauth/authorize` route is already defined by the `Passport::routes` method. You do not need to manually define this route.
+> {tip} Pamiętaj, że trasa `/oauth/authorize` jest już zdefiniowana metodą `Passport::routes`. Nie musisz ręcznie definiować tej trasy.
 
 <a name="client-credentials-grant-tokens"></a>
-## Client Credentials Grant Tokens
+## Client Credentials Grant Tokens - Żetony Grantów Poświadczających Klienta
 
-The client credentials grant is suitable for machine-to-machine authentication. For example, you might use this grant in a scheduled job which is performing maintenance tasks over an API. To use this method you first need to add new middleware to your `$routeMiddleware` in `app/Http/Kernel.php`:
+Przypisanie poświadczeń klienta jest odpowiednie dla uwierzytelniania maszyna-maszyna. Na przykład można użyć tego przydziału w zaplanowanym zadaniu, które wykonuje zadania konserwacyjne za pośrednictwem interfejsu API. Aby skorzystać z tej metody, musisz najpierw dodać nowe oprogramowanie pośrednie do `$routeMiddleware` w `app/Http/Kernel.php`:
 
     use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
@@ -428,13 +429,13 @@ The client credentials grant is suitable for machine-to-machine authentication. 
         'client' => CheckClientCredentials::class,
     ];
 
-Then attach this middleware to a route:
+Następnie podłącz to oprogramowanie pośrednie do trasy:
 
     Route::get('/user', function(Request $request) {
         ...
     })->middleware('client');
 
-To retrieve a token, make a request to the `oauth/token` endpoint:
+Aby pobrać token, wprowadź żądanie do punktu końcowego `oauth/token`:
 
     $guzzle = new GuzzleHttp\Client;
 
@@ -450,23 +451,23 @@ To retrieve a token, make a request to the `oauth/token` endpoint:
     return json_decode((string) $response->getBody(), true)['access_token'];
 
 <a name="personal-access-tokens"></a>
-## Personal Access Tokens
+## Personal Access Tokens - Osobiste żetony dostępu
 
-Sometimes, your users may want to issue access tokens to themselves without going through the typical authorization code redirect flow. Allowing users to issue tokens to themselves via your application's UI can be useful for allowing users to experiment with your API or may serve as a simpler approach to issuing access tokens in general.
+Czasami Twoi użytkownicy mogą chcieć wydać tokenom dostęp do nich bez przechodzenia przez typowy przepływ przekierowania kodu autoryzacyjnego. Zezwalanie użytkownikom na wydawanie tokenów sobie za pośrednictwem interfejsu użytkownika aplikacji może być przydatne dla umożliwienia użytkownikom eksperymentowania z interfejsem API lub może służyć jako prostsze podejście do wydawania tokenów dostępu w ogóle.
 
-> {note} Personal access tokens are always long-lived. Their lifetime is not modified when using the `tokensExpireIn` or `refreshTokensExpireIn` methods.
+> {note} Osobiste żetony dostępu są zawsze długożyciowe. Ich żywotność nie jest modyfikowana podczas używania metod `tokensExpireIn` lub` refreshTokensExpireIn`.
 
 <a name="creating-a-personal-access-client"></a>
-### Creating A Personal Access Client
+### Creating A Personal Access Client - Tworzenie osobistego klienta dostępu
 
-Before your application can issue personal access tokens, you will need to create a personal access client. You may do this using the `passport:client` command with the `--personal` option. If you have already run the `passport:install` command, you do not need to run this command:
+Zanim aplikacja będzie mogła wydawać osobiste tokeny dostępu, musisz utworzyć osobistego klienta dostępu. Możesz to zrobić za pomocą polecenia `paszport:client` z opcją `--personal`. Jeśli uruchomiłeś już polecenie `passport:install`, nie musisz uruchamiać tego polecenia:
 
     php artisan passport:client --personal
 
 <a name="managing-personal-access-tokens"></a>
-### Managing Personal Access Tokens
+### Managing Personal Access Tokens - Zarządzanie osobistymi tokenami dostępu
 
-Once you have created a personal access client, you may issue tokens for a given user using the `createToken` method on the `User` model instance. The `createToken` method accepts the name of the token as its first argument and an optional array of [scopes](#token-scopes) as its second argument:
+Po utworzeniu osobistego klienta dostępu możesz wydać tokeny dla danego użytkownika, używając metody `createToken` w instancji modelu `User`. Metoda `createToken` akceptuje nazwę tokenu jako swój pierwszy argument i opcjonalną tablicę [zakresów](#token-scopes) jako swojego drugiego argumentu:
 
     $user = App\User::find(1);
 
@@ -478,13 +479,13 @@ Once you have created a personal access client, you may issue tokens for a given
 
 #### JSON API
 
-Passport also includes a JSON API for managing personal access tokens. You may pair this with your own frontend to offer your users a dashboard for managing personal access tokens. Below, we'll review all of the API endpoints for managing personal access tokens. For convenience, we'll use [Axios](https://github.com/mzabriskie/axios) to demonstrate making HTTP requests to the endpoints.
+Passport zawiera również interfejs API JSON do zarządzania osobistymi tokenami dostępu. Możesz sparować to z własnym frontendem, aby zaoferować swoim użytkownikom pulpit do zarządzania osobistymi tokenami dostępu. Poniżej opiszemy wszystkie punkty końcowe API do zarządzania osobistymi tokenami dostępu. Dla wygody użyjemy [Axios](https://github.com/mzabriskie/axios), aby zademonstrować wysyłanie żądań HTTP do punktów końcowych.
 
-> {tip} If you don't want to implement the personal access token frontend yourself, you can use the [frontend quickstart](#frontend-quickstart) to have a fully functional frontend in a matter of minutes.
+> {tip} Jeśli nie chcesz samodzielnie implementować osobnego tokenu dostępu do tokena, możesz skorzystać z szybkiego [frontend szybki start](#frontend-quickstart), aby w pełni funkcjonalny interfejs uruchomić w ciągu kilku minut.
 
 #### `GET /oauth/scopes`
 
-This route returns all of the [scopes](#token-scopes) defined for your application. You may use this route to list the scopes a user may assign to a personal access token:
+Ta trasa zwraca wszystkie [zakresy](#token-scopes) zdefiniowane dla twojej aplikacji. Możesz użyć tej trasy, aby wyświetlić listę zakresów, które użytkownik może przypisać do osobistego tokena dostępu:
 
     axios.get('/oauth/scopes')
         .then(response => {
@@ -493,7 +494,7 @@ This route returns all of the [scopes](#token-scopes) defined for your applicati
 
 #### `GET /oauth/personal-access-tokens`
 
-This route returns all of the personal access tokens that the authenticated user has created. This is primarily useful for listing all of the user's tokens so that they may edit or delete them:
+Ta trasa zwraca wszystkie osobiste tokeny dostępu, które utworzył uwierzytelniony użytkownik. Jest to przydatne przede wszystkim w przypadku umieszczania na liście wszystkich tokenów użytkownika, które mogą edytować lub usuwać:
 
     axios.get('/oauth/personal-access-tokens')
         .then(response => {
@@ -502,7 +503,7 @@ This route returns all of the personal access tokens that the authenticated user
 
 #### `POST /oauth/personal-access-tokens`
 
-This route creates new personal access tokens. It requires two pieces of data: the token's `name` and the `scopes` that should be assigned to the token:
+Ta trasa tworzy nowe osobiste żetony dostępu. Wymaga dwóch danych: token `name` i `scopes`, które powinny zostać przypisane do tokena:
 
     const data = {
         name: 'Token Name',
@@ -519,26 +520,26 @@ This route creates new personal access tokens. It requires two pieces of data: t
 
 #### `DELETE /oauth/personal-access-tokens/{token-id}`
 
-This route may be used to delete personal access tokens:
+Ta trasa może zostać wykorzystana do usunięcia osobistych tokenów dostępu:
 
     axios.delete('/oauth/personal-access-tokens/' + tokenId);
 
 <a name="protecting-routes"></a>
-## Protecting Routes
+## Protecting Routes - Ochrona tras
 
 <a name="via-middleware"></a>
-### Via Middleware
+### Via Middleware - Przez oprogramowanie pośredniczące
 
-Passport includes an [authentication guard](/docs/{{version}}/authentication#adding-custom-guards) that will validate access tokens on incoming requests. Once you have configured the `api` guard to use the `passport` driver, you only need to specify the `auth:api` middleware on any routes that require a valid access token:
+Paszport zawiera [strażnik-a uwierzytelniania](/docs/{{version}}/authentication#adding-custom-guards), który będzie sprawdzać tokeny dostępu na przychodzących żądaniach. Po skonfigurowaniu aplikacji `api` strażnika do korzystania ze sterownika `passport`, musisz tylko określić oprogramowanie pośredniczące `auth:api` na dowolnych trasach, które wymagają poprawnego tokena dostępu:
 
     Route::get('/user', function () {
         //
     })->middleware('auth:api');
 
 <a name="passing-the-access-token"></a>
-### Passing The Access Token
+### Passing The Access Token - Przekazywanie tokena dostępu
 
-When calling routes that are protected by Passport, your application's API consumers should specify their access token as a `Bearer` token in the `Authorization` header of their request. For example, when using the Guzzle HTTP library:
+Podczas nawiązywania połączeń chronionych za pomocą usługi Passport, użytkownicy interfejsu API aplikacji powinni określić swój token dostępu jako token  `Bearer` (na okaziciela) w nagłówku `Authorization` swojego żądania. Na przykład podczas korzystania z biblioteki HTTP Guzzle:
 
     $response = $client->request('GET', '/api/user', [
         'headers' => [
@@ -548,14 +549,14 @@ When calling routes that are protected by Passport, your application's API consu
     ]);
 
 <a name="token-scopes"></a>
-## Token Scopes
+## Token Scopes - Zakresy żetonu
 
 <a name="defining-scopes"></a>
-### Defining Scopes
+### Defining Scopes - Definiowanie żetonu
 
-Scopes allow your API clients to request a specific set of permissions when requesting authorization to access an account. For example, if you are building an e-commerce application, not all API consumers will need the ability to place orders. Instead, you may allow the consumers to only request authorization to access order shipment statuses. In other words, scopes allow your application's users to limit the actions a third-party application can perform on their behalf.
+Zakresy umożliwiają Twoim klientom API żądanie określonego zestawu uprawnień przy żądaniu autoryzacji dostępu do konta. Na przykład, jeśli tworzysz aplikację handlu elektronicznego, nie wszyscy konsumenci API będą potrzebować możliwości składania zamówień. Zamiast tego możesz zezwolić konsumentom tylko na żądanie autoryzacji, aby uzyskać dostęp do statusów przesyłek zamówień. Innymi słowy, zakresy pozwalają użytkownikom aplikacji ograniczyć działanie, które aplikacja zewnętrzna może wykonywać w ich imieniu.
 
-You may define your API's scopes using the `Passport::tokensCan` method in the `boot` method of your `AuthServiceProvider`. The `tokensCan` method accepts an array of scope names and scope descriptions. The scope description may be anything you wish and will be displayed to users on the authorization approval screen:
+Możesz zdefiniować zakresy swojego API za pomocą metody `Passport::tokensCan` w metodzie` boot` swojego `AuthServiceProvider`. Metoda `tokensCan` akceptuje tablicę nazw zakresów i opisów zakresów. Opis zakresu może być dowolnie wybrany i będzie wyświetlany użytkownikom na ekranie zatwierdzania autoryzacji:
 
     use Laravel\Passport\Passport;
 
@@ -565,11 +566,11 @@ You may define your API's scopes using the `Passport::tokensCan` method in the `
     ]);
 
 <a name="assigning-scopes-to-tokens"></a>
-### Assigning Scopes To Tokens
+### Assigning Scopes To Tokens - Przypisywanie zakresów do tokenów
 
-#### When Requesting Authorization Codes
+#### When Requesting Authorization Codes - Podczas żądania kodów autoryzacyjnych
 
-When requesting an access token using the authorization code grant, consumers should specify their desired scopes as the `scope` query string parameter. The `scope` parameter should be a space-delimited list of scopes:
+Żądając tokenu dostępu przy użyciu przyznawania kodu autoryzacji, konsumenci powinni określać swoje pożądane zakresy jako parametr ciągu zapytania `scope`. W parametrze `scope`  lista zakresów powinien być rozdzieloną spacjami:
 
     Route::get('/redirect', function () {
         $query = http_build_query([
@@ -582,39 +583,40 @@ When requesting an access token using the authorization code grant, consumers sh
         return redirect('http://your-app.com/oauth/authorize?'.$query);
     });
 
-#### When Issuing Personal Access Tokens
+#### When Issuing Personal Access Tokens - Podczas wydawania osobistych tokenów dostępu
 
-If you are issuing personal access tokens using the `User` model's `createToken` method, you may pass the array of desired scopes as the second argument to the method:
+Jeśli wydajesz osobiste tokeny dostępu za pomocą metody `createToken` modelu  `User`, możesz przekazać tablicę żądanych zakresów jako drugi argument metody:
 
     $token = $user->createToken('My Token', ['place-orders'])->accessToken;
 
 <a name="checking-scopes"></a>
-### Checking Scopes
+### Checking Scopes - Sprawdzanie zakresów
 
 Passport includes two middleware that may be used to verify that an incoming request is authenticated with a token that has been granted a given scope. To get started, add the following middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
+Paszport zawiera dwa oprogramowania pośrednie, które mogą być używane do sprawdzania, czy przychodzące żądanie jest uwierzytelniane za pomocą tokena,a któremu przyznano dany zakres. Aby rozpocząć, dodaj następujące oprogramowanie pośrednie do właściwości `$routeMiddleware` pliku `app/Http/Kernel.php`:
 
     'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
     'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
 
-#### Check For All Scopes
+#### Check For All Scopes - Sprawdź wszystkie zakresy
 
-The `scopes` middleware may be assigned to a route to verify that the incoming request's access token has *all* of the listed scopes:
+Program pośredniczący `scopes` może zostać przypisany do trasy w celu sprawdzenia, czy token dostępu żądania przychodzącego ma *wszystkie* wymienione zakresy:
 
     Route::get('/orders', function () {
         // Access token has both "check-status" and "place-orders" scopes...
     })->middleware('scopes:check-status,place-orders');
 
-#### Check For Any Scopes
+#### Check For Any Scopes - Sprawdź dla dowolnych zakresów
 
-The `scope` middleware may be assigned to a route to verify that the incoming request's access token has *at least one* of the listed scopes:
+Program pośredniczący `scope` może zostać przypisany do trasy w celu sprawdzenia, czy token dostępu żądania przychodzącego ma *co najmniej jeden* z wymienionych zakresów:
 
     Route::get('/orders', function () {
         // Access token has either "check-status" or "place-orders" scope...
     })->middleware('scope:check-status,place-orders');
 
-#### Checking Scopes On A Token Instance
+#### Checking Scopes On A Token Instance - Sprawdzanie zakresów na wystąpieniu tokena
 
-Once an access token authenticated request has entered your application, you may still check if the token has a given scope using the `tokenCan` method on the authenticated `User` instance:
+Po wprowadzeniu do aplikacji żądania uwierzytelnionego tokena dostępu możesz nadal sprawdzić, czy token ma określony zakres, używając metody `tokenCan` na uwierzytelnionej instancji `User`:
 
     use Illuminate\Http\Request;
 
@@ -625,36 +627,36 @@ Once an access token authenticated request has entered your application, you may
     });
 
 <a name="consuming-your-api-with-javascript"></a>
-## Consuming Your API With JavaScript
+## Consuming Your API With JavaScript - Spożywanie Twojego API za pomocą JavaScript
 
-When building an API, it can be extremely useful to be able to consume your own API from your JavaScript application. This approach to API development allows your own application to consume the same API that you are sharing with the world. The same API may be consumed by your web application, mobile applications, third-party applications, and any SDKs that you may publish on various package managers.
+Podczas tworzenia interfejsu API niezwykle przydatna może być możliwość korzystania z własnego API z aplikacji JavaScript. Takie podejście do rozwoju API pozwala Twojej własnej aplikacji korzystać z tego samego API, z którego dzielisz się ze światem. To samo API może być używane przez twoją aplikację internetową, aplikacje mobilne, aplikacje innych firm i wszelkie pakiety SDK, które możesz publikować na różnych menedżerach pakietów.
 
-Typically, if you want to consume your API from your JavaScript application, you would need to manually send an access token to the application and pass it with each request to your application. However, Passport includes a middleware that can handle this for you. All you need to do is add the `CreateFreshApiToken` middleware to your `web` middleware group:
+Zwykle, jeśli chcesz korzystać z interfejsu API z aplikacji JavaScript, musisz ręcznie przesłać token dostępu do aplikacji i przekazać go przy każdym żądaniu do aplikacji. Jednak usługa Passport obejmuje oprogramowanie pośrednie, które może obsłużyć to za Ciebie. Wszystko, co musisz zrobić, to dodać oprogramowanie pośredniczące `CreateFreshApiToken` do `web` swojej grupy oprogramowania pośredniego:
 
     'web' => [
         // Other middleware...
         \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
     ],
 
-This Passport middleware will attach a `laravel_token` cookie to your outgoing responses. This cookie contains an encrypted JWT that Passport will use to authenticate API requests from your JavaScript application. Now, you may make requests to your application's API without explicitly passing an access token:
+To oprogramowanie pośredniczące do usługi Passport dołączy do ciastek plik cookie `laravel_token` na Twoje odpowiedzi wychodzące. Ten plik cookie zawiera zaszyfrowaną ścieżkę JWT, której usługa Passport będzie używać do uwierzytelniania żądań interfejsu API z aplikacji JavaScript. Teraz możesz wysyłać żądania do interfejsu API aplikacji bez jawnego przekazywania tokena dostępu:
 
     axios.get('/api/user')
         .then(response => {
             console.log(response.data);
         });
 
-When using this method of authentication, the default Laravel JavaScript scaffolding instructs Axios to always send the `X-CSRF-TOKEN` and `X-Requested-With` headers. However, you should be sure to include your CSRF token in a [HTML meta tag](/docs/{{version}}/csrf#csrf-x-csrf-token):
+Podczas korzystania z tej metody uwierzytelniania domyślne rusztowanie Laravel JavaScript nakazuje Axiosowi wysyłanie zawsze nagłówków `X-CSRF-TOKEN` i `X-Requested-With`. Należy jednak pamiętać o umieszczeniu tokenu CSRF w [metatagu HTML](/docs/{{version}}/csrf#csrf-x-csrf-token):
 
     window.axios.defaults.headers.common = {
         'X-Requested-With': 'XMLHttpRequest',
     };
 
-> {note} If you are using a different JavaScript framework, you should make sure it is configured to send the `X-CSRF-TOKEN` and `X-Requested-With` headers with every outgoing request.
+> {note} Jeśli używasz innej architektury JavaScript, powinieneś upewnić się, że jest skonfigurowana do wysyłania nagłówków `X-CSRF-TOKEN` i `X-Requested-With` przy każdym wychodzącym żądaniu.
 
 <a name="events"></a>
-## Events
+## Events - Zdarzenia
 
-Passport raises events when issuing access tokens and refresh tokens. You may use these events to prune or revoke other access tokens in your database. You may attach listeners to these events in your application's `EventServiceProvider`:
+Paszport podnosi zdarzenia podczas wydawania żetonów dostępu i odświeżania tokenów. Możesz wykorzystać te zdarzenia do usunięcia lub unieważnienia innych tokenów dostępu w bazie danych. Możesz dołączyć detektory do tych zdarzeń w `EventServiceProvider` aplikacji:
 
 ```php
 /**
@@ -674,9 +676,9 @@ protected $listen = [
 ```
 
 <a name="testing"></a>
-## Testing
+## Testing - Testowanie
 
-Passport's `actingAs` method may be used to specify the currently authenticated user as well as its scopes. The first argument given to the `actingAs` method is the user instance and the second is an array of scopes that should be granted to the user's token:
+Metoda `actingAs` Passport-u może być używana do określenia aktualnie uwierzytelnionego użytkownika, a także jego zakresów. Pierwszym argumentem przypisanym do metody `actingAs` jest instancja użytkownika, a druga to tablica zakresów, które powinny zostać nadane tokenowi użytkownika:
 
     public function testServerCreation()
     {
