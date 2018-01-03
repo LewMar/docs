@@ -1,38 +1,38 @@
 # Authorization
 
-- [Introduction](#introduction)
-- [Gates](#gates)
-    - [Writing Gates](#writing-gates)
-    - [Authorizing Actions](#authorizing-actions-via-gates)
-- [Creating Policies](#creating-policies)
-    - [Generating Policies](#generating-policies)
-    - [Registering Policies](#registering-policies)
-- [Writing Policies](#writing-policies)
-    - [Policy Methods](#policy-methods)
-    - [Methods Without Models](#methods-without-models)
-    - [Policy Filters](#policy-filters)
-- [Authorizing Actions Using Policies](#authorizing-actions-using-policies)
-    - [Via The User Model](#via-the-user-model)
-    - [Via Middleware](#via-middleware)
-    - [Via Controller Helpers](#via-controller-helpers)
-    - [Via Blade Templates](#via-blade-templates)
+- [Introduction - Wprowadzenie](#introduction)
+- [Gates - Bramy](#gates)
+    - [Writing Gates - Pisanie bram](#writing-gates)
+    - [Authorizing Actions - Działania autoryzujące](#authorizing-actions-via-gates)
+- [Creating Policies - Tworzenie polityk](#creating-policies)
+    - [Generating Policies - Generowanie polityk](#generating-policies)
+    - [Registering Policies - Rejestrowanie polityk](#registering-policies)
+- [Writing Policies - Pisanie polityk](#writing-policies)
+    - [Policy Methods - Metody polityki](#policy-methods)
+    - [Methods Without Models - Metody bez modeli](#methods-without-models)
+    - [Policy Filters - Filtry polityk](#policy-filters)
+- [Authorizing Actions Using Policies - Autoryzacja działań przy użyciu polityk](#authorizing-actions-using-policies)
+    - [Via The User Model - Przez model użytkownika](#via-the-user-model)
+    - [Via Middleware - Przez oprogramowanie pośredniczące](#via-middleware)
+    - [Via Controller Helpers - Za pomocą pomocników kontrolera](#via-controller-helpers)
+    - [Via Blade Templates - Przez szablony Blade](#via-blade-templates)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-In addition to providing [authentication](/docs/{{version}}/authentication) services out of the box, Laravel also provides a simple way to authorize user actions against a given resource. Like authentication, Laravel's approach to authorization is simple, and there are two primary ways of authorizing actions: gates and policies.
+Oprócz dostarczania usług [uwierzytelniania](/docs/{{version}}/authentication) po wyjęciu z pudełka, Laravel zapewnia również prosty sposób autoryzowania działań użytkownika względem danego zasobu. Podobnie jak uwierzytelnianie, podejście Laravel do autoryzacji jest proste i istnieją dwa główne sposoby autoryzacji działań: bramki i polityki.
 
-Think of gates and policies like routes and controllers. Gates provide a simple, Closure based approach to authorization while policies, like controllers, group their logic around a particular model or resource. We'll explore gates first and then examine policies.
+Pomyśl o bramkach i politykach, takich jak trasy i kontrolery. Gates zapewnia proste, oparte na Closure podejście do autoryzacji, podczas gdy zasady, takie jak kontrolery, grupują swoją logikę wokół określonego modelu lub zasobu. Najpierw zbadamy bramy, a następnie sprawdzimy polityki.
 
-You do not need to choose between exclusively using gates or exclusively using policies when building an application. Most applications will most likely contain a mixture of gates and policies, and that is perfectly fine! Gates are most applicable to actions which are not related to any model or resource, such as viewing an administrator dashboard. In contrast, policies should be used when you wish to authorize an action for a particular model or resource.
+Nie musisz wybierać pomiędzy wyłącznym korzystaniem z bramek lub wyłącznie przy użyciu zasad podczas budowania aplikacji. Większość aplikacji będzie najprawdopodobniej zawierać mieszankę bramek i polityk, i to jest w porządku! Bramki są najbardziej odpowiednie dla działań, które nie są związane z żadnym modelem ani zasobem, takich jak wyświetlanie pulpitu administratora. Natomiast zasady powinny być stosowane, gdy chcesz autoryzować działanie dla konkretnego modelu lub zasobu.
 
 <a name="gates"></a>
-## Gates
+## Gates - Bramy
 
 <a name="writing-gates"></a>
-### Writing Gates
+### Writing Gates - Pisanie bram
 
-Gates are Closures that determine if a user is authorized to perform a given action and are typically defined in the `App\Providers\AuthServiceProvider` class using the `Gate` facade. Gates always receive a user instance as their first argument, and may optionally receive additional arguments such as a relevant Eloquent model:
+Bramki są Closures, które określają, czy użytkownik jest uprawniony do wykonania danej czynności i są zazwyczaj zdefiniowane w klasie `App\Providers\AuthServiceProvider` za pomocą elewacji `Gate`. Bramki zawsze otrzymują instancję użytkownika jako swój pierwszy argument i mogą opcjonalnie otrzymać dodatkowe argumenty, takie jak odpowiedni model Eloquent:
 
     /**
      * Register any authentication / authorization services.
@@ -48,7 +48,7 @@ Gates are Closures that determine if a user is authorized to perform a given act
         });
     }
 
-Gates may also be defined using a `Class@method` style callback string, like controllers:
+Bramki można również zdefiniować za pomocą łańcucha wywołań stylu `Class@method`, takich jak kontrolery:
 
     /**
      * Register any authentication / authorization services.
@@ -62,20 +62,20 @@ Gates may also be defined using a `Class@method` style callback string, like con
         Gate::define('update-post', 'PostPolicy@update');
     }
 
-#### Resource Gates
+#### Resource Gates - Bramy zasobów
 
-You may also define multiple Gate abilities at once using the `resource` method:
+Możesz także zdefiniować wiele zdolności Bram jednocześnie za pomocą metody `resource`:
 
     Gate::resource('posts', 'PostPolicy');
 
-This is identical to manually defining the following Gate definitions:
+Jest to identyczne z ręcznym definiowaniem następujących definicji bramek:
 
     Gate::define('posts.view', 'PostPolicy@view');
     Gate::define('posts.create', 'PostPolicy@create');
     Gate::define('posts.update', 'PostPolicy@update');
     Gate::define('posts.delete', 'PostPolicy@delete');
 
-By default, the `view`, `create`, `update`, and `delete` abilities will be defined. You may override or add to the default abilities by passing an array as a third argument to the `resource` method. The keys of the array define the names of the abilities while the values define the method names. For example, the following code will create two new Gate definitions - `posts.image` and `posts.photo`:
+Domyślnie zdefiniowane zostaną zdolności `view`, `create`, `update` oraz `delete`. Możesz przesłonić lub dodać domyślne umiejętności, przekazując tablicę jako trzeci argument do metody `resource`. Klucze tablicy definiują nazwy zdolności, podczas gdy wartości definiują nazwy metod. Na przykład poniższy kod utworzy dwie nowe definicje bramek - "posts.image" i "posts.photo":
 
     Gate::resource('posts', 'PostPolicy', [
         'image' => 'updateImage',
@@ -83,9 +83,9 @@ By default, the `view`, `create`, `update`, and `delete` abilities will be defin
     ]);
 
 <a name="authorizing-actions-via-gates"></a>
-### Authorizing Actions
+### Authorizing Actions - Działania autoryzujące
 
-To authorize an action using gates, you should use the `allows` or `denies` methods. Note that you are not required to pass the currently authenticated user to these methods. Laravel will automatically take care of passing the user into the gate Closure:
+Aby autoryzować akcję za pomocą bramek, powinieneś użyć metod `allow` lub `denies`. Pamiętaj, że nie musisz przekazywać aktualnie uwierzytelnionego użytkownika do tych metod. Laravel automatycznie zajmie się przekazaniem użytkownika do Closure bramy:
 
     if (Gate::allows('update-post', $post)) {
         // The current user can update the post...
@@ -95,7 +95,7 @@ To authorize an action using gates, you should use the `allows` or `denies` meth
         // The current user can't update the post...
     }
 
-If you would like to determine if a particular user is authorized to perform an action, you may use the `forUser` method on the `Gate` facade:
+Jeśli chcesz określić, czy dany użytkownik jest uprawniony do wykonania działania, możesz użyć metody `forUser` na elewacji `Gate`:
 
     if (Gate::forUser($user)->allows('update-post', $post)) {
         // The user can update the post...
@@ -106,27 +106,27 @@ If you would like to determine if a particular user is authorized to perform an 
     }
 
 <a name="creating-policies"></a>
-## Creating Policies
+## Creating Policies - Tworzenie polityk
 
 <a name="generating-policies"></a>
-### Generating Policies
+### Generating Policies - Generowanie polityk
 
-Policies are classes that organize authorization logic around a particular model or resource. For example, if your application is a blog, you may have a `Post` model and a corresponding `PostPolicy` to authorize user actions such as creating or updating posts.
+Polityki to klasy organizujące logikę autoryzacji wokół określonego modelu lub zasobu. Na przykład, jeśli twoja aplikacja jest blogiem, możesz mieć model `Post` i odpowiadającą mu `PostPolicy`, aby autoryzować akcje użytkownika, takie jak tworzenie lub aktualizowanie wpisów.
 
-You may generate a policy using the `make:policy` [artisan command](/docs/{{version}}/artisan). The generated policy will be placed in the `app/Policies` directory. If this directory does not exist in your application, Laravel will create it for you:
+Możesz wygenerować politykę za pomocą `make:policy` [polecenie artisan](/docs/{{version}}/artisan). Wygenerowana polityka zostanie umieszczona w katalogu `app/Policies`. Jeśli ten katalog nie istnieje w Twojej aplikacji, Laravel utworzy go dla ciebie:
 
     php artisan make:policy PostPolicy
 
-The `make:policy` command will generate an empty policy class. If you would like to generate a class with the basic "CRUD" policy methods already included in the class, you may specify a `--model` when executing the command:
+Komenda `make:policy` wygeneruje pustą klasę polityk. Jeśli chcesz wygenerować klasę z podstawowymi metodami "CRUD" już zawartymi w klasie, możesz określić `--model` podczas wykonywania polecenia:
 
     php artisan make:policy PostPolicy --model=Post
 
-> {tip} All policies are resolved via the Laravel [service container](/docs/{{version}}/container), allowing you to type-hint any needed dependencies in the policy's constructor to have them automatically injected.
+> {tip} Wszystkie zasady są rozwiązywane za pośrednictwem Laravel [kontener usługi](/docs/{{version}}/container), umożliwiając wpisanie podpowiedzi potrzebnych zależności w konstruktorze zasady w celu automatycznego ich wstrzyknięcia.
 
 <a name="registering-policies"></a>
-### Registering Policies
+### Registering Policies - Rejestrowanie polityk
 
-Once the policy exists, it needs to be registered. The `AuthServiceProvider` included with fresh Laravel applications contains a `policies` property which maps your Eloquent models to their corresponding policies. Registering a policy will instruct Laravel which policy to utilize when authorizing actions against a given model:
+Gdy zasady już istnieją, muszą zostać zarejestrowane. `AuthServiceProvider` dołączony do świeżych aplikacji Laravel zawiera właściwość `policies`, która odwzorowuje modele Eloquent na odpowiadające im zasady. Rejestrowanie zasad będzie instruować Laravel, jaką politykę zastosować podczas autoryzowania działań w stosunku do danego modelu:
 
     <?php
 
@@ -162,14 +162,14 @@ Once the policy exists, it needs to be registered. The `AuthServiceProvider` inc
     }
 
 <a name="writing-policies"></a>
-## Writing Policies
+## Writing Policies - Pisanie polityk
 
 <a name="policy-methods"></a>
-### Policy Methods
+### Policy Methods - Metody polityki
 
-Once the policy has been registered, you may add methods for each action it authorizes. For example, let's define an `update` method on our `PostPolicy` which determines if a given `User` can update a given `Post` instance.
+Po zarejestrowaniu zasad możesz dodać metody dla każdej akcji, którą autoryzujesz. Na przykład, zdefiniujmy metodę `update` w naszym `PostPolicy`, która określa, czy dany `User` może aktualizować daną instancję `Post`.
 
-The `update` method will receive a `User` and a `Post` instance as its arguments, and should return `true` or `false` indicating whether the user is authorized to update the given `Post`. So, for this example, let's verify that the user's `id` matches the `user_id` on the post:
+Metoda `update` otrzyma jako argumenty instancję `User` i `Post` i powinna zwrócić wartość `true` lub `false` wskazującą, czy użytkownik jest uprawniony do aktualizacji danego `Post`. Tak więc dla tego przykładu sprawdźmy, czy `id` użytkownika pasuje do `user_id`  w poście:
 
     <?php
 
@@ -193,16 +193,16 @@ The `update` method will receive a `User` and a `Post` instance as its arguments
         }
     }
 
-You may continue to define additional methods on the policy as needed for the various actions it authorizes. For example, you might define `view` or `delete` methods to authorize various `Post` actions, but remember you are free to give your policy methods any name you like.
+Możesz nadal definiować dodatkowe metody polityki, zgodnie z potrzebami różnych akcji, które autoryzuje. Na przykład możesz zdefiniować metody `view` lub `delete`, aby autoryzować różne akcje `Post`, ale pamiętaj, że możesz dowolnie nadawać swoim metodom politycznym dowolną nazwę.
 
-> {tip} If you used the `--model` option when generating your policy via the Artisan console, it will already contain methods for the `view`, `create`, `update`, and `delete` actions.
+> {tip} Jeśli użyłeś opcji `--model` podczas generowania polityki poprzez konsolę Artisan, będzie ona już zawierała metody dla akcji `view`, `create`, `update`, oraz `delete`.
 
 <a name="methods-without-models"></a>
-### Methods Without Models
+### Methods Without Models - Metody bez modeli
 
-Some policy methods only receive the currently authenticated user and not an instance of the model they authorize. This situation is most common when authorizing `create` actions. For example, if you are creating a blog, you may wish to check if a user is authorized to create any posts at all.
+Niektóre metody polityki otrzymują tylko uwierzytelnionego użytkownika, a nie instancję autoryzowanego modelu. Ta sytuacja jest najczęstsza podczas autoryzowania akcji `create`. Na przykład, jeśli tworzysz bloga, możesz chcieć sprawdzić, czy użytkownik jest uprawniony do tworzenia jakichkolwiek postów w ogóle.
 
-When defining policy methods that will not receive a model instance, such as a `create` method, it will not receive a model instance. Instead, you should define the method as only expecting the authenticated user:
+Podczas definiowania metod strategii, które nie będą otrzymywać instancji modelu, takich jak metoda `create`, nie będzie ona otrzymywać instancji modelu. Zamiast tego powinieneś zdefiniować metodę jako oczekującą tylko uwierzytelnionego użytkownika:
 
     /**
      * Determine if the given user can create posts.
@@ -216,9 +216,9 @@ When defining policy methods that will not receive a model instance, such as a `
     }
 
 <a name="policy-filters"></a>
-### Policy Filters
+### Policy Filters - Filtry polityk
 
-For certain users, you may wish to authorize all actions within a given policy. To accomplish this, define a `before` method on the policy. The `before` method will be executed before any other methods on the policy, giving you an opportunity to authorize the action before the intended policy method is actually called. This feature is most commonly used for authorizing application administrators to perform any action:
+W przypadku niektórych użytkowników możesz autoryzować wszystkie działania w ramach danej polityki. Aby to osiągnąć, zdefiniuj metodę `before` w strategii. Metoda `before` zostanie wykonana przed innymi metodami polityki, dając możliwość autoryzacji akcji przed wywołaniem zamierzonej metody polityki. Ta funkcja jest najczęściej używana do autoryzowania administratorów aplikacji do wykonywania dowolnych czynności:
 
     public function before($user, $ability)
     {
@@ -227,27 +227,28 @@ For certain users, you may wish to authorize all actions within a given policy. 
         }
     }
 
-If you would like to deny all authorizations for a user you should return `false` from the `before` method. If `null` is returned, the authorization will fall through to the policy method.
+Jeśli chcesz odmówić wszystkim autoryzacji dla użytkownika, powinieneś zwrócić `false` z metody `before`. Zwrócenie `null` spowoduje, że autoryzacja przejdzie do metody polityki.
 
-> {note} The `before` method of a policy class will not be called if the class doesn't contain a method with a name matching the name of the ability being checked.
+> {note} Metoda `before` klasy polityki nie zostanie wywołana, jeśli klasa nie zawiera metody o nazwie pasującej do nazwy sprawdzanej umiejętności.
 
 <a name="authorizing-actions-using-policies"></a>
-## Authorizing Actions Using Policies
+## Authorizing Actions Using Policies - Autoryzacja działań przy użyciu polityk
 
 <a name="via-the-user-model"></a>
-### Via The User Model
+### Via The User Model - Przez model użytkownika
 
-The `User` model that is included with your Laravel application includes two helpful methods for authorizing actions: `can` and `cant`. The `can` method receives the action you wish to authorize and the relevant model. For example, let's determine if a user is authorized to update a given `Post` model:
+Model `User`, który jest dołączony do twojej aplikacji Laravel zawiera dwie pomocne metody autoryzacji akcji: `can` i `cant`. Metoda `can` odbiera akcję, którą chcesz autoryzować, i odpowiedni model. Na przykład, ustalmy, czy użytkownik jest uprawniony do aktualizacji danego modelu `Post`:
 
     if ($user->can('update', $post)) {
         //
     }
 
-If a [policy is registered](#registering-policies) for the given model, the `can` method will automatically call the appropriate policy and return the boolean result. If no policy is registered for the model, the `can` method will attempt to call the Closure based Gate matching the given action name.
+Jeśli [polityka zostanie zarejestrowana](#registering-policies) dla danego modelu, metoda `can` automatycznie wywoła odpowiednią politykę i zwróci wynik boolowski. Jeśli żadna strategia nie jest zarejestrowana dla modelu, metoda `can` spróbuje wywołać Bramę opartą na Closure, pasującą do danej nazwy akcji.
 
-#### Actions That Don't Require Models
 
-Remember, some actions like `create` may not require a model instance. In these situations, you may pass a class name to the `can` method. The class name will be used to determine which policy to use when authorizing the action:
+#### Actions That Don't Require Models - Działania, które nie wymagają modeli
+
+Pamiętaj, że niektóre akcje, takie jak `create`, mogą nie wymagać wystąpienia modelu. W takich sytuacjach możesz przekazać nazwę klasy do metody `can`. Nazwa klasy zostanie użyta do określenia, której zasady należy użyć podczas autoryzowania działania:
 
     use App\Post;
 
@@ -256,9 +257,9 @@ Remember, some actions like `create` may not require a model instance. In these 
     }
 
 <a name="via-middleware"></a>
-### Via Middleware
+### Via Middleware - Przez oprogramowanie pośredniczące
 
-Laravel includes a middleware that can authorize actions before the incoming request even reaches your routes or controllers. By default, the `Illuminate\Auth\Middleware\Authorize` middleware is assigned the `can` key in your `App\Http\Kernel` class. Let's explore an example of using the `can` middleware to authorize that a user can update a blog post:
+Laravel zawiera oprogramowanie pośrednie, które może autoryzować akcje zanim przychodzące żądanie dotrze do twoich tras lub kontrolerów. Domyślnie oprogramowanie pośrednie `Illuminate\Auth\Middleware\Authorize` ma przypisany klucz `can` w klasie `App\Http\Kernel`. Przyjrzyjmy się przykładowi używania oprogramowania pośredniego `can` do autoryzacji, żeby użytkownik mogł zaktualizować post na blogu:
 
     use App\Post;
 
@@ -266,20 +267,20 @@ Laravel includes a middleware that can authorize actions before the incoming req
         // The current user may update the post...
     })->middleware('can:update,post');
 
-In this example, we're passing the `can` middleware two arguments. The first is the name of the action we wish to authorize and the second is the route parameter we wish to pass to the policy method. In this case, since we are using [implicit model binding](/docs/{{version}}/routing#implicit-binding), a `Post` model will be passed to the policy method. If the user is not authorized to perform the given action, a HTTP response with a `403` status code will be generated by the middleware.
+W tym przykładzie podajemy dwa argumenty `can` middleware. Pierwsza to nazwa akcji, którą chcemy autoryzować, a druga to parametr trasy, który chcemy przekazać do metody polityki. W tym przypadku, ponieważ używamy [niejawnego powiązania modelu](/docs/{{version}}/routing#implicit-binding), model `Post` zostanie przekazany do metody policy. Jeśli użytkownik nie jest uprawniony do wykonania danej czynności, oprogramowanie pośredniczące wygeneruje odpowiedź HTTP z kodem statusu "403".
 
-#### Actions That Don't Require Models
+#### Actions That Don't Require Models - Działania, które nie wymagają modeli
 
-Again, some actions like `create` may not require a model instance. In these situations, you may pass a class name to the middleware. The class name will be used to determine which policy to use when authorizing the action:
+Znowu niektóre akcje, takie jak `create`, mogą nie wymagać wystąpienia modelu. W takich sytuacjach możesz przekazać nazwę klasy do oprogramowania pośredniego. Nazwa klasy zostanie użyta do określenia, której zasady należy użyć podczas autoryzowania działania:
 
     Route::post('/post', function () {
         // The current user may create posts...
     })->middleware('can:create,App\Post');
 
 <a name="via-controller-helpers"></a>
-### Via Controller Helpers
+### Via Controller Helpers - Za pomocą pomocników kontrolera
 
-In addition to helpful methods provided to the `User` model, Laravel provides a helpful `authorize` method to any of your controllers which extend the `App\Http\Controllers\Controller` base class. Like the `can` method, this method accepts the name of the action you wish to authorize and the relevant model. If the action is not authorized, the `authorize` method will throw an `Illuminate\Auth\Access\AuthorizationException`, which the default Laravel exception handler will convert to an HTTP response with a `403` status code:
+Oprócz pomocnych metod dostarczonych do modelu `User`, Laravel dostarcza pomocną metodę `authorize` dla każdego ze swoich kontrolerów, które rozszerzają klasę bazową `App\Http\Controllers\Controller`. Podobnie jak metoda `can`, ta metoda akceptuje nazwę akcji, którą chcesz autoryzować i odpowiedni model. Jeśli akcja nie jest autoryzowana, metoda `authorize` wygeneruje `Illuminate\Auth\Access\AuthorizationException`, który domyślny program obsługi wyjątków Laravel będzie konwertował na odpowiedź HTTP z kodem statusu `403`:
 
     <?php
 
@@ -306,9 +307,9 @@ In addition to helpful methods provided to the `User` model, Laravel provides a 
         }
     }
 
-#### Actions That Don't Require Models
+#### Actions That Don't Require Models - Działania, które nie wymagają modeli
 
-As previously discussed, some actions like `create` may not require a model instance. In these situations, you may pass a class name to the `authorize` method. The class name will be used to determine which policy to use when authorizing the action:
+Jak wcześniej wspomniano, niektóre akcje, takie jak `create`, mogą nie wymagać wystąpienia modelu. W takich sytuacjach możesz przekazać nazwę klasy do metody `authorize`. Nazwa klasy zostanie użyta do określenia, której zasady należy użyć podczas autoryzowania działania:
 
     /**
      * Create a new blog post.
@@ -324,9 +325,10 @@ As previously discussed, some actions like `create` may not require a model inst
     }
 
 <a name="via-blade-templates"></a>
-### Via Blade Templates
+### Via Blade Templates - Przez szablony Blade
 
-When writing Blade templates, you may wish to display a portion of the page only if the user is authorized to perform a given action. For example, you may wish to show an update form for a blog post only if the user can actually update the post. In this situation, you may use the `@can` and `@cannot` family of directives:
+Podczas pisania szablonów Blade możesz chcieć wyświetlić część strony tylko wtedy, gdy użytkownik jest uprawniony do wykonania danej akcji. Na przykład możesz chcieć pokazać formularz aktualizacji dla wpisu na blogu tylko wtedy, gdy użytkownik może zaktualizować wpis. W tej sytuacji możesz korzystać z rodziny dyrektyw  `@can` i `@cannot`:
+
 
     @can('update', $post)
         <!-- The Current User Can Update The Post -->
@@ -340,7 +342,7 @@ When writing Blade templates, you may wish to display a portion of the page only
         <!-- The Current User Can't Create New Post -->
     @endcannot
 
-These directives are convenient shortcuts for writing `@if` and `@unless` statements. The `@can` and `@cannot` statements above respectively translate to the following statements:
+Te dyrektywy są wygodnymi skrótami do pisania instrukcji `@if` i `@unless`. Powyższe instrukcje `@can` i `@cannot` oznaczają odpowiednio następujące wyrażenia:
 
     @if (Auth::user()->can('update', $post))
         <!-- The Current User Can Update The Post -->
@@ -350,9 +352,9 @@ These directives are convenient shortcuts for writing `@if` and `@unless` statem
         <!-- The Current User Can't Update The Post -->
     @endunless
 
-#### Actions That Don't Require Models
+#### Actions That Don't Require Models - Działania, które nie wymagają modeli
 
-Like most of the other authorization methods, you may pass a class name to the `@can` and `@cannot` directives if the action does not require a model instance:
+Podobnie jak w przypadku większości innych metod autoryzacji, możesz przekazać nazwę klasy do dyrektyw `@can` i `@cannot`, jeśli akcja nie wymaga wystąpienia modelu:
 
     @can('create', App\Post::class)
         <!-- The Current User Can Create Posts -->
