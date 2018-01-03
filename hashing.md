@@ -1,19 +1,19 @@
 # Hashing
 
-- [Introduction](#introduction)
-- [Basic Usage](#basic-usage)
+- [Introduction - Wprowadzenie](#introduction)
+- [Basic Usage - Podstawowe użycie](#basic-usage)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-The Laravel `Hash` [facade](/docs/{{version}}/facades) provides secure Bcrypt hashing for storing user passwords. If you are using the built-in `LoginController` and `RegisterController` classes that are included with your Laravel application, they will automatically use Bcrypt for registration and authentication.
+[Fasada](/docs/{{version}}/facades) `Hash` Laravel zapewnia bezpieczne hashowanie Bcrypt do przechowywania haseł użytkowników. Jeśli używasz wbudowanych klas `LoginController` i` RegisterController`, które są dołączone do twojej aplikacji Laravel, automatycznie użyją Bcrypt do rejestracji i uwierzytelnienia.
 
-> {tip} Bcrypt is a great choice for hashing passwords because its "work factor" is adjustable, which means that the time it takes to generate a hash can be increased as hardware power increases.
+> {tip} Bcrypt jest świetnym wyborem do mieszania haseł, ponieważ jego "współczynnik pracy" jest regulowany, co oznacza, że czas potrzebny na wygenerowanie skrótu może zostać zwiększony wraz ze wzrostem mocy sprzętowej.
 
 <a name="basic-usage"></a>
-## Basic Usage
+## Basic Usage - Podstawowe użycie
 
-You may hash a password by calling the `make` method on the `Hash` facade:
+Możesz hashować hasło, wywołując metodę `make` na elewacji `Hash`:
 
     <?php
 
@@ -41,23 +41,23 @@ You may hash a password by calling the `make` method on the `Hash` facade:
         }
     }
 
-The `make` method also allows you to manage the work factor of the bcrypt hashing algorithm using the `rounds` option; however, the default is acceptable for most applications:
+Metoda `make` pozwala również zarządzać współczynnikiem roboczym algorytmu mieszania bcrypt za pomocą opcji `rounds`; jednak domyślne ustawienie jest akceptowalne w przypadku większości aplikacji:
 
     $hashed = Hash::make('password', [
         'rounds' => 12
     ]);
 
-#### Verifying A Password Against A Hash
+#### Verifying A Password Against A Hash - Weryfikacja hasła o haszowanie
 
-The `check` method allows you to verify that a given plain-text string corresponds to a given hash. However, if you are using the `LoginController` [included with Laravel](/docs/{{version}}/authentication), you will probably not need to use this directly, as this controller automatically calls this method:
+Metoda `check` pozwala sprawdzić, czy dany ciąg tekstowy odpowiada danemu hashowi. Jednakże, jeśli używasz `LoginController` [zawartego w Laravel](/docs/{{version}}/authentication), prawdopodobnie nie będziesz musiał używać tego bezpośrednio, ponieważ kontroler automatycznie wywołuje tę metodę:
 
     if (Hash::check('plain-text', $hashedPassword)) {
         // The passwords match...
     }
 
-#### Checking If A Password Needs To Be Rehashed
+#### Checking If A Password Needs To Be Rehashed - Sprawdzanie, czy hasło wymaga ponownego przehaszowania
 
-The `needsRehash` function allows you to determine if the work factor used by the hasher has changed since the password was hashed:
+Funkcja `needsRehash` pozwala określić, czy współczynnik pracy używany przez moduł mieszający zmienił się od czasu, gdy hasło zostało zmieszane:
 
     if (Hash::needsRehash($hashed)) {
         $hashed = Hash::make('plain-text');
