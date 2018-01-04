@@ -1,73 +1,74 @@
 # Broadcasting
 
-- [Introduction](#introduction)
-    - [Configuration](#configuration)
-    - [Driver Prerequisites](#driver-prerequisites)
-- [Concept Overview](#concept-overview)
-    - [Using An Example Application](#using-example-application)
-- [Defining Broadcast Events](#defining-broadcast-events)
-    - [Broadcast Name](#broadcast-name)
-    - [Broadcast Data](#broadcast-data)
-    - [Broadcast Queue](#broadcast-queue)
-    - [Broadcast Conditions](#broadcast-conditions)
-- [Authorizing Channels](#authorizing-channels)
-    - [Defining Authorization Routes](#defining-authorization-routes)
-    - [Defining Authorization Callbacks](#defining-authorization-callbacks)
-- [Broadcasting Events](#broadcasting-events)
-    - [Only To Others](#only-to-others)
-- [Receiving Broadcasts](#receiving-broadcasts)
-    - [Installing Laravel Echo](#installing-laravel-echo)
-    - [Listening For Events](#listening-for-events)
-    - [Leaving A Channel](#leaving-a-channel)
-    - [Namespaces](#namespaces)
-- [Presence Channels](#presence-channels)
-    - [Authorizing Presence Channels](#authorizing-presence-channels)
-    - [Joining Presence Channels](#joining-presence-channels)
-    - [Broadcasting To Presence Channels](#broadcasting-to-presence-channels)
-- [Client Events](#client-events)
-- [Notifications](#notifications)
+- [Introduction - Wprowadzenie](#introduction)
+    - [Configuration - Konfiguracja](#configuration)
+    - [Driver Prerequisites - Wymagania wstępne sterownika](#driver-prerequisites)
+- [Concept Overview - Przegląd koncepcji](#concept-overview)
+    - [Using An Example Application - Korzystanie z przykładowej aplikacji](#using-example-application)
+- [Defining Broadcast Events - Definiowanie zdarzeń rozgłoszeniowych](#defining-broadcast-events)
+    - [Broadcast Name - Nazwa transmisji](#broadcast-name)
+    - [Broadcast Data - Dane transmisji](#broadcast-data)
+    - [Broadcast Queue - Kolejka rozgłoszeniowa](#broadcast-queue)
+    - [Broadcast Conditions - Warunki transmisji](#broadcast-conditions)
+- [Authorizing Channels - Autoryzacja kanałów](#authorizing-channels)
+    - [Defining Authorization Routes - Definiowanie tras autoryzacji](#defining-authorization-routes)
+    - [Defining Authorization Callbacks - Definiowanie wywołań autoryzacji](#defining-authorization-callbacks)
+- [Broadcasting Events - Rozgłaszanie zdarzeń](#broadcasting-events)
+    - [Only To Others - Tylko dla innych](#only-to-others)
+- [Receiving Broadcasts - Odbierane rozgłoszenia](#receiving-broadcasts)
+    - [Installing Laravel Echo - Instalowanie Laravel Echo](#installing-laravel-echo)
+    - [Listening For Events - Słuchanie zdarzeń](#listening-for-events)
+    - [Leaving A Channel - Opuszczając kanał](#leaving-a-channel)
+    - [Namespaces - Przestrzenie nazw](#namespaces)
+- [Presence Channels - Kanały obecności](#presence-channels)
+    - [Authorizing Presence Channels - Autoryzacja kanałów obecności](#authorizing-presence-channels)
+    - [Joining Presence Channels - Dołączanie do kanałów obecności](#joining-presence-channels)
+    - [Broadcasting To Presence Channels - Transmisja do kanałów obecności](#broadcasting-to-presence-channels)
+- [Client Events - Zdarzenia klienta](#client-events)
+- [Notifications - Powiadomienia](#notifications)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-In many modern web applications, WebSockets are used to implement realtime, live-updating user interfaces. When some data is updated on the server, a message is typically sent over a WebSocket connection to be handled by the client. This provides a more robust, efficient alternative to continually polling your application for changes.
+W wielu nowoczesnych aplikacjach webowych WebSockets są wykorzystywane do implementowania interfejsów użytkownika w czasie rzeczywistym i aktualizacji na żywo. Gdy niektóre dane są aktualizowane na serwerze, wiadomość jest zazwyczaj wysyłana za pośrednictwem połączenia WebSocket, z którym klient ma obsługiwać. Zapewnia to bardziej niezawodną, wydajną alternatywę do ciągłego odpytywania aplikacji o zmiany.
 
-To assist you in building these types of applications, Laravel makes it easy to "broadcast" your [events](/docs/{{version}}/events) over a WebSocket connection. Broadcasting your Laravel events allows you to share the same event names between your server-side code and your client-side JavaScript application.
+Aby pomóc ci w budowaniu tego typu aplikacji, Laravel ułatwia "rozgłaszanie" twoich [wydarzeń](/docs/{{version}}/events) przez połączenie WebSocket. Nadawanie zdarzeń Laravel umożliwia udostępnianie tych samych nazw zdarzeń między kodem po stronie serwera a aplikacją JavaScript po stronie klienta.
 
-> {tip} Before diving into event broadcasting, make sure you have read all of the documentation regarding Laravel [events and listeners](/docs/{{version}}/events).
+
+> {tip} Przed rozpoczęciem nurkowania w transmisje zdarzeń upewnij się, że przeczytałeś całą dokumentację dotyczącą Laravel [wydarzenia i słuchacze](/docs/{{version}}/events).
 
 <a name="configuration"></a>
-### Configuration
+### Configuration - Konfiguracja
 
-All of your application's event broadcasting configuration is stored in the `config/broadcasting.php` configuration file. Laravel supports several broadcast drivers out of the box: [Pusher](https://pusher.com), [Redis](/docs/{{version}}/redis), and a `log` driver for local development and debugging. Additionally, a `null` driver is included which allows you to totally disable broadcasting. A configuration example is included for each of these drivers in the `config/broadcasting.php` configuration file.
+Cała konfiguracja rozgłaszania zdarzeń aplikacji jest przechowywana w pliku konfiguracyjnym `config/broadcasting.php`. Laravel obsługuje kilka sterowników rozgłoszeniowych: [Pusher](https://pusher.com), [Redis](/docs/{{version}}/redis) i sterownik `log` do lokalnego programowania i debugowania . Dodatkowo dołączony jest sterownik `null`, który pozwala całkowicie wyłączyć nadawanie. Przykład konfiguracji dla każdego z tych sterowników znajduje się w pliku konfiguracyjnym `config/broadcasting.php`.
 
-#### Broadcast Service Provider
+#### Broadcast Service Provider - Dostawca usług rozgłoszeniowych
 
-Before broadcasting any events, you will first need to register the `App\Providers\BroadcastServiceProvider`. In fresh Laravel applications, you only need to uncomment this provider in the `providers` array of your `config/app.php` configuration file. This provider will allow you to register the broadcast authorization routes and callbacks.
+Przed transmisją jakichkolwiek wydarzeń, musisz najpierw zarejestrować `App\Providers\BroadcastServiceProvider`. W świeżych aplikacjach Laravel wystarczy odkomentować tego dostawcę w tablicy `provider` pliku konfiguracyjnego `config/app.php`. Ten dostawca umożliwi rejestrację tras autoryzacji rozgłaszania i wywołań zwrotnych.
 
-#### CSRF Token
+#### CSRF Token - Żeton CSRF
 
-[Laravel Echo](#installing-laravel-echo) will need access to the current session's CSRF token. You should verify that your application's `head` HTML element defines a `meta` tag containing the CSRF token:
+[Laravel Echo](#installing-laravel-echo) będzie wymagać dostępu do tokenu CSRF bieżącej sesji. Powinieneś sprawdzić, czy element HTML `head` twojej aplikacji definiuje znacznik `meta` zawierający token CSRF:
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <a name="driver-prerequisites"></a>
-### Driver Prerequisites
+### Driver Prerequisites - Wymagania wstępne sterownika
 
 #### Pusher
 
-If you are broadcasting your events over [Pusher](https://pusher.com), you should install the Pusher PHP SDK using the Composer package manager:
+Jeśli transmitujesz swoje wydarzenia przez [Pusher](https://pusher.com), powinieneś zainstalować Pusher PHP SDK przy użyciu menedżera pakietów Composer:
 
     composer require pusher/pusher-php-server "~3.0"
 
-Next, you should configure your Pusher credentials in the `config/broadcasting.php` configuration file. An example Pusher configuration is already included in this file, allowing you to quickly specify your Pusher key, secret, and application ID. The `config/broadcasting.php` file's `pusher` configuration also allows you to specify additional `options` that are supported by Pusher, such as the cluster:
+Następnie powinieneś skonfigurować swoje dane Pusher w pliku konfiguracyjnym `config/broadcasting.php`. Przykładowa konfiguracja Pusher jest już zawarta w tym pliku, co pozwala szybko określić klucze Pusher, tajny i identyfikator aplikacji. Konfiguracja `pusher` pliku `config/broadcasting.php` pozwala również na określenie dodatkowych `opcji` obsługiwanych przez Pusher, takich jak klaster:
 
     'options' => [
         'cluster' => 'eu',
         'encrypted' => true
     ],
 
-When using Pusher and [Laravel Echo](#installing-laravel-echo), you should specify `pusher` as your desired broadcaster when instantiating the Echo instance in your `resources/assets/js/bootstrap.js` file:
+Używając Pushera i [Laravel Echo](#installation-laravel-echo), powinieneś określić `pusher` jako żądany nadawca podczas tworzenia wystąpienia Echo w pliku `resources/assets/js/bootstrap.js`:
 
     import Echo from "laravel-echo"
 
@@ -80,21 +81,22 @@ When using Pusher and [Laravel Echo](#installing-laravel-echo), you should speci
 
 #### Redis
 
-If you are using the Redis broadcaster, you should install the Predis library:
+Jeśli korzystasz z nadawcy Redis, powinieneś zainstalować bibliotekę Predis:
 
     composer require predis/predis
 
-The Redis broadcaster will broadcast messages using Redis' pub / sub feature; however, you will need to pair this with a WebSocket server that can receive the messages from Redis and broadcast them to your WebSocket channels.
+Nadawca Redis będzie nadawać wiadomości za pomocą funkcji pub / sub Redis-a; należy jednak sparować to z serwerem WebSocket, który może odbierać wiadomości od Redis i transmitować je do swoich kanałów WebSocket.
 
-When the Redis broadcaster publishes an event, it will be published on the event's specified channel names and the payload will be a JSON encoded string containing the event name, a `data` payload, and the user that generated the event's socket ID (if applicable).
+Kiedy nadawca Redis opublikuje wydarzenie, zostanie on opublikowany w nazwach określonych kanałów zdarzenia, a ładunek będzie zakodowanym ciągiem JSON zawierającym nazwę zdarzenia, ładunek `data` i użytkownika, który wygenerował identyfikator gniazda zdarzenia (jeśli dotyczy).
 
 #### Socket.IO
 
-If you are going to pair the Redis broadcaster with a Socket.IO server, you will need to include the Socket.IO JavaScript client library in your application's `head` HTML element. When the Socket.IO server is started, it will automatically expose the client JavaScript library at a standard URL. For example, if you are running the Socket.IO server on the same domain as your web application, you may access the client library like so:
+Jeśli zamierzasz sparować nadawcę Redis z serwerem Socket.IO, będziesz musiał dołączyć bibliotekę kliencką JavaScript Socket.IO do elementu HTML `head` twojej aplikacji. Po uruchomieniu serwera Socket.IO automatycznie udostępni on bibliotekę JavaScript klienta pod standardowym adresem URL. Na przykład, jeśli korzystasz z serwera Socket.IO w tej samej domenie co twoja aplikacja internetowa, możesz uzyskać dostęp do biblioteki klienta tak:
 
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 
-Next, you will need to instantiate Echo with the `socket.io` connector and a `host`.
+Następnie musisz utworzyć instancję Echo ze złączem `socket.io` i `host`.
+
 
     import Echo from "laravel-echo"
 
@@ -103,31 +105,31 @@ Next, you will need to instantiate Echo with the `socket.io` connector and a `ho
         host: window.location.hostname + ':6001'
     });
 
-Finally, you will need to run a compatible Socket.IO server. Laravel does not include a Socket.IO server implementation; however, a community driven Socket.IO server is currently maintained at the [tlaverdure/laravel-echo-server](https://github.com/tlaverdure/laravel-echo-server) GitHub repository.
+Na koniec będziesz musiał uruchomić kompatybilny serwer Socket.IO. Laravel nie zawiera implementacji serwera Socket.IO; jednak serwer Socket.IO zarządzany przez społeczność jest obecnie utrzymywany na serwerze [tlaverdure/laravel-echo-server](https://github.com/tlaverdure/laravel-echo-server) repozytorium GitHub.
 
-#### Queue Prerequisites
+#### Queue Prerequisites - Wymagania kolejkowania
 
-Before broadcasting events, you will also need to configure and run a [queue listener](/docs/{{version}}/queues). All event broadcasting is done via queued jobs so that the response time of your application is not seriously affected.
+Przed emisją zdarzeń należy również skonfigurować i uruchomić [moduł do odbierania kolejek](/docs/{{version}}/queues). Wszystkie transmisje zdarzeń odbywają się za pośrednictwem zadań oczekujących w kolejce, dzięki czemu czas reakcji w aplikacji nie jest poważnie zagrożony.
 
 <a name="concept-overview"></a>
-## Concept Overview
+## Concept Overview - Przegląd koncepcji
 
-Laravel's event broadcasting allows you to broadcast your server-side Laravel events to your client-side JavaScript application using a driver-based approach to WebSockets. Currently, Laravel ships with [Pusher](https://pusher.com) and Redis drivers. The events may be easily consumed on the client-side using the [Laravel Echo](#installing-laravel-echo) Javascript package.
+Rozgłaszanie zdarzeń Laravel umożliwia rozgłaszanie zdarzeń Laravel po stronie serwera do aplikacji klienckiej JavaScript po stronie klienta przy użyciu podejścia opartego na sterownikach do WebSockets. Obecnie Laravel jest dostarczany ze sterownikami [Pusher](https://pusher.com) i Redis. Zdarzenia mogą być łatwo konsumowane po stronie klienta za pomocą pakietu Javascript [Laravel Echo](#installation-laravel-echo).
 
-Events are broadcast over "channels", which may be specified as public or private. Any visitor to your application may subscribe to a public channel without any authentication or authorization; however, in order to subscribe to a private channel, a user must be authenticated and authorized to listen on that channel.
+Wydarzenia są nadawane za pośrednictwem "kanałów", które można określić jako publiczne lub prywatne. Każdy odwiedzający twoją aplikację może zasubskrybować publiczny kanał bez uwierzytelniania lub autoryzacji; Jednak aby subskrybować kanał prywatny, użytkownik musi być uwierzytelniony i upoważniony do słuchania na tym kanale.
 
 <a name="using-example-application"></a>
-### Using An Example Application
+### Using An Example Application - Korzystanie z przykładowej aplikacji
 
-Before diving into each component of event broadcasting, let's take a high level overview using an e-commerce store as an example. We won't discuss the details of configuring [Pusher](https://pusher.com) or [Laravel Echo](#installing-laravel-echo) since that will be discussed in detail in other sections of this documentation.
+Zanim przejdziemy do każdego komponentu emisji wydarzeń, przyjrzyjmy się przeglądowi wysokiego poziomu, na przykładzie sklepu e-commerce. Nie będziemy omawiać szczegółów konfiguracji [Pusher](https://pusher.com) ani [Laravel Echo](#installation-laravel-echo), ponieważ zostanie to szczegółowo omówione w innych sekcjach tej dokumentacji.
 
-In our application, let's assume we have a page that allows users to view the shipping status for their orders. Let's also assume that a `ShippingStatusUpdated` event is fired when a shipping status update is processed by the application:
+W naszej aplikacji przyjmijmy, że mamy stronę, która umożliwia użytkownikom przeglądanie statusu wysyłki dla swoich zamówień. Załóżmy również, że zdarzenie `ShippingStatusUpdated` jest uruchamiane, gdy aplikacja aktualizuje status wysyłki:
 
     event(new ShippingStatusUpdated($update));
 
-#### The `ShouldBroadcast` Interface
+#### The `ShouldBroadcast` Interface - Interfejs `ShouldBroadcast`
 
-When a user is viewing one of their orders, we don't want them to have to refresh the page to view status updates. Instead, we want to broadcast the updates to the application as they are created. So, we need to mark the `ShippingStatusUpdated` event with the `ShouldBroadcast` interface. This will instruct Laravel to broadcast the event when it is fired:
+Gdy użytkownik przegląda jedno ze swoich zamówień, nie chcemy, aby musiał odświeżać stronę, aby wyświetlić aktualizacje statusu. Zamiast tego chcemy nadawać aktualizacje aplikacji, gdy są one tworzone. Musimy więc zaznaczyć zdarzenie `ShippingStatusUpdated` z interfejsem `ShouldBroadcast`. Spowoduje to, że Laravel będzie transmitować wydarzenie po jego uruchomieniu:
 
     <?php
 
@@ -150,7 +152,7 @@ When a user is viewing one of their orders, we don't want them to have to refres
         public $update;
     }
 
-The `ShouldBroadcast` interface requires our event to define a `broadcastOn` method. This method is responsible for returning the channels that the event should broadcast on. An empty stub of this method is already defined on generated event classes, so we only need to fill in its details. We only want the creator of the order to be able to view status updates, so we will broadcast the event on a private channel that is tied to the order:
+Interfejs `ShouldBroadcast` wymaga, aby nasze zdarzenie definiowało metodę `broadcastOn`. Ta metoda jest odpowiedzialna za zwrócenie kanałów, na których wydarzenie ma nadawać. Pusty odcinek tej metody jest już zdefiniowany na wygenerowanych klasach zdarzeń, więc musimy tylko wypełnić jego szczegóły. Chcemy tylko, aby twórca zamówienia mógł wyświetlać aktualizacje statusu, dlatego będziemy transmitować wydarzenie na prywatnym kanale powiązanym z zamówieniem:
 
     /**
      * Get the channels the event should broadcast on.
@@ -162,21 +164,20 @@ The `ShouldBroadcast` interface requires our event to define a `broadcastOn` met
         return new PrivateChannel('order.'.$this->update->order_id);
     }
 
-#### Authorizing Channels
+#### Authorizing Channels - Autoryzacja kanałów
 
-Remember, users must be authorized to listen on private channels. We may define our channel authorization rules in the `routes/channels.php` file. In this example, we need to verify that any user attempting to listen on the private `order.1` channel is actually the creator of the order:
+Pamiętaj, że użytkownicy muszą mieć uprawnienia do słuchania na prywatnych kanałach. Możemy zdefiniować nasze reguły autoryzacji kanałów w pliku `routes/channels.php`. W tym przykładzie musimy sprawdzić, czy każdy użytkownik usiłujący nasłuchiwać na prywatnym kanale `order.1` jest w rzeczywistości twórcą zamówienia:
 
     Broadcast::channel('order.{orderId}', function ($user, $orderId) {
         return $user->id === Order::findOrNew($orderId)->user_id;
     });
 
-The `channel` method accepts two arguments: the name of the channel and a callback which returns `true` or `false` indicating whether the user is authorized to listen on the channel.
+Metoda `channel` przyjmuje dwa argumenty: nazwę kanału i wywołanie zwrotne, które zwraca `true` lub `false` wskazujące, czy użytkownik jest uprawniony do nasłuchiwania na kanale.
 
-All authorization callbacks receive the currently authenticated user as their first argument and any additional wildcard parameters as their subsequent arguments. In this example, we are using the `{orderId}` placeholder to indicate that the "ID" portion of the channel name is a wildcard.
+Wszystkie wywołania zwrotne autoryzacji odbierają aktualnie uwierzytelnionego użytkownika jako swój pierwszy argument i wszelkie dodatkowe parametry wieloznaczne jako kolejne argumenty. W tym przykładzie używamy symbolu zastępczego `{orderId}`, aby wskazać, że część "ID" nazwy kanału jest symbolem wieloznacznym.
+#### Listening For Event Broadcasts - Słuchanie rozgłaszanych zdarzeń
 
-#### Listening For Event Broadcasts
-
-Next, all that remains is to listen for the event in our JavaScript application. We can do this using Laravel Echo. First, we'll use the `private` method to subscribe to the private channel. Then, we may use the `listen` method to listen for the `ShippingStatusUpdated` event. By default, all of the event's public properties will be included on the broadcast event:
+Następnie pozostaje nam tylko wysłuchać zdarzenia w naszej aplikacji JavaScript. Możemy to zrobić za pomocą Laravel Echo. Najpierw użyjemy metody "private" do subskrybowania kanału prywatnego. Następnie możemy użyć metody `listen` do nasłuchiwania zdarzenia `ShippingStatusUpdated`. Domyślnie wszystkie właściwości publiczne wydarzenia zostaną uwzględnione w wydarzeniu transmisji:
 
     Echo.private(`order.${orderId}`)
         .listen('ShippingStatusUpdated', (e) => {
@@ -184,11 +185,11 @@ Next, all that remains is to listen for the event in our JavaScript application.
         });
 
 <a name="defining-broadcast-events"></a>
-## Defining Broadcast Events
+## Defining Broadcast Events - Definiowanie zdarzeń rozgłoszeniowych
 
-To inform Laravel that a given event should be broadcast, implement the `Illuminate\Contracts\Broadcasting\ShouldBroadcast` interface on the event class. This interface is already imported into all event classes generated by the framework so you may easily add it to any of your events.
+Aby poinformować Laravel, że dane wydarzenie ma być rozgłaszane, należy zaimplementować interfejs `Illuminate\Contracts\Broadcasting\ShouldBroadcast` na klasie zdarzenia. Ten interfejs jest już zaimportowany do wszystkich klas zdarzeń wygenerowanych przez framework, dzięki czemu można go łatwo dodać do dowolnych zdarzeń.
 
-The `ShouldBroadcast` interface requires you to implement a single method: `broadcastOn`. The `broadcastOn` method should return a channel or array of channels that the event should broadcast on. The channels should be instances of `Channel`, `PrivateChannel`, or `PresenceChannel`. Instances of `Channel` represent public channels that any user may subscribe to, while `PrivateChannels` and `PresenceChannels` represent private channels that require [channel authorization](#authorizing-channels):
+Interfejs `ShouldBroadcast` wymaga implementacji jednej metody: `broadcastOn`. Metoda `broadcastOn` powinna zwracać kanał lub tablicę kanałów, na których wydarzenie ma nadawać. Kanały powinny być instancjami `Channel`, `PrivateChannel` lub `PresenceChannel`. Instancje `Channel` reprezentują publiczne kanały, które każdy użytkownik może subskrybować, a `PrivateChannels` oraz `PresenceChannels` reprezentują prywatne kanały, które wymagają [autoryzacji kanału](#authorizing-channels):
 
     <?php
 
@@ -228,12 +229,12 @@ The `ShouldBroadcast` interface requires you to implement a single method: `broa
         }
     }
 
-Then, you only need to [fire the event](/docs/{{version}}/events) as you normally would. Once the event has been fired, a [queued job](/docs/{{version}}/queues) will automatically broadcast the event over your specified broadcast driver.
+Następnie musisz tylko [wywołać zdarzenie](/docs/{{version}}/events) tak jak zwykle. Po uruchomieniu zdarzenia kolejka [zadanie w kolejce](/docs/{{version}}/queues) automatycznie rozgłasza zdarzenie nad określonym sterowniku rozgłoszeniowym.
 
 <a name="broadcast-name"></a>
-### Broadcast Name
+### Broadcast Name - Nazwa transmisji
 
-By default, Laravel will broadcast the event using the event's class name. However, you may customize the broadcast name by defining a `broadcastAs` method on the event:
+Domyślnie Laravel będzie rozgłaszał zdarzenie, używając nazwy klasy zdarzenia. Możesz jednak dostosować nazwę rozgłoszenia, definiując metodę `broadcastAs` dla zdarzenia:
 
     /**
      * The event's broadcast name.
@@ -245,16 +246,17 @@ By default, Laravel will broadcast the event using the event's class name. Howev
         return 'server.created';
     }
 
-If you customize the broadcast name using the `broadcastAs` method, you should make sure to register your listener with a leading `.` character. This will instruct Echo to not prepend the application's namespace to the event:
+Jeśli dostosujesz nazwę rozgłoszeniową za pomocą metody `broadcastAs`, powinieneś upewnić się, że zarejestrowałeś swojego słuchacza z wiodącym znakiem `.`. Spowoduje to, że Echo nie będzie dodawać przestrzeni nazw aplikacji do zdarzenia:
 
     .listen('.server.created', function (e) {
         ....
     });
 
 <a name="broadcast-data"></a>
-### Broadcast Data
+### Broadcast Data - Dane transmisji
 
 When an event is broadcast, all of its `public` properties are automatically serialized and broadcast as the event's payload, allowing you to access any of its public data from your JavaScript application. So, for example, if your event has a single public `$user` property that contains an Eloquent model, the event's broadcast payload would be:
+Gdy zdarzenie jest transmitowane, wszystkie jego właściwości "publiczne" są automatycznie szeregowane i emitowane jako ładunek zdarzenia, co pozwala na dostęp do dowolnych jego publicznych danych z aplikacji JavaScript. Na przykład, jeśli zdarzenie ma jedną publiczną właściwość `$user` zawierającą model Eloquent, ładunek emisji wydarzenia będzie następujący:
 
     {
         "user": {
@@ -264,7 +266,7 @@ When an event is broadcast, all of its `public` properties are automatically ser
         }
     }
 
-However, if you wish to have more fine-grained control over your broadcast payload, you may add a `broadcastWith` method to your event. This method should return the array of data that you wish to broadcast as the event payload:
+Jeśli jednak chcesz mieć większą kontrolę nad swoim nadajnikiem transmisji, możesz dodać metodę `broadcastWith` do swojego zdarzenia. Ta metoda powinna zwrócić tablicę danych, które chcesz transmitować jako ładunek zdarzenia:
 
     /**
      * Get the data to broadcast.
@@ -277,9 +279,9 @@ However, if you wish to have more fine-grained control over your broadcast paylo
     }
 
 <a name="broadcast-queue"></a>
-### Broadcast Queue
+### Broadcast Queue - Kolejka rozgłoszeniowa
 
-By default, each broadcast event is placed on the default queue for the default queue connection specified in your `queue.php` configuration file. You may customize the queue used by the broadcaster by defining a `broadcastQueue` property on your event class. This property should specify the name of the queue you wish to use when broadcasting:
+Domyślnie każde zdarzenie emisji jest umieszczane w domyślnej kolejce dla domyślnego połączenia kolejki określonego w pliku konfiguracyjnym `queue.php`. Możesz dostosować kolejkę używaną przez nadawcę, definiując właściwość `broadcastQueue` w klasie zdarzenia. Ta właściwość powinna określać nazwę kolejki, której chcesz używać podczas rozgłaszania:
 
     /**
      * The name of the queue on which to place the event.
@@ -288,7 +290,7 @@ By default, each broadcast event is placed on the default queue for the default 
      */
     public $broadcastQueue = 'your-queue-name';
 
-If you want to broadcast your event using the `sync` queue instead of the default queue driver, you can implement the `ShouldBroadcastNow` interface instead of `ShouldBroadcast`:
+Jeśli chcesz transmitować swoje zdarzenia za pomocą kolejki `sync` zamiast domyślnego sterownika kolejki, możesz zaimplementować interfejs `ShouldBroadcastNow` zamiast `ShouldBroadcast`:
 
     <?php
 
@@ -299,9 +301,9 @@ If you want to broadcast your event using the `sync` queue instead of the defaul
         //
     }
 <a name="broadcast-conditions"></a>
-### Broadcast Conditions
+### Broadcast Conditions - Warunki transmisji
 
-Sometimes you want to broadcast your event only if a given condition is true. You may define these conditions by adding a `broadcastWhen` method to your event class:
+Czasami chcesz transmitować swoje wydarzenie tylko wtedy, gdy dany warunek jest prawdziwy. Możesz zdefiniować te warunki, dodając metodę `broadcastWhen` do swojej klasy zdarzenia:
 
     /**
      * Determine if this event should broadcast.
@@ -314,37 +316,37 @@ Sometimes you want to broadcast your event only if a given condition is true. Yo
     }
 
 <a name="authorizing-channels"></a>
-## Authorizing Channels
+## Authorizing Channels - Autoryzacja kanałów
 
-Private channels require you to authorize that the currently authenticated user can actually listen on the channel. This is accomplished by making an HTTP request to your Laravel application with the channel name and allowing your application to determine if the user can listen on that channel. When using [Laravel Echo](#installing-laravel-echo), the HTTP request to authorize subscriptions to private channels will be made automatically; however, you do need to define the proper routes to respond to these requests.
+Kanały prywatne wymagają autoryzacji, aby aktualnie uwierzytelniony użytkownik mógł rzeczywiście słuchać na kanale. Można to osiągnąć, wysyłając żądanie HTTP do aplikacji Laravel z nazwą kanału i zezwalając aplikacji na określenie, czy użytkownik może słuchać na tym kanale. Podczas korzystania z [Laravel Echo](#installation-laravel-echo) żądanie HTTP autoryzujące subskrypcje kanałów prywatnych zostanie wykonane automatycznie; jednak musisz zdefiniować właściwe trasy, aby odpowiedzieć na te żądania.
 
 <a name="defining-authorization-routes"></a>
-### Defining Authorization Routes
+### Defining Authorization Routes - Definiowanie tras autoryzacji
 
-Thankfully, Laravel makes it easy to define the routes to respond to channel authorization requests. In the `BroadcastServiceProvider` included with your Laravel application, you will see a call to the `Broadcast::routes` method. This method will register the `/broadcasting/auth` route to handle authorization requests:
+Na szczęście Laravel ułatwia zdefiniowanie tras odpowiadających na żądania autoryzacji kanałów. W `BroadcastServiceProvider` dołączonym do twojej aplikacji Laravel zobaczysz połączenie z metodą `Broadcast::routes`. Ta metoda zarejestruje trasę `/broadcasting/auth`, aby obsłużyć żądania autoryzacji:
 
     Broadcast::routes();
 
-The `Broadcast::routes` method will automatically place its routes within the `web` middleware group; however, you may pass an array of route attributes to the method if you would like to customize the assigned attributes:
+Metoda `Broadcast::routes` automatycznie umieszcza swoje trasy w grupie `web` oprogramowania pośredniego; jednak możesz przekazać tablicę atrybutów trasy do metody, jeśli chcesz dostosować przypisane atrybuty:
 
     Broadcast::routes($attributes);
 
 <a name="defining-authorization-callbacks"></a>
-### Defining Authorization Callbacks
+### Defining Authorization Callbacks - Definiowanie wywołań autoryzacji
 
-Next, we need to define the logic that will actually perform the channel authorization. This is done in the `routes/channels.php` file that is included with your application. In this file, you may use the `Broadcast::channel` method to register channel authorization callbacks:
+Następnie musimy zdefiniować logikę, która faktycznie wykona autoryzację kanału. Odbywa się to w pliku `routes/channels.php` dołączonym do aplikacji. W tym pliku możesz użyć metody `Broadcast::channel`, aby zarejestrować wywołania zwrotne autoryzacji kanału:
 
     Broadcast::channel('order.{orderId}', function ($user, $orderId) {
         return $user->id === Order::findOrNew($orderId)->user_id;
     });
 
-The `channel` method accepts two arguments: the name of the channel and a callback which returns `true` or `false` indicating whether the user is authorized to listen on the channel.
+Metoda `channel` przyjmuje dwa argumenty: nazwę kanału i wywołanie zwrotne, które zwraca `true` lub `false` wskazujące, czy użytkownik jest uprawniony do nasłuchiwania na kanale.
 
-All authorization callbacks receive the currently authenticated user as their first argument and any additional wildcard parameters as their subsequent arguments. In this example, we are using the `{orderId}` placeholder to indicate that the "ID" portion of the channel name is a wildcard.
+Wszystkie wywołania zwrotne autoryzacji odbierają aktualnie uwierzytelnionego użytkownika jako swój pierwszy argument i wszelkie dodatkowe parametry wieloznaczne jako kolejne argumenty. W tym przykładzie używamy symbolu zastępczego `{orderId}`, aby wskazać, że część "ID" nazwy kanału jest symbolem wieloznacznym.
 
-#### Authorization Callback Model Binding
+#### Authorization Callback Model Binding - Autoryzacja Callback Model Binding
 
-Just like HTTP routes, channel routes may also take advantage of implicit and explicit [route model binding](/docs/{{version}}/routing#route-model-binding). For example, instead of receiving the string or numeric order ID, you may request an actual `Order` model instance:
+Podobnie jak trasy HTTP, trasy kanałów mogą również wykorzystywać niejawne i jawne [powiązanie modelu trasy](/docs/{{version}}/routing#route-model-binding). Na przykład zamiast odbierać ciąg znaków lub numeryczny identyfikator zamówienia, możesz poprosić o rzeczywistą instancję modelu `Order`:
 
     use App\Order;
 
@@ -353,53 +355,53 @@ Just like HTTP routes, channel routes may also take advantage of implicit and ex
     });
 
 <a name="broadcasting-events"></a>
-## Broadcasting Events
+## Broadcasting Events - Rozgłaszanie zdarzeń
 
-Once you have defined an event and marked it with the `ShouldBroadcast` interface, you only need to fire the event using the `event` function. The event dispatcher will notice that the event is marked with the `ShouldBroadcast` interface and will queue the event for broadcasting:
+Po zdefiniowaniu zdarzenia i oznaczeniu go za pomocą interfejsu `ShouldBroadcast`, wystarczy wywołać zdarzenie za pomocą funkcji `event`. Program rozsyłający zdarzenia zauważy, że zdarzenie jest oznaczone interfejsem `ShouldBroadcast` i spowoduje umieszczenie zdarzenia w kolejce do nadawania:
 
     event(new ShippingStatusUpdated($update));
 
 <a name="only-to-others"></a>
-### Only To Others
+### Only To Others - Tylko dla innych
 
-When building an application that utilizes event broadcasting, you may substitute the `event` function with the `broadcast` function. Like the `event` function, the `broadcast` function dispatches the event to your server-side listeners:
+Podczas budowania aplikacji wykorzystującej rozgłszanie zdarzeń, możesz zastąpić funkcję `event` funkcją `broadcast`. Podobnie jak funkcja `event`, funkcja `broadcast` wywołuje zdarzenie do nasłuchujących po stronie serwera:
 
     broadcast(new ShippingStatusUpdated($update));
 
-However, the `broadcast` function also exposes the `toOthers` method which allows you to exclude the current user from the broadcast's recipients:
+Jednak funkcja `broadcast` również eksponuje metodę `toOthers`, która pozwala ci wykluczyć bieżącego użytkownika z odbiorców transmisji:
 
     broadcast(new ShippingStatusUpdated($update))->toOthers();
 
-To better understand when you may want to use the `toOthers` method, let's imagine a task list application where a user may create a new task by entering a task name. To create a task, your application might make a request to a `/task` end-point which broadcasts the task's creation and returns a JSON representation of the new task. When your JavaScript application receives the response from the end-point, it might directly insert the new task into its task list like so:
+Aby lepiej zrozumieć, kiedy chcesz użyć metody `toOthers`, wyobraźmy sobie aplikację na liście zadań, w której użytkownik może utworzyć nowe zadanie, wprowadzając nazwę zadania. Aby utworzyć zadanie, aplikacja może wysłać żądanie do punktu końcowego `/task`, który rozgłasza tworzenie zadania i zwraca reprezentację JSON nowego zadania. Gdy aplikacja JavaScript otrzyma odpowiedź od punktu końcowego, może bezpośrednio wstawić nowe zadanie do swojej listy zadań, tak jak to:
 
     axios.post('/task', task)
         .then((response) => {
             this.tasks.push(response.data);
         });
 
-However, remember that we also broadcast the task's creation. If your JavaScript application is listening for this event in order to add tasks to the task list, you will have duplicate tasks in your list: one from the end-point and one from the broadcast.
+Pamiętaj jednak, że nadawaliśmy także tworzenie tego zadania. Jeśli twoja aplikacja JavaScript nasłuchuje tego zdarzenia w celu dodania zadań do listy zadań, będziesz mieć zduplikowane zadania na liście: jedną z punktu końcowego i jedną z transmisji.
 
-You may solve this by using the `toOthers` method to instruct the broadcaster to not broadcast the event to the current user.
+Możesz rozwiązać ten problem, używając metody `toOthers`, aby poinstruować nadawcę, aby nie transmitował zdarzenia do bieżącego użytkownika.
 
-#### Configuration
+#### Configuration - Konfiguracja
 
-When you initialize a Laravel Echo instance, a socket ID is assigned to the connection. If you are using [Vue](https://vuejs.org) and [Axios](https://github.com/mzabriskie/axios), the socket ID will automatically be attached to every outgoing request as a `X-Socket-ID` header. Then, when you call the `toOthers` method, Laravel will extract the socket ID from the header and instruct the broadcaster to not broadcast to any connections with that socket ID.
+Podczas inicjowania instancji Laravel Echo do połączenia jest przypisywany identyfikator gniazda. Jeśli używasz [Vue](https://vuejs.org) i [Axios](https://github.com/mzabriskie/axios), identyfikator gniazda zostanie automatycznie dołączony do każdego wychodzącego żądania jako `X- Nagłówek Socket-ID`. Następnie, wywołując metodę `toOthers`, Laravel wyodrębni identyfikator gniazda z nagłówka i poinstruuje nadawcę, aby nie nadawał żadnych połączeń z tym identyfikatorem gniazda.
 
-If you are not using Vue and Axios, you will need to manually configure your JavaScript application to send the `X-Socket-ID` header. You may retrieve the socket ID using the `Echo.socketId` method:
+Jeśli nie używasz Vue i Axios, będziesz musiał ręcznie skonfigurować swoją aplikację JavaScript, aby wysłać nagłówek `X-Socket-ID`. Możesz pobrać identyfikator gniazda za pomocą metody `Echo.socketId`:
 
     var socketId = Echo.socketId();
 
 <a name="receiving-broadcasts"></a>
-## Receiving Broadcasts
+## Receiving Broadcasts - Odbierane rozgłoszenia
 
 <a name="installing-laravel-echo"></a>
-### Installing Laravel Echo
+### Installing Laravel Echo - Instalowanie Laravel Echo
 
-Laravel Echo is a JavaScript library that makes it painless to subscribe to channels and listen for events broadcast by Laravel. You may install Echo via the NPM package manager. In this example, we will also install the `pusher-js` package since we will be using the Pusher broadcaster:
+Laravel Echo to biblioteka JavaScript, która sprawia, że bezboleśnie subskrybować kanały i słuchać wydarzeń emitowanych przez Laravel. Możesz zainstalować Echo za pośrednictwem menedżera pakietów NPM. W tym przykładzie zainstalujemy również pakiet `pusher-js`, ponieważ będziemy używać nadawcy Pusher:
 
     npm install --save laravel-echo pusher-js
 
-Once Echo is installed, you are ready to create a fresh Echo instance in your application's JavaScript. A great place to do this is at the bottom of the `resources/assets/js/bootstrap.js` file that is included with the Laravel framework:
+Po zainstalowaniu Echo możesz przygotować nową instancję Echo w JavaScript swojej aplikacji. Doskonałym miejscem na to jest u dołu pliku `resources/assets/js/bootstrap.js`, który jest dołączony do frameworka Laravel:
 
     import Echo from "laravel-echo"
 
@@ -408,7 +410,7 @@ Once Echo is installed, you are ready to create a fresh Echo instance in your ap
         key: 'your-pusher-key'
     });
 
-When creating an Echo instance that uses the `pusher` connector, you may also specify a `cluster` as well as whether the connection should be encrypted:
+Podczas tworzenia instancji Echo, która korzysta ze złącza `pusher`, możesz także określić `cluster`, a także, czy połączenie powinno być szyfrowane:
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
@@ -418,16 +420,16 @@ When creating an Echo instance that uses the `pusher` connector, you may also sp
     });
 
 <a name="listening-for-events"></a>
-### Listening For Events
+### Listening For Events - Słuchanie zdarzeń
 
-Once you have installed and instantiated Echo, you are ready to start listening for event broadcasts. First, use the `channel` method to retrieve an instance of a channel, then call the `listen` method to listen for a specified event:
+Po zainstalowaniu i utworzeniu instancji Echo możesz zacząć słuchać transmisji zdarzeń. Najpierw użyj metody `channel`, aby pobrać instancję kanału, a następnie wywołaj metodę `listen`, aby nasłuchiwać określonego zdarzenia:
 
     Echo.channel('orders')
         .listen('OrderShipped', (e) => {
             console.log(e.order.name);
         });
 
-If you would like to listen for events on a private channel, use the `private` method instead. You may continue to chain calls to the `listen` method to listen for multiple events on a single channel:
+Jeśli chcesz słuchać zdarzeń na prywatnym kanale, użyj zamiast tego metody `private`. Możesz kontynuować łańcuch połączeń do metody `listen`, aby nasłuchiwać wielu zdarzeń na jednym kanale:
 
     Echo.private('orders')
         .listen(...)
@@ -435,16 +437,16 @@ If you would like to listen for events on a private channel, use the `private` m
         .listen(...);
 
 <a name="leaving-a-channel"></a>
-### Leaving A Channel
+### Leaving A Channel - Opuszczając kanał
 
-To leave a channel, you may call the `leave` method on your Echo instance:
+Aby opuścić kanał, możesz wywołać metodę `leave` na instancji Echo:
 
     Echo.leave('orders');
 
 <a name="namespaces"></a>
-### Namespaces
+### Namespaces - Przestrzenie nazw
 
-You may have noticed in the examples above that we did not specify the full namespace for the event classes. This is because Echo will automatically assume the events are located in the `App\Events` namespace. However, you may configure the root namespace when you instantiate Echo by passing a `namespace` configuration option:
+Być może zauważyłeś w powyższych przykładach, że nie określiliśmy pełnej przestrzeni nazw dla klas zdarzeń. Dzieje się tak, ponieważ Echo automatycznie zakłada, że zdarzenia znajdują się w przestrzeni nazw `App\Events`. Można jednak skonfigurować główną przestrzeń nazw podczas tworzenia instancji Echo, przekazując opcję konfiguracyjną `namespace`:
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
@@ -452,7 +454,7 @@ You may have noticed in the examples above that we did not specify the full name
         namespace: 'App.Other.Namespace'
     });
 
-Alternatively, you may prefix event classes with a `.` when subscribing to them using Echo. This will allow you to always specify the fully-qualified class name:
+Alternatywnie, możesz prefiksować klasy zdarzeń z `.` podczas subskrybowania ich za pomocą Echo. Umożliwi to zawsze określenie w pełni kwalifikowanej nazwy klasy:
 
     Echo.channel('orders')
         .listen('.Namespace.Event.Class', (e) => {
@@ -460,16 +462,16 @@ Alternatively, you may prefix event classes with a `.` when subscribing to them 
         });
 
 <a name="presence-channels"></a>
-## Presence Channels
+## Presence Channels - Kanały obecności
 
-Presence channels build on the security of private channels while exposing the additional feature of awareness of who is subscribed to the channel. This makes it easy to build powerful, collaborative application features such as notifying users when another user is viewing the same page.
+Kanały obecności opierają się na bezpieczeństwie kanałów prywatnych, a jednocześnie uwidaczniają dodatkową funkcję świadomości, kto jest subskrybentem kanału. Ułatwia to tworzenie zaawansowanych, współpracujących funkcji aplikacji, takich jak powiadamianie użytkowników, gdy inny użytkownik przegląda tę samą stronę.
 
 <a name="authorizing-presence-channels"></a>
-### Authorizing Presence Channels
+### Authorizing Presence Channels - Autoryzacja kanałów obecności
 
-All presence channels are also private channels; therefore, users must be [authorized to access them](#authorizing-channels). However, when defining authorization callbacks for presence channels, you will not return `true` if the user is authorized to join the channel. Instead, you should return an array of data about the user.
+Wszystkie kanały obecności są również kanałami prywatnymi; w związku z tym użytkownicy muszą być [uprawnieni do uzyskiwania do nich dostępu](#authorizing-channels). Jednak podczas definiowania wywołań zwrotnych autoryzacji dla kanałów obecności nie zwrócisz wartości `true`, jeśli użytkownik jest uprawniony do przyłączenia się do kanału. Zamiast tego powinieneś zwrócić tablicę danych o użytkowniku.
 
-The data returned by the authorization callback will be made available to the presence channel event listeners in your JavaScript application. If the user is not authorized to join the presence channel, you should return `false` or `null`:
+Dane zwrócone przez wywołanie zwrotne autoryzacji zostaną udostępnione detektorom zdarzeń kanału obecności w aplikacji JavaScript. Jeśli użytkownik nie ma uprawnień do przyłączenia się do kanału obecności, powinieneś zwrócić `false` lub `null`:
 
     Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
         if ($user->canJoinRoom($roomId)) {
@@ -478,9 +480,9 @@ The data returned by the authorization callback will be made available to the pr
     });
 
 <a name="joining-presence-channels"></a>
-### Joining Presence Channels
+### Joining Presence Channels - Dołączanie do kanałów obecności
 
-To join a presence channel, you may use Echo's `join` method. The `join` method will return a `PresenceChannel` implementation which, along with exposing the `listen` method, allows you to subscribe to the `here`, `joining`, and `leaving` events.
+Aby dołączyć do kanału obecności, możesz użyć metody `join` firmy Echo. Metoda `join` zwróci implementację `PresenceChannel`, która wraz z odsłonięciem metody `listen` umożliwia subskrybowanie zdarzeń `here`, `join` oraz` leaving`.
 
     Echo.join(`chat.${roomId}`)
         .here((users) => {
@@ -493,12 +495,12 @@ To join a presence channel, you may use Echo's `join` method. The `join` method 
             console.log(user.name);
         });
 
-The `here` callback will be executed immediately once the channel is joined successfully, and will receive an array containing the user information for all of the other users currently subscribed to the channel. The `joining` method will be executed when a new user joins a channel, while the `leaving` method will be executed when a user leaves the channel.
+Wywołanie `here` zostanie wykonane natychmiast po pomyślnym połączeniu kanału i otrzyma tablicę zawierającą informacje o użytkowniku dla wszystkich innych użytkowników aktualnie subskrybujących kanał. Metoda `joining` zostanie wykonana, gdy nowy użytkownik dołączy do kanału, natomiast metoda `leaving` zostanie wykonana, gdy użytkownik opuści kanał.
 
 <a name="broadcasting-to-presence-channels"></a>
-### Broadcasting To Presence Channels
+### Broadcasting To Presence Channels - Transmisja do kanałów obecności
 
-Presence channels may receive events just like public or private channels. Using the example of a chatroom, we may want to broadcast `NewMessage` events to the room's presence channel. To do so, we'll return an instance of `PresenceChannel` from the event's `broadcastOn` method:
+Kanały obecności mogą odbierać zdarzenia, tak jak kanały publiczne lub prywatne. Na przykładzie czatu możemy chcieć transmitować zdarzenia `NewMessage` do kanału obecności w pokoju. W tym celu zwrócimy instancję `PresenceChannel` z metody` broadcastOn` zdarzenia:
 
     /**
      * Get the channels the event should broadcast on.
@@ -510,13 +512,13 @@ Presence channels may receive events just like public or private channels. Using
         return new PresenceChannel('room.'.$this->message->room_id);
     }
 
-Like public or private events, presence channel events may be broadcast using the `broadcast` function. As with other events, you may use the `toOthers` method to exclude the current user from receiving the broadcast:
+Podobnie jak zdarzenia publiczne lub prywatne, zdarzenia kanału obecności mogą być nadawane za pomocą funkcji `broadcast`. Podobnie jak w przypadku innych zdarzeń, możesz użyć metody `toOthers`, aby wykluczyć bieżącego użytkownika z odbioru transmisji:
 
     broadcast(new NewMessage($message));
 
     broadcast(new NewMessage($message))->toOthers();
 
-You may listen for the join event via Echo's `listen` method:
+Możesz posłuchać zdarzenia join przez metodę `listen` Echa:
 
     Echo.join(`chat.${roomId}`)
         .here(...)
@@ -527,16 +529,16 @@ You may listen for the join event via Echo's `listen` method:
         });
 
 <a name="client-events"></a>
-## Client Events
+## Client Events - Zdarzenia klienta
 
-Sometimes you may wish to broadcast an event to other connected clients without hitting your Laravel application at all. This can be particularly useful for things like "typing" notifications, where you want to alert users of your application that another user is typing a message on a given screen. To broadcast client events, you may use Echo's `whisper` method:
+Czasami możesz chcieć nadać zdarzenie innym podłączonym klientom bez rrejestrowania w aplikację Laravel. Może to być szczególnie przydatne w przypadku takich powiadomień, jak "pisząc", w których chcesz powiadomić użytkowników swojej aplikacji, że inny użytkownik pisze wiadomość na danym ekranie. Aby transmitować zdarzenia klienta, możesz użyć metody `whisper` Echa:
 
     Echo.channel('chat')
         .whisper('typing', {
             name: this.user.name
         });
 
-To listen for client events, you may use the `listenForWhisper` method:
+Aby nasłuchiwać zdarzeń klienta, możesz użyć metody `listenForWhisper`:
 
     Echo.channel('chat')
         .listenForWhisper('typing', (e) => {
@@ -544,15 +546,15 @@ To listen for client events, you may use the `listenForWhisper` method:
         });
 
 <a name="notifications"></a>
-## Notifications
+## Notifications - Powiadomienia
 
-By pairing event broadcasting with [notifications](/docs/{{version}}/notifications), your JavaScript application may receive new notifications as they occur without needing to refresh the page. First, be sure to read over the documentation on using [the broadcast notification channel](/docs/{{version}}/notifications#broadcast-notifications).
+Po powiązaniu emisji zdarzeń z [powiadomieniami](/docs/{{version}}/notifications), aplikacja JavaScript może otrzymywać nowe powiadomienia, które pojawiają się bez potrzeby odświeżania strony. Najpierw przeczytaj dokumentację na temat [kanału powiadomień o transmisji](/docs/{{version}}/notifications#broadcast-notifications).
 
-Once you have configured a notification to use the broadcast channel, you may listen for the broadcast events using Echo's `notification` method. Remember, the channel name should match the class name of the entity receiving the notifications:
+Po skonfigurowaniu powiadomienia o korzystaniu z kanału transmisji możesz wysłuchać zdarzeń rozgłoszeniowych za pomocą metody `notification` Echo. Pamiętaj, że nazwa kanału powinna pasować do nazwy klasy podmiotu odbierającego powiadomienia:
 
     Echo.private(`App.User.${userId}`)
         .notification((notification) => {
             console.log(notification.type);
         });
 
-In this example, all notifications sent to `App\User` instances via the `broadcast` channel would be received by the callback. A channel authorization callback for the `App.User.{id}` channel is included in the default `BroadcastServiceProvider` that ships with the Laravel framework.
+W tym przykładzie wszystkie powiadomienia wysyłane do instancji `App\User` za pośrednictwem kanału `broadcast` będą odbierane przez wywołanie zwrotne. Wywołanie autoryzacji kanału dla kanału `App.User.{id}` jest zawarte w domyślnym `BroadcastServiceProvider` dostarczanym ze strukturą Laravel.
