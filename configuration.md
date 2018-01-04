@@ -72,7 +72,7 @@ Aby przyspieszyć działanie aplikacji, wszystkie pliki konfiguracyjne należy p
 
 Zwykle należy uruchomić polecenie `php artisan config: cache` jako część procedury wdrażania produkcyjnego. Polecenie nie powinno być uruchamiane podczas rozwoju lokalnego, ponieważ opcje konfiguracji często muszą być zmieniane w trakcie rozwoju aplikacji.
 
-> {note} Jeśli wykonasz komendę `config: cache` podczas procesu wdrażania, powinieneś być pewien, że wywołujesz funkcję` env` z plików konfiguracyjnych.
+> {note} Jeśli wykonasz komendę `config:cache` podczas procesu wdrażania, powinieneś być pewien, że wywołujesz funkcję `env` z plików konfiguracyjnych. Gdy konfiguracja została zbuforowana, plik `.env` nie zostanie załadowany, a wszystkie wywołania funkcji `env` zwrucą `null`.
 
 <a name="maintenance-mode"></a>
 ## Maintenance Mode - Tryb konserwacji
