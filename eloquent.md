@@ -680,7 +680,7 @@ Scopes should always return a query builder instance:
 
 #### Utilizing A Local Scope - Korzystanie z lokalnego zakresu
 
-Po zdefiniowaniu zakresu można wywoływać metody zasięgu podczas wysyłania zapytania do modelu. Jednak nie trzeba dodawać przedrostka `scope` podczas wywoływania metody. Można nawet łączyć wywołania do różnych zakresów, na przykład:
+Po zdefiniowaniu zakresu można wywoływać metody zasięgu podczas wysyłania zapytania do modelu. Nie powinieneś jednak włączać prefiksu `scope` podczas wywoływania metody. Można nawet łączyć wywołania do różnych zakresów, na przykład:
 
     $users = App\User::popular()->active()->orderBy('created_at')->get();
 
