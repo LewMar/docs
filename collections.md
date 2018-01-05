@@ -2014,7 +2014,7 @@ Każda wiadomość wyższego rzędu może być dostępna jako właściwość dyn
 
     $users->each->markAsVip();
 
-Podobnie, możemy użyć `sum wiadomości wyższego rzędu, aby zebrać całkowitą liczbę "głosów" dla zbioru użytkowników:
+Podobnie, możemy użyć `sum` wiadomości wyższego rzędu, aby zebrać całkowitą liczbę "głosów" dla zbioru użytkowników:
 
     $users = User::where('group', 'Development')->get();
 
