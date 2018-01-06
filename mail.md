@@ -407,7 +407,6 @@ Składnik tabeli umożliwia przekształcenie tabeli Markdown w tabelę HTML. Kom
 <a name="customizing-the-components"></a>
 ### Customizing The Components - Dostosowywanie komponentów
 
-You may export all of the Markdown mail components to your own application for customization. To export the components, use the `vendor:publish` Artisan command to publish the `laravel-mail` asset tag:
 Możesz wyeksportować wszystkie komponenty poczty Markdown do swojej aplikacji w celu dostosowania. Aby wyeksportować komponenty, użyj komendy `vendor:publish` Artisan, aby opublikować znacznik zasobu `laravel-mail`:
 
     php artisan vendor:publish --tag=laravel-mail
