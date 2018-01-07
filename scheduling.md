@@ -1,35 +1,35 @@
 # Task Scheduling
 
-- [Introduction](#introduction)
-- [Defining Schedules](#defining-schedules)
-    - [Scheduling Artisan Commands](#scheduling-artisan-commands)
-    - [Scheduling Queued Jobs](#scheduling-queued-jobs)
-    - [Scheduling Shell Commands](#scheduling-shell-commands)
-    - [Schedule Frequency Options](#schedule-frequency-options)
-    - [Preventing Task Overlaps](#preventing-task-overlaps)
-    - [Maintenance Mode](#maintenance-mode)
-- [Task Output](#task-output)
-- [Task Hooks](#task-hooks)
+- [Introduction - Wprowadzenie](#introduction)
+- [Defining Schedules - Definiowanie harmonogramów](#defining-schedules)
+    - [Scheduling Artisan Commands - Planowanie poleceń Artisan](#scheduling-artisan-commands)
+    - [Scheduling Queued Jobs - Planowanie zadań w kolejce](#scheduling-queued-jobs)
+    - [Scheduling Shell Commands - Planowanie poleceń powłoki](#scheduling-shell-commands)
+    - [Schedule Frequency Options - Zaplanuj opcje częstotliwości](#schedule-frequency-options)
+    - [Preventing Task Overlaps - Zapobieganie nakładaniu się zadań](#preventing-task-overlaps)
+    - [Maintenance Mode - Tryb konserwacji](#maintenance-mode)
+- [Task Output - Zadanie wyjściowe](#task-output)
+- [Task Hooks - Haczyki zadań](#task-hooks)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-In the past, you may have generated a Cron entry for each task you needed to schedule on your server. However, this can quickly become a pain, because your task schedule is no longer in source control and you must SSH into your server to add additional Cron entries.
+W przeszłości mogłeś wygenerować wpis Cron dla każdego zadania, które musisz zaplanować na swoim serwerze. Jednak może to szybko stać się problemem, ponieważ harmonogram zadań nie jest już kontrolowany przez źródło, a do serwera należy dodać SSH, aby dodać dodatkowe wpisy Cron.
 
-Laravel's command scheduler allows you to fluently and expressively define your command schedule within Laravel itself. When using the scheduler, only a single Cron entry is needed on your server. Your task schedule is defined in the `app/Console/Kernel.php` file's `schedule` method. To help you get started, a simple example is defined within the method.
+Harmonogram poleceń Laravel pozwala ci płynnie i ekspresyjnie definiować twój harmonogram poleceń w samym Laravel-u. Podczas korzystania z programu planującego na twoim serwerze potrzebny jest tylko jeden wpis Cron. Twój harmonogram zadań jest zdefiniowany w metodzie `schedule` pliku  `app/Console/Kernel.php`. Aby pomóc Ci zacząć, prosty przykład jest zdefiniowany w ramach metody.
 
-### Starting The Scheduler
+### Starting The Scheduler - Uruchamianie programu planującego
 
-When using the scheduler, you only need to add the following Cron entry to your server. If you do not know how to add Cron entries to your server, consider using a service such as [Laravel Forge](https://forge.laravel.com) which can manage the Cron entries for you:
+Podczas korzystania z programu planującego wystarczy dodać do serwera następujący wpis Cron. Jeśli nie wiesz, jak dodać wpisy Cron do swojego serwera, rozważ skorzystanie z usługi takiej jak [Laravel Forge](https://forge.laravel.com), która może zarządzać wpisami Cron:
 
     * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
 
-This Cron will call the Laravel command scheduler every minute. When the `schedule:run` command is executed, Laravel will evaluate your scheduled tasks and runs the tasks that are due.
+Cron będzie wywoływał harmonogram poleceń Laravel co minutę. Po uruchomieniu polecenia `schedule:run` program Laravel oceni zaplanowane zadania i wykona zadania, które są należne.
 
 <a name="defining-schedules"></a>
-## Defining Schedules
+## Defining Schedules - Definiowanie harmonogramów
 
-You may define all of your scheduled tasks in the `schedule` method of the `App\Console\Kernel` class. To get started, let's look at an example of scheduling a task. In this example, we will schedule a `Closure` to be called every day at midnight. Within the `Closure` we will execute a database query to clear a table:
+Możesz zdefiniować wszystkie zaplanowane zadania w metodzie `schedule` klasy `App\Console\Kernel` . Na początek przyjrzyjmy się przykładowi planowania zadania. W tym przykładzie zaplanujemy `Closure`, które będzie uruchamiane codziennie o północy. Wewnątrz  `Closure` będziemy wykonywać zapytanie do bazy danych, aby wyczyścić tabelę:
 
     <?php
 
@@ -65,54 +65,54 @@ You may define all of your scheduled tasks in the `schedule` method of the `App\
     }
 
 <a name="scheduling-artisan-commands"></a>
-### Scheduling Artisan Commands
+### Scheduling Artisan Commands - Planowanie poleceń Artisan
 
-In addition to scheduling Closure calls, you may also schedule [Artisan commands](/docs/{{version}}/artisan) and operating system commands. For example, you may use the `command` method to schedule an Artisan command using either the command's name or class:
+Oprócz planowania wywołań Closure możesz również zaplanować [polecenia Artisana](/docs/{{version}}/artisan) i polecenia systemu operacyjnego. Na przykład możesz użyć metody `command`, aby zaplanować polecenie Artisan za pomocą nazwy lub klasy polecenia:
 
     $schedule->command('emails:send --force')->daily();
 
     $schedule->command(EmailsCommand::class, ['--force'])->daily();
 
 <a name="scheduling-queued-jobs"></a>
-### Scheduling Queued Jobs
+### Scheduling Queued Jobs - Planowanie zadań w kolejce
 
-The `job` method may be used to schedule a [queued job](/docs/{{version}}/queues). This method provides a convenient way to schedule jobs without using the `call` method to manually create Closures to queue the job:
+Metodę `job` można użyć do zaplanowania [zadania w kolejce](/docs/{{version}}/queues). Ta metoda zapewnia wygodny sposób planowania zadań bez użycia metody `call` do ręcznego tworzenia Closures w celu kolejkowania zadania:
 
     $schedule->job(new Heartbeat)->everyFiveMinutes();
 
 <a name="scheduling-shell-commands"></a>
-### Scheduling Shell Commands
+### Scheduling Shell Commands - Planowanie poleceń powłoki
 
-The `exec` method may be used to issue a command to the operating system:
+Do wydania polecenia do systemu operacyjnego można użyć metody `exec`:
 
     $schedule->exec('node /home/forge/script.js')->daily();
 
 <a name="schedule-frequency-options"></a>
-### Schedule Frequency Options
+### Schedule Frequency Options - Zaplanuj opcje częstotliwości
 
-Of course, there are a variety of schedules you may assign to your task:
+Oczywiście istnieje wiele harmonogramów, które możesz przypisać do swojego zadania:
 
-Method  | Description
+Metoda  | Opis
 ------------- | -------------
-`->cron('* * * * * *');`  |  Run the task on a custom Cron schedule
-`->everyMinute();`  |  Run the task every minute
-`->everyFiveMinutes();`  |  Run the task every five minutes
-`->everyTenMinutes();`  |  Run the task every ten minutes
-`->everyFifteenMinutes();`  |  Run the task every fifteen minutes
-`->everyThirtyMinutes();`  |  Run the task every thirty minutes
-`->hourly();`  |  Run the task every hour
-`->hourlyAt(17);`  |  Run the task every hour at 17 mins past the hour
-`->daily();`  |  Run the task every day at midnight
-`->dailyAt('13:00');`  |  Run the task every day at 13:00
-`->twiceDaily(1, 13);`  |  Run the task daily at 1:00 & 13:00
-`->weekly();`  |  Run the task every week
-`->monthly();`  |  Run the task every month
-`->monthlyOn(4, '15:00');`  |  Run the task every month on the 4th at 15:00
-`->quarterly();` |  Run the task every quarter
-`->yearly();`  |  Run the task every year
-`->timezone('America/New_York');` | Set the timezone
+`->cron('* * * * * *');`  |  Uruchom zadanie w niestandardowym harmonogramie Cron
+`->everyMinute();`  |  Uruchom zadanie co minutę
+`->everyFiveMinutes();`  |  Uruchom zadanie co pięć minut
+`->everyTenMinutes();`  |  Uruchom zadanie co dziesięć minut
+`->everyFifteenMinutes();`  |  Uruchom zadanie co piętnaście minut
+`->everyThirtyMinutes();`  |  Uruchom zadanie co trzydzieści minut
+`->hourly();`  |  Uruchom zadanie co godzinę
+`->hourlyAt(17);`  |  Uruchom zadanie co godzinę, o 17 minut po godzinie
+`->daily();`  |  Uruchom zadanie codziennie o północy
+`->dailyAt('13:00');`  |  Uruchom zadanie codziennie o 13:00
+`->twiceDaily(1, 13);`  |  Uruchom zadanie codziennie o 1:00 i 13:00
+`->weekly();`  |  Uruchom zadanie co tydzień
+`->monthly();`  |  Uruchom zadanie co miesiąc
+`->monthlyOn(4, '15:00');`  |  Uruchom zadanie co miesiąc 4 dnia o 15:00
+`->quarterly();` |  Uruchom zadanie co kwartał
+`->yearly();`  |  Uruchom zadanie co roku
+`->timezone('America/New_York');` | Ustaw strefę czasową
 
-These methods may be combined with additional constraints to create even more finely tuned schedules that only run on certain days of the week. For example, to schedule a command to run weekly on Monday:
+Te metody można łączyć z dodatkowymi ograniczeniami w celu stworzenia jeszcze bardziej precyzyjnie opracowanych harmonogramów, które działają tylko w określone dni tygodnia. Na przykład, aby zaplanować uruchamianie polecenia cotygodniowego w poniedziałek:
 
     // Run once per week on Monday at 1 PM...
     $schedule->call(function () {
@@ -126,95 +126,95 @@ These methods may be combined with additional constraints to create even more fi
               ->timezone('America/Chicago')
               ->between('8:00', '17:00');
 
-Below is a list of the additional schedule constraints:
+Poniżej znajduje się lista dodatkowych ograniczeń harmonogramu:
 
-Method  | Description
+Metoda  | Opis
 ------------- | -------------
-`->weekdays();`  |  Limit the task to weekdays
-`->sundays();`  |  Limit the task to Sunday
-`->mondays();`  |  Limit the task to Monday
-`->tuesdays();`  |  Limit the task to Tuesday
-`->wednesdays();`  |  Limit the task to Wednesday
-`->thursdays();`  |  Limit the task to Thursday
-`->fridays();`  |  Limit the task to Friday
-`->saturdays();`  |  Limit the task to Saturday
-`->between($start, $end);`  |  Limit the task to run between start and end times
-`->when(Closure);`  |  Limit the task based on a truth test
+`->weekdays();`  |  Ogranicz zadanie do dni powszednich
+`->sundays();`  |  Ogranicz zadanie do Niedzieli
+`->mondays();`  |  Ogranicz zadanie do Poniedziałku
+`->tuesdays();`  |  Ogranicz zadanie to Wtorku
+`->wednesdays();`  |  Ogranicz zadanie to Środy
+`->thursdays();`  |  Ogranicz zadanie to Czwartku
+`->fridays();`  |  Ogranicz zadanie to Piątku
+`->saturdays();`  |  Ogranicz zadanie Soboty
+`->between($start, $end);`  |  Ogranicz zadanie do uruchomienia między czasem rozpoczęcia i zakończenia
+`->when(Closure);`  |  Ogranicz zadanie w oparciu o test prawdy
 
-#### Between Time Constraints
+#### Between Time Constraints - Między ograniczeniami czasowymi
 
-The `between` method may be used to limit the execution of a task based on the time of day:
+Metoda `between` może być używana do ograniczenia wykonania zadania w zależności od pory dnia:
 
     $schedule->command('reminders:send')
                         ->hourly()
                         ->between('7:00', '22:00');
 
-Similarly, the `unlessBetween` method can be used to exclude the execution of a task for a period of time:
+Podobnie, można użyć metody `unlessBetween`, aby wykluczyć wykonanie zadania przez pewien okres czasu:
 
     $schedule->command('reminders:send')
                         ->hourly()
                         ->unlessBetween('23:00', '4:00');
 
-#### Truth Test Constraints
+#### Truth Test Constraints - Ograniczenia testu prawdy
 
-The `when` method may be used to limit the execution of a task based on the result of a given truth test. In other words, if the given `Closure` returns `true`, the task will execute as long as no other constraining conditions prevent the task from running:
+Metodę `when` można użyć do ograniczenia wykonania zadania w oparciu o wynik danego testu prawdy. Innymi słowy, jeśli podane `Closure` zwraca `true`, zadanie zostanie wykonane, dopóki żadne inne warunki ograniczające uniemożliwiają uruchomienie zadania:
 
     $schedule->command('emails:send')->daily()->when(function () {
         return true;
     });
 
-The `skip` method may be seen as the inverse of `when`. If the `skip` method returns `true`, the scheduled task will not be executed:
+Metoda `skip` może być postrzegana jako odwrotność `when`. Jeśli metoda `skip` zwraca `true`, zaplanowane zadanie nie zostanie wykonane:
 
     $schedule->command('emails:send')->daily()->skip(function () {
         return true;
     });
 
-When using chained `when` methods, the scheduled command will only execute if all `when` conditions return `true`.
+W przypadku użycia połączonych metod `when`, zaplanowane polecenie zostanie wykonane, jeśli wszystkie warunki `when` zwrócą `true`.
 
 <a name="preventing-task-overlaps"></a>
-### Preventing Task Overlaps
+### Preventing Task Overlaps - Zapobieganie nakładaniu się zadań
 
-By default, scheduled tasks will be run even if the previous instance of the task is still running. To prevent this, you may use the `withoutOverlapping` method:
+Domyślnie zaplanowane zadania będą uruchamiane, nawet jeśli poprzednia instancja zadania nadal działa. Aby temu zapobiec, możesz użyć metody `withoutOverlapping`:
 
     $schedule->command('emails:send')->withoutOverlapping();
 
-In this example, the `emails:send` [Artisan command](/docs/{{version}}/artisan) will be run every minute if it is not already running. The `withoutOverlapping` method is especially useful if you have tasks that vary drastically in their execution time, preventing you from predicting exactly how long a given task will take.
+W tym przykładzie `emails:send` [polecenie Artisana](/docs/{{version}}/artisan) będą uruchamiane co minutę, jeśli jeszcze nie jest uruchomiona. Metoda `withoutOverlapping` jest szczególnie użyteczna, jeśli masz zadania drastycznie różniące się czasem wykonania, co uniemożliwia dokładne przewidzenie czasu wykonania danego zadania.
 
 <a name="maintenance-mode"></a>
-### Maintenance Mode
+### Maintenance Mode - Tryb konserwacji
 
-Laravel's scheduled tasks will not run when Laravel is in [maintenance mode](/docs/{{version}}/configuration#maintenance-mode), since we don't want your tasks to interfere with any unfinished maintenance you may be performing on your server. However, if you would like to force a task to run even in maintenance mode, you may use the `evenInMaintenanceMode` method:
+Zadania zaplanowane przez Laravel nie będą działać, jeśli Laravel jest w [trybie konserwacji](/docs/{{version}}/configuration#maintenance-mode), ponieważ nie chcemy, aby twoje zadania kolidowały z niedokończoną konserwacją, którą możesz wykonywać na komputerze. twój serwer. Jeśli jednak chcesz wymusić uruchomienie zadania nawet w trybie konserwacji, możesz użyć metody `evenInMaintenanceMode`:
 
     $schedule->command('emails:send')->evenInMaintenanceMode();
 
 <a name="task-output"></a>
-## Task Output
+## Task Output - Zadanie wyjściowe
 
-The Laravel scheduler provides several convenient methods for working with the output generated by scheduled tasks. First, using the `sendOutputTo` method, you may send the output to a file for later inspection:
+Program planujący Laravel oferuje kilka wygodnych metod pracy z danymi wyjściowymi generowanymi przez zaplanowane zadania. Po pierwsze, używając metody `sendOutputTo`, możesz wysłać dane wyjściowe do pliku w celu późniejszej inspekcji:
 
     $schedule->command('emails:send')
              ->daily()
              ->sendOutputTo($filePath);
 
-If you would like to append the output to a given file, you may use the `appendOutputTo` method:
+Jeśli chcesz dołączyć dane wyjściowe do danego pliku, możesz użyć metody `appendOutputTo`:
 
     $schedule->command('emails:send')
              ->daily()
              ->appendOutputTo($filePath);
 
-Using the `emailOutputTo` method, you may e-mail the output to an e-mail address of your choice. Before e-mailing the output of a task, you should configure Laravel's [e-mail services](/docs/{{version}}/mail):
+Korzystając z metody `emailOutputTo`, możesz wysłać wiadomość e-mail z danymi wyjściowymi na wybrany adres e-mail. Przed wysłaniem wiadomości e-mail do wyjścia zadania należy skonfigurować [usługi e-mailowe](/docs/{{version}}/mail) Laravel:
 
     $schedule->command('foo')
              ->daily()
              ->sendOutputTo($filePath)
              ->emailOutputTo('foo@example.com');
 
-> {note} The `emailOutputTo`, `sendOutputTo` and `appendOutputTo` methods are exclusive to the `command` method and are not supported for `call`.
+> {note} Metody `emailOutputTo`, `sendOutputTo` i `appendOutputTo` są wyłącznie dla metody `command` i nie są obsługiwane dla `call`.
 
 <a name="task-hooks"></a>
-## Task Hooks
+## Task Hooks - Haczyki zadań
 
-Using the `before` and `after` methods, you may specify code to be executed before and after the scheduled task is complete:
+Korzystając z metod `before` i `after`, możesz określić kod, który ma zostać wykonany przed zakończeniem zaplanowanego zadania i po jego zakończeniu:
 
     $schedule->command('emails:send')
              ->daily()
@@ -225,15 +225,15 @@ Using the `before` and `after` methods, you may specify code to be executed befo
                  // Task is complete...
              });
 
-#### Pinging URLs
+#### Pinging URLs - Pingujące adresy URL
 
-Using the `pingBefore` and `thenPing` methods, the scheduler can automatically ping a given URL before or after a task is complete. This method is useful for notifying an external service, such as [Laravel Envoyer](https://envoyer.io), that your scheduled task is commencing or has finished execution:
+Korzystając z metod `pingBefore` i `thenPing`, program planujący może automatycznie pingować dany URL przed zakończeniem lub po zakończeniu zadania. Ta metoda jest przydatna do powiadamiania usługi zewnętrznej, takiej jak [Laravel Envoyer](https://envoyer.io), że zaplanowane zadanie rozpoczyna się lub zakończyło wykonanie:
 
     $schedule->command('emails:send')
              ->daily()
              ->pingBefore($url)
              ->thenPing($url);
 
-Using either the `pingBefore($url)` or `thenPing($url)` feature requires the Guzzle HTTP library. You can add Guzzle to your project using the Composer package manager:
+Użycie funkcji  `pingBefore($url)` lub `thenPing($url)` wymaga biblioteki HTTP Guzzle. Możesz dodać Guzzle do swojego projektu za pomocą menedżera pakietów Composer:
 
     composer require guzzlehttp/guzzle
