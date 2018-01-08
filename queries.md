@@ -1,39 +1,39 @@
 # Database: Query Builder
 
-- [Introduction](#introduction)
-- [Retrieving Results](#retrieving-results)
-    - [Chunking Results](#chunking-results)
-    - [Aggregates](#aggregates)
-- [Selects](#selects)
-- [Raw Expressions](#raw-expressions)
-- [Joins](#joins)
-- [Unions](#unions)
-- [Where Clauses](#where-clauses)
-    - [Parameter Grouping](#parameter-grouping)
-    - [Where Exists Clauses](#where-exists-clauses)
-    - [JSON Where Clauses](#json-where-clauses)
-- [Ordering, Grouping, Limit, & Offset](#ordering-grouping-limit-and-offset)
-- [Conditional Clauses](#conditional-clauses)
-- [Inserts](#inserts)
-- [Updates](#updates)
-    - [Updating JSON Columns](#updating-json-columns)
-    - [Increment & Decrement](#increment-and-decrement)
-- [Deletes](#deletes)
-- [Pessimistic Locking](#pessimistic-locking)
+- [Introduction - Wprowadzenie](#introduction)
+- [Retrieving Results - Pobieranie wyników](#retrieving-results)
+    - [Chunking Results - Kawałek wyników](#chunking-results)
+    - [Aggregates - Agregaty](#aggregates)
+- [Selects - Selekty](#selects)
+- [Raw Expressions - Surowe wyrażenia](#raw-expressions)
+- [Joins - Złaczenia](#joins)
+- [Unions - Unie](#unions)
+- [Where Clauses - Klauzury Where](#where-clauses)
+    - [Parameter Grouping - Grupowanie parametrów](#parameter-grouping)
+    - [Where Exists Clauses - Klauzura Where Exist](#where-exists-clauses)
+    - [JSON Where Clauses - Klauzura gdzie JSON](#json-where-clauses)
+- [Ordering, Grouping, Limit, & Offset - Zamawianie, grupowanie, ograniczenie i przesunięcie](#ordering-grouping-limit-and-offset)
+- [Conditional Clauses - Klauzule warunkowe](#conditional-clauses)
+- [Inserts - Wstawianie](#inserts)
+- [Updates - Aktualizacje](#updates)
+    - [Updating JSON Columns - Aktualizacja kolumn JSON](#updating-json-columns)
+    - [Increment & Decrement - Inkrementacja i Dekrementacja](#increment-and-decrement)
+- [Deletes - Usunięcia](#deletes)
+- [Pessimistic Locking - Pesymistyczne blokowanie](#pessimistic-locking)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-Laravel's database query builder provides a convenient, fluent interface to creating and running database queries. It can be used to perform most database operations in your application and works on all supported database systems.
+Konstruktor kwerend bazodanowych Laravel zapewnia wygodny, płynny interfejs do tworzenia i uruchamiania zapytań do bazy danych. Może być używany do wykonywania większości operacji na bazach danych w aplikacji i działa we wszystkich obsługiwanych systemach baz danych.
 
-The Laravel query builder uses PDO parameter binding to protect your application against SQL injection attacks. There is no need to clean strings being passed as bindings.
+Konstruktor kwerend Laravel używa wiązania parametru PDO do ochrony aplikacji przed atakami typu SQL injection. Nie ma potrzeby czyszczenia łańcuchów przekazywanych jako wiązania.
 
 <a name="retrieving-results"></a>
-## Retrieving Results
+## Retrieving Results - Pobieranie wyników
 
-#### Retrieving All Rows From A Table
+#### Retrieving All Rows From A Table - Pobieranie wszystkich wierszy z tabeli
 
-You may use the `table` method on the `DB` facade to begin a query. The `table` method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then finally get the results using the `get` method:
+Możesz użyć metody `table` na elewacji `DB`, aby rozpocząć zapytanie. Metoda `table` zwraca płynną instancję konstruktora kwerend dla danej tabeli, umożliwiając powiązanie większej liczby ograniczeń z zapytaniem, a następnie uzyskanie wyników za pomocą metody `get`:
 
     <?php
 
@@ -57,27 +57,27 @@ You may use the `table` method on the `DB` facade to begin a query. The `table` 
         }
     }
 
-The `get` method returns an `Illuminate\Support\Collection` containing the results where each result is an instance of the PHP `StdClass` object. You may access each column's value by accessing the column as a property of the object:
+Metoda `get` zwraca `Illuminate\Support\Collection` zawierające wyniki, gdzie każdy wynik jest instancją obiektu PHP `StdClass`. Możesz uzyskać dostęp do wartości każdej kolumny, uzyskując dostęp do kolumny jako właściwości obiektu:
 
     foreach ($users as $user) {
         echo $user->name;
     }
 
-#### Retrieving A Single Row / Column From A Table
+#### Retrieving A Single Row / Column From A Table - Pobieranie pojedynczego wiersza / kolumny z tabeli
 
-If you just need to retrieve a single row from the database table, you may use the `first` method. This method will return a single `StdClass` object:
+Jeśli potrzebujesz tylko pobrać jeden wiersz z tabeli bazy danych, możesz użyć metody `first`. Ta metoda zwróci pojedynczy obiekt `StdClass`:
 
     $user = DB::table('users')->where('name', 'John')->first();
 
     echo $user->name;
 
-If you don't even need an entire row, you may extract a single value from a record using the `value` method. This method will return the value of the column directly:
+Jeśli nawet nie potrzebujesz całego wiersza, możesz wyodrębnić pojedynczą wartość z rekordu za pomocą metody `value`. Ta metoda zwróci bezpośrednio wartość kolumny:
 
     $email = DB::table('users')->where('name', 'John')->value('email');
 
-#### Retrieving A List Of Column Values
+#### Retrieving A List Of Column Values - Pobieranie listy wartości kolumn
 
-If you would like to retrieve a Collection containing the values of a single column, you may use the `pluck` method. In this example, we'll retrieve a Collection of role titles:
+Jeśli chcesz pobrać kolekcję zawierającą wartości jednej kolumny, możesz użyć metody "pluck". W tym przykładzie otrzymamy kolekcję tytułów ról:
 
     $titles = DB::table('roles')->pluck('title');
 
@@ -85,7 +85,7 @@ If you would like to retrieve a Collection containing the values of a single col
         echo $title;
     }
 
- You may also specify a custom key column for the returned Collection:
+ Możesz także określić kolumnę klucza niestandardowego dla zwróconej kolekcji:
 
     $roles = DB::table('roles')->pluck('title', 'name');
 
@@ -94,9 +94,9 @@ If you would like to retrieve a Collection containing the values of a single col
     }
 
 <a name="chunking-results"></a>
-### Chunking Results
+### Chunking Results - Kawałek wyników
 
-If you need to work with thousands of database records, consider using the `chunk` method. This method retrieves a small chunk of the results at a time and feeds each chunk into a `Closure` for processing. This method is very useful for writing [Artisan commands](/docs/{{version}}/artisan) that process thousands of records. For example, let's work with the entire `users` table in chunks of 100 records at a time:
+Jeśli chcesz pracować z tysiącami rekordów bazy danych, rozważ użycie metody `chunk`. Ta metoda pobiera niewielki fragment wyników naraz i podaje każdą porcję do `Closure` w celu przetworzenia. Ta metoda jest bardzo przydatna przy pisaniu [poleceń Artisana](/docs/{{version}}/artisan), które przetwarzają tysiące rekordów. Na przykład pracujmy z całą tabelą `users` w porcjach po 100 rekordów naraz:
 
     DB::table('users')->orderBy('id')->chunk(100, function ($users) {
         foreach ($users as $user) {
@@ -104,7 +104,7 @@ If you need to work with thousands of database records, consider using the `chun
         }
     });
 
-You may stop further chunks from being processed by returning `false` from the `Closure`:
+Możesz przerwać przetwarzanie kolejnych fragmentów, zwracając `false` z `Closure`:
 
     DB::table('users')->orderBy('id')->chunk(100, function ($users) {
         // Process the records...
@@ -113,43 +113,43 @@ You may stop further chunks from being processed by returning `false` from the `
     });
 
 <a name="aggregates"></a>
-### Aggregates
+### Aggregates - Agregaty
 
-The query builder also provides a variety of aggregate methods such as `count`, `max`, `min`, `avg`, and `sum`. You may call any of these methods after constructing your query:
+Konstruktor kwerend udostępnia także różne metody agregacji, takie jak `count`, `max`, `min`, `avg`, i `sum`. Możesz wywołać dowolną z tych metod po skonstruowaniu zapytania:
 
     $users = DB::table('users')->count();
 
     $price = DB::table('orders')->max('price');
 
-Of course, you may combine these methods with other clauses:
+Oczywiście możesz łączyć te metody z innymi klauzulami:
 
     $price = DB::table('orders')
                     ->where('finalized', 1)
                     ->avg('price');
 
 <a name="selects"></a>
-## Selects
+## Selects - Selekty
 
-#### Specifying A Select Clause
+#### Specifying A Select Clause - Określanie klauzuli Select
 
-Of course, you may not always want to select all columns from a database table. Using the `select` method, you can specify a custom `select` clause for the query:
+Oczywiście nie zawsze chcesz wybrać wszystkie kolumny z tabeli bazy danych. Używając metody `select`, możesz określić niestandardową klauzulę `select` dla zapytania:
 
     $users = DB::table('users')->select('name', 'email as user_email')->get();
 
-The `distinct` method allows you to force the query to return distinct results:
+Metoda `distinct` pozwala wymusić na zapytaniu zwracanie wyraźnych wyników:
 
     $users = DB::table('users')->distinct()->get();
 
-If you already have a query builder instance and you wish to add a column to its existing select clause, you may use the `addSelect` method:
+Jeśli masz już instancję budującą zapytania i chcesz dodać kolumnę do istniejącej klauzuli select, możesz użyć metody `addSelect`:
 
     $query = DB::table('users')->select('name');
 
     $users = $query->addSelect('age')->get();
 
 <a name="raw-expressions"></a>
-## Raw Expressions
+## Raw Expressions - Surowe wyrażenia
 
-Sometimes you may need to use a raw expression in a query. To create a raw expression, you may use the `DB::raw` method:
+Czasami może zajść potrzeba użycia surowego wyrażenia w zapytaniu. Aby utworzyć wyrażenie raw, możesz użyć metody `DB::raw`:
 
     $users = DB::table('users')
                          ->select(DB::raw('count(*) as user_count, status'))
@@ -157,16 +157,17 @@ Sometimes you may need to use a raw expression in a query. To create a raw expre
                          ->groupBy('status')
                          ->get();
 
-> {note} Raw statements will be injected into the query as strings, so you should be extremely careful to not create SQL injection vulnerabilities.
+> {note} Surowe instrukcje będą wstrzykiwane do zapytania jako łańcuchy, więc powinieneś być bardzo ostrożny, aby nie tworzyć luk SQL injection.
 
 <a name="raw-methods"></a>
-### Raw Methods
+### Raw Methods - Surowe metody
 
 Instead of using `DB::raw`, you may also use the following methods to insert a raw expression into various parts of your query.
+Zamiast używać `DB::raw`, możesz również użyć następujących metod, aby wstawić surowe wyrażenie do różnych części zapytania.
 
 #### `selectRaw`
 
-The `selectRaw` method can be used in place of `select(DB::raw(...))`. This method accepts an optional array of bindings as its second argument:
+Metodę `selectRaw` można użyć zamiast `select(DB::raw(...))`. Ta metoda przyjmuje opcjonalną tablicę powiązań jako swój drugi argument:
 
     $orders = DB::table('orders')
                     ->selectRaw('price * ? as price_with_tax', [1.0825])
@@ -174,7 +175,7 @@ The `selectRaw` method can be used in place of `select(DB::raw(...))`. This meth
 
 #### `whereRaw / orWhereRaw`
 
-The `whereRaw` and `orWhereRaw` methods can be used to inject a raw `where` clause into your query. These methods accept an optional array of bindings as their second argument:
+Metody `whereRaw` i` orWhereRaw` mogą być użyte do wprowadzenia surowej klauzuli `where` do zapytania. Te metody przyjmują opcjonalną tablicę powiązań jako swój drugi argument:
 
     $orders = DB::table('orders')
                     ->whereRaw('price > IF(state = "TX", ?, 100)', [200])
@@ -182,7 +183,7 @@ The `whereRaw` and `orWhereRaw` methods can be used to inject a raw `where` clau
 
 #### `havingRaw / orHavingRaw`
 
-The `havingRaw` and `orHavingRaw` methods may be used to set a raw string as the value of the `having` clause:
+Metody `havingRaw` i `orHavingRaw` mogą być użyte do ustawienia nieprzetworzonego łańcucha jako wartości klauzuli `having`:
 
     $orders = DB::table('orders')
                     ->select('department', DB::raw('SUM(price) as total_sales'))
@@ -192,18 +193,18 @@ The `havingRaw` and `orHavingRaw` methods may be used to set a raw string as the
 
 #### `orderByRaw`
 
-The `orderByRaw` method may be used to set a raw string as the value of the `order by` clause:
+Metoda `orderByRaw` może służyć do ustawienia nieprzetworzonego łańcucha jako wartości klauzuli `order by`:
 
     $orders = DB::table('orders')
                     ->orderByRaw('updated_at - created_at DESC')
                     ->get();
 
 <a name="joins"></a>
-## Joins
+## Joins - Złaczenia
 
-#### Inner Join Clause
+#### Inner Join Clause - Klauzula Inner Join
 
-The query builder may also be used to write join statements. To perform a basic "inner join", you may use the `join` method on a query builder instance. The first argument passed to the `join` method is the name of the table you need to join to, while the remaining arguments specify the column constraints for the join. Of course, as you can see, you can join to multiple tables in a single query:
+Kreator zapytań może być również używany do pisania instrukcji łączenia. Aby wykonać podstawowe "sprzężenie wewnętrzne", możesz użyć metody `join` na instancji konstruktora zapytań. Pierwszy argument przekazany do metody `join` jest nazwą tabeli, do której należy się przyłączyć, podczas gdy pozostałe argumenty określają ograniczenia kolumn dla łączenia. Oczywiście, jak widać, możesz dołączyć do wielu tabel w jednym zapytaniu:
 
     $users = DB::table('users')
                 ->join('contacts', 'users.id', '=', 'contacts.user_id')
@@ -211,25 +212,25 @@ The query builder may also be used to write join statements. To perform a basic 
                 ->select('users.*', 'contacts.phone', 'orders.price')
                 ->get();
 
-#### Left Join Clause
+#### Left Join Clause - Klauzula Left Join
 
-If you would like to perform a "left join" instead of an "inner join", use the `leftJoin` method. The `leftJoin` method has the same signature as the `join` method:
+Jeśli chcesz wykonać "lewe połączenie" zamiast "wewnętrznego łączenia", użyj metody `leftJoin`. Metoda `leftJoin` ma taki sam podpis jak metoda `join`:
 
     $users = DB::table('users')
                 ->leftJoin('posts', 'users.id', '=', 'posts.user_id')
                 ->get();
 
-#### Cross Join Clause
+#### Cross Join Clause - Klauzula Cross Join
 
-To perform a "cross join" use the `crossJoin` method with the name of the table you wish to cross join to. Cross joins generate a cartesian product between the first table and the joined table:
+Aby wykonać "sprzężenie krzyżowe", użyj metody `crossJoin` z nazwą tabeli, do której chcesz się połączyć. Połączenia krzyżowe generują kartezjański produkt między pierwszą tabelą a połączoną tabelą:
 
     $users = DB::table('sizes')
                 ->crossJoin('colours')
                 ->get();
 
-#### Advanced Join Clauses
+#### Advanced Join Clauses - Klauzula zaawansowana
 
-You may also specify more advanced join clauses. To get started, pass a `Closure` as the second argument into the `join` method. The `Closure` will receive a `JoinClause` object which allows you to specify constraints on the `join` clause:
+Możesz także określić bardziej zaawansowane klauzule dołączania. Aby rozpocząć, podaj `Closure` jako drugi argument w metodzie`join`. `Closure` otrzyma obiekt `JoinClause`, który pozwala na określenie ograniczeń w klauzuli `join`:
 
     DB::table('users')
             ->join('contacts', function ($join) {
@@ -237,7 +238,7 @@ You may also specify more advanced join clauses. To get started, pass a `Closure
             })
             ->get();
 
-If you would like to use a "where" style clause on your joins, you may use the `where` and `orWhere` methods on a join. Instead of comparing two columns, these methods will compare the column against a value:
+Jeśli chcesz użyć klauzuli "where" w swoich połączeniach, możesz użyć metod `where` i `orWhere` na sprzężeniu. Zamiast porównywania dwóch kolumn, metody te będą porównywać kolumnę z wartością:
 
     DB::table('users')
             ->join('contacts', function ($join) {
@@ -247,9 +248,9 @@ If you would like to use a "where" style clause on your joins, you may use the `
             ->get();
 
 <a name="unions"></a>
-## Unions
+## Unions - Unie
 
-The query builder also provides a quick way to "union" two queries together. For example, you may create an initial query and use the `union` method to union it with a second query:
+Konstruktor kwerend zapewnia również szybki sposób łączenia dwóch zapytań razem. Na przykład możesz utworzyć zapytanie wstępne i użyć metody `union`, aby połączyć ją z drugim zapytaniem:
 
     $first = DB::table('users')
                 ->whereNull('first_name');
@@ -259,24 +260,25 @@ The query builder also provides a quick way to "union" two queries together. For
                 ->union($first)
                 ->get();
 
-> {tip} The `unionAll` method is also available and has the same method signature as `union`.
+> {tip} Dostępna jest także metoda `unionAll`, która ma ten sam podpis metody co `union`.
 
 <a name="where-clauses"></a>
-## Where Clauses
+## Where Clauses - Klauzury Where
 
-#### Simple Where Clauses
+#### Simple Where Clauses - Proste klauzury Where
 
-You may use the `where` method on a query builder instance to add `where` clauses to the query. The most basic call to `where` requires three arguments. The first argument is the name of the column. The second argument is an operator, which can be any of the database's supported operators. Finally, the third argument is the value to evaluate against the column.
+Możesz użyć metody `where` na instancji konstruktora zapytań, aby dodać klauzule `where` do zapytania. Najbardziej podstawowe wywołanie `where` wymaga trzech argumentów. Pierwszym argumentem jest nazwa kolumny. Drugi argument to operator, który może być dowolnym operatorem obsługiwanym przez bazę danych. Wreszcie, trzecim argumentem jest wartość do oceny w stosunku do kolumny.
 
 For example, here is a query that verifies the value of the "votes" column is equal to 100:
+Na przykład tutaj jest zapytanie, które weryfikuje wartość kolumny "głosy" równe 100:
 
     $users = DB::table('users')->where('votes', '=', 100)->get();
 
-For convenience, if you simply want to verify that a column is equal to a given value, you may pass the value directly as the second argument to the `where` method:
+Dla wygody, jeśli chcesz po prostu sprawdzić, czy kolumna jest równa danej wartości, możesz przekazać wartość bezpośrednio jako drugi argument do metody `where`:
 
     $users = DB::table('users')->where('votes', 100)->get();
 
-Of course, you may use a variety of other operators when writing a `where` clause:
+Oczywiście podczas pisania klauzuli `where` możesz używać wielu innych operatorów:
 
     $users = DB::table('users')
                     ->where('votes', '>=', 100)
@@ -290,114 +292,114 @@ Of course, you may use a variety of other operators when writing a `where` claus
                     ->where('name', 'like', 'T%')
                     ->get();
 
-You may also pass an array of conditions to the `where` function:
+Możesz także przekazać tablicę warunków do funkcji `where`:
 
     $users = DB::table('users')->where([
         ['status', '=', '1'],
         ['subscribed', '<>', '1'],
     ])->get();
 
-#### Or Statements
+#### Or Statements - Deklaracja OR
 
-You may chain where constraints together as well as add `or` clauses to the query. The `orWhere` method accepts the same arguments as the `where` method:
+Możesz łączyć ze sobą wiązania, a także dodawać klauzule `or` do zapytania. Metoda `orWhere` akceptuje te same argumenty, co metoda `where`:
 
     $users = DB::table('users')
                         ->where('votes', '>', 100)
                         ->orWhere('name', 'John')
                         ->get();
 
-#### Additional Where Clauses
+#### Additional Where Clauses - Dodakkowe klauzury Where
 
-**whereBetween**
+**whereBetween** - gdzie pomiędzy
 
-The `whereBetween` method verifies that a column's value is between two values:
+Metoda `whereBetween` sprawdza, czy wartość kolumny mieści się między dwiema wartościami:
 
     $users = DB::table('users')
                         ->whereBetween('votes', [1, 100])->get();
 
-**whereNotBetween**
+**whereNotBetween** - nie gdzie pomiędzy
 
-The `whereNotBetween` method verifies that a column's value lies outside of two values:
+Metoda `whereNotBetween` sprawdza, czy wartość kolumny znajduje się poza dwiema wartościami:
 
     $users = DB::table('users')
                         ->whereNotBetween('votes', [1, 100])
                         ->get();
 
-**whereIn / whereNotIn**
+**whereIn / whereNotIn** - gdzie w i gdzie nie w
 
-The `whereIn` method verifies that a given column's value is contained within the given array:
+Metoda `whereIn` sprawdza, czy dana kolumna zawiera się w podanej tablicy:
 
     $users = DB::table('users')
                         ->whereIn('id', [1, 2, 3])
                         ->get();
 
-The `whereNotIn` method verifies that the given column's value is **not** contained in the given array:
+Metoda `whereNotIn` sprawdza, czy dana kolumna ma wartość **nie** zawartą w podanej tablicy:
 
     $users = DB::table('users')
                         ->whereNotIn('id', [1, 2, 3])
                         ->get();
 
-**whereNull / whereNotNull**
+**whereNull / whereNotNull** - gdzie puste i gdzie nie puste
 
-The `whereNull` method verifies that the value of the given column is `NULL`:
+Metoda `whereNull` sprawdza, czy wartość danej kolumny to `NULL`:
 
     $users = DB::table('users')
                         ->whereNull('updated_at')
                         ->get();
 
-The `whereNotNull` method verifies that the column's value is not `NULL`:
+Metoda `whereNotNull` sprawdza, czy wartość kolumny nie ma wartości `NULL`:
 
     $users = DB::table('users')
                         ->whereNotNull('updated_at')
                         ->get();
 
-**whereDate / whereMonth / whereDay / whereYear / whereTime**
+**whereDate / whereMonth / whereDay / whereYear / whereTime** - gdzie data, miesiąc, dzień, rok, czas
 
-The `whereDate` method may be used to compare a column's value against a date:
+Metoda `whereDate` może być używana do porównywania wartości kolumny z datą:
 
     $users = DB::table('users')
                     ->whereDate('created_at', '2016-12-31')
                     ->get();
 
-The `whereMonth` method may be used to compare a column's value against a specific month of a year:
+Metodę `whereMonth` można użyć do porównania wartości kolumny z konkretnym miesiącem roku:
 
     $users = DB::table('users')
                     ->whereMonth('created_at', '12')
                     ->get();
 
-The `whereDay` method may be used to compare a column's value against a specific day of a month:
+Metodę `whereDay` można użyć do porównania wartości kolumny z określonym dniem miesiąca:
 
     $users = DB::table('users')
                     ->whereDay('created_at', '31')
                     ->get();
 
-The `whereYear` method may be used to compare a column's value against a specific year:
+Metodę `whereYear` można użyć do porównania wartości kolumny z konkretnym rokiem:
 
     $users = DB::table('users')
                     ->whereYear('created_at', '2016')
                     ->get();
 
-The `whereTime` method may be used to compare a column's value against a specific time:
+Metodę `whereTime` można użyć do porównania wartości kolumny z określonym czasem:
 
     $users = DB::table('users')
                     ->whereTime('created_at', '=', '11:20')
                     ->get();
 
-**whereColumn**
+**whereColumn** - czy dwie kolumny sa równe
 
-The `whereColumn` method may be used to verify that two columns are equal:
+Do sprawdzenia, czy dwie kolumny są równe, można użyć metody `whereColumn`:
 
     $users = DB::table('users')
                     ->whereColumn('first_name', 'last_name')
                     ->get();
 
-You may also pass a comparison operator to the method:
+Możesz także przekazać operatorowi porównania metodę:
 
     $users = DB::table('users')
                     ->whereColumn('updated_at', '>', 'created_at')
                     ->get();
 
-The `whereColumn` method can also be passed an array of multiple conditions. These conditions will be joined using the `and` operator:
+Metodę `whereColumn` można również przekazać tablicę wielu warunków. Warunki te zostaną połączone za pomocą operatora `and`:
 
     $users = DB::table('users')
                     ->whereColumn([
@@ -406,9 +408,9 @@ The `whereColumn` method can also be passed an array of multiple conditions. The
                     ])->get();
 
 <a name="parameter-grouping"></a>
-### Parameter Grouping
+### Parameter Grouping - Grupowanie parametrów
 
-Sometimes you may need to create more advanced where clauses such as "where exists" clauses or nested parameter groupings. The Laravel query builder can handle these as well. To get started, let's look at an example of grouping constraints within parenthesis:
+Czasami może być konieczne utworzenie bardziej zaawansowanych klauzul, w których występują klauzule "gdzie istnieje" lub zagnieżdżone grupowanie parametrów. Konstruktor kwerend Laravel może również obsługiwać te kwerendy. Aby rozpocząć, spójrzmy na przykład grupowania wiązań w nawiasach:
 
     DB::table('users')
                 ->where('name', '=', 'John')
@@ -418,14 +420,14 @@ Sometimes you may need to create more advanced where clauses such as "where exis
                 })
                 ->get();
 
-As you can see, passing a `Closure` into the `orWhere` method instructs the query builder to begin a constraint group. The `Closure` will receive a query builder instance which you can use to set the constraints that should be contained within the parenthesis group. The example above will produce the following SQL:
+Jak widać, przekazanie `Closure` do metody `orWhere` instruuje konstruktora kwerend, aby rozpoczął grupę ograniczeń. `Closure` otrzyma instancję konstruktora zapytań, której można użyć do ustawienia wiązań, które powinny być zawarte w grupie nawiasów. Powyższy przykład wygeneruje następujący kod SQL:
 
     select * from users where name = 'John' or (votes > 100 and title <> 'Admin')
 
 <a name="where-exists-clauses"></a>
-### Where Exists Clauses
+### Where Exists Clauses - Klauzura Where Exist
 
-The `whereExists` method allows you to write `where exists` SQL clauses. The `whereExists` method accepts a `Closure` argument, which will receive a query builder instance allowing you to define the query that should be placed inside of the "exists" clause:
+Metoda `whereExists` pozwala na pisanie klauzul SQL `tam, gdzie istnieje`. Metoda `whereExists` akceptuje argument `Closure`, który otrzyma instancję konstruktora zapytań pozwalającą zdefiniować zapytanie, które powinno zostać umieszczone w klauzuli "istnieje":
 
     DB::table('users')
                 ->whereExists(function ($query) {
@@ -435,7 +437,7 @@ The `whereExists` method allows you to write `where exists` SQL clauses. The `wh
                 })
                 ->get();
 
-The query above will produce the following SQL:
+Powyższe zapytanie wygeneruje następujący kod SQL:
 
     select * from users
     where exists (
@@ -443,9 +445,9 @@ The query above will produce the following SQL:
     )
 
 <a name="json-where-clauses"></a>
-### JSON Where Clauses
+### JSON Where Clauses - Klauzura gdzie JSON
 
-Laravel also supports querying JSON column types on databases that provide support for JSON column types. Currently, this includes MySQL 5.7 and PostgreSQL. To query a JSON column, use the `->` operator:
+Laravel obsługuje również wyszukiwanie typów kolumn JSON w bazach danych, które obsługują typy kolumn JSON. Obecnie obejmuje to MySQL 5.7 i PostgreSQL. Aby wysłać zapytanie do kolumny JSON, użyj operatora `->`:
 
     $users = DB::table('users')
                     ->where('options->language', 'en')
@@ -456,57 +458,57 @@ Laravel also supports querying JSON column types on databases that provide suppo
                     ->get();
 
 <a name="ordering-grouping-limit-and-offset"></a>
-## Ordering, Grouping, Limit, & Offset
+## Ordering, Grouping, Limit, & Offset - Zamawianie, grupowanie, ograniczenie i przesunięcie
 
-#### orderBy
+#### orderBy - grupuj po
 
-The `orderBy` method allows you to sort the result of the query by a given column. The first argument to the `orderBy` method should be the column you wish to sort by, while the second argument controls the direction of the sort and may be either `asc` or `desc`:
+Metoda `orderBy` umożliwia sortowanie wyniku zapytania przez daną kolumnę. Pierwszym argumentem metody `orderBy` powinna być kolumna, którą chcesz sortować, podczas gdy drugi argument kontroluje kierunek sortowania i może to być` asc` lub `desc`:
 
     $users = DB::table('users')
                     ->orderBy('name', 'desc')
                     ->get();
 
-#### latest / oldest
+#### latest / oldest - najnowsze / najstarsze
 
-The `latest` and `oldest` methods allow you to easily order results by date. By default, result will be ordered by the `created_at` column. Or, you may pass the column name that you wish to sort by:
+Metody `latest` and `oldest` pozwalają łatwo zamawiać wyniki według daty. Domyślnie wynik zostanie uporządkowany według kolumny `created_at`. Możesz też podać nazwę kolumny, którą chcesz posortować według:
 
     $user = DB::table('users')
                     ->latest()
                     ->first();
 
-#### inRandomOrder
+#### inRandomOrder - losowe sortowanie
 
-The `inRandomOrder` method may be used to sort the query results randomly. For example, you may use this method to fetch a random user:
+Metoda `inRandomOrder` może być używana do losowego sortowania wyników zapytania. Na przykład możesz użyć tej metody, aby pobrać losowego użytkownika:
 
     $randomUser = DB::table('users')
                     ->inRandomOrder()
                     ->first();
 
-#### groupBy / having
+#### groupBy / having - grupuj po / mających
 
-The `groupBy` and `having` methods may be used to group the query results. The `having` method's signature is similar to that of the `where` method:
+Do grupowania wyników zapytania można użyć metod `groupBy` i `having`. Sygnatura metody "posiadająca" jest podobna do metody `where`:
 
     $users = DB::table('users')
                     ->groupBy('account_id')
                     ->having('account_id', '>', 100)
                     ->get();
 
-You may pass multiple arguments to the `groupBy` method to group by multiple columns:
+Możesz przekazać wiele argumentów do metody `groupBy` w celu grupowania według wielu kolumn:
 
     $users = DB::table('users')
                     ->groupBy('first_name', 'status')
                     ->having('account_id', '>', 100)
                     ->get();
 
-For more advanced `having` statements, see the [`havingRaw`](#raw-methods) method.
+Dla bardziej zaawansowanych instrukcji `having` zobacz metodę [`havingRaw`](#raw-methods).
 
-#### skip / take
+#### skip / take - pomiń / zabierz
 
-To limit the number of results returned from the query, or to skip a given number of results in the query, you may use the `skip` and `take` methods:
+Aby ograniczyć liczbę wyników zwracanych przez zapytanie lub pominąć podaną liczbę wyników w zapytaniu, możesz użyć metod `skip` and `take`:
 
     $users = DB::table('users')->skip(10)->take(5)->get();
 
-Alternatively, you may use the `limit` and `offset` methods:
+Alternatywnie możesz użyć metod `limit` i `offset`:
 
     $users = DB::table('users')
                     ->offset(10)
@@ -514,9 +516,9 @@ Alternatively, you may use the `limit` and `offset` methods:
                     ->get();
 
 <a name="conditional-clauses"></a>
-## Conditional Clauses
+## Conditional Clauses - Klauzule warunkowe
 
-Sometimes you may want clauses to apply to a query only when something else is true. For instance you may only want to apply a `where` statement if a given input value is present on the incoming request. You may accomplish this using the `when` method:
+Czasami możesz chcieć zastosować klauzule do zapytania tylko wtedy, gdy coś innego jest prawdą. Na przykład możesz chcieć zastosować tylko instrukcję `where`, jeśli dana wartość wejściowa jest obecna w żądaniu przychodzącym. Możesz to zrobić za pomocą metody `when`:
 
     $role = $request->input('role');
 
@@ -526,9 +528,9 @@ Sometimes you may want clauses to apply to a query only when something else is t
                     })
                     ->get();
 
-The `when` method only executes the given Closure when the first parameter is `true`. If the first parameter is `false`, the Closure will not be executed.
+Metoda `when` wykonuje tylko daną Closure, gdy pierwszym parametrem jest `true`. Jeśli pierwszym parametrem jest `false`, Closure nie zostanie wykonane.
 
-You may pass another Closure as the third parameter to the `when` method. This Closure will execute if the first parameter evaluates as `false`. To illustrate how this feature may be used, we will use it to configure the default sorting of a query:
+Możesz przekazać kolejne zamknięcie jako trzeci parametr metody  `true`. To Closure zostanie wykonane, jeśli pierwszy parametr zostanie oceniony jako `false`. Aby zilustrować, w jaki sposób można użyć tej funkcji, użyjemy jej do skonfigurowania domyślnego sortowania zapytania:
 
     $sortBy = null;
 
@@ -541,55 +543,55 @@ You may pass another Closure as the third parameter to the `when` method. This C
                     ->get();
 
 <a name="inserts"></a>
-## Inserts
+## Inserts - Wstawianie
 
-The query builder also provides an `insert` method for inserting records into the database table. The `insert` method accepts an array of column names and values:
+Konstruktor kwerend udostępnia również metodę `insert` do wstawiania rekordów do tabeli bazy danych. Metoda `insert` przyjmuje tablicę nazw kolumn i wartości:
 
     DB::table('users')->insert(
         ['email' => 'john@example.com', 'votes' => 0]
     );
 
-You may even insert several records into the table with a single call to `insert` by passing an array of arrays. Each array represents a row to be inserted into the table:
+Możesz nawet wstawić kilka rekordów do tabeli za pomocą jednego wywołania `insert`, przekazując tablicę tablic. Każda tablica reprezentuje wiersz do wstawienia do tabeli:
 
     DB::table('users')->insert([
         ['email' => 'taylor@example.com', 'votes' => 0],
         ['email' => 'dayle@example.com', 'votes' => 0]
     ]);
 
-#### Auto-Incrementing IDs
+#### Auto-Incrementing IDs - Autoinkrementacja identyfikatora
 
-If the table has an auto-incrementing id, use the `insertGetId` method to insert a record and then retrieve the ID:
+Jeśli tabela ma automatycznie zwiększany identyfikator, użyj metody `insertGetId`, aby wstawić rekord, a następnie pobierz identyfikator:
 
     $id = DB::table('users')->insertGetId(
         ['email' => 'john@example.com', 'votes' => 0]
     );
 
-> {note} When using PostgreSQL the `insertGetId` method expects the auto-incrementing column to be named `id`. If you would like to retrieve the ID from a different "sequence", you may pass the column name as the second parameter to the `insertGetId` method.
+> {note} Podczas korzystania z PostgreSQL, metoda `insertGetId` oczekuje, że kolumna auto-inkrementująca ma mieć nazwę `id`. Jeśli chcesz pobrać identyfikator z innej "sekwencji", możesz przekazać nazwę kolumny jako drugi parametr do metody `insertGetId`.
 
 <a name="updates"></a>
-## Updates
+## Updates - Aktualizacje
 
-Of course, in addition to inserting records into the database, the query builder can also update existing records using the `update` method. The `update` method, like the `insert` method, accepts an array of column and value pairs containing the columns to be updated. You may constrain the `update` query using `where` clauses:
+Oczywiście, oprócz wstawiania rekordów do bazy danych, konstruktor kwerend może również aktualizować istniejące rekordy za pomocą metody `update`. Metoda `update`, podobnie jak metoda `insert`, akceptuje tablicę kolumn i par wartości zawierających kolumny do aktualizacji. Możesz ograniczyć zapytanie `update` używając klauzul `where`:
 
     DB::table('users')
                 ->where('id', 1)
                 ->update(['votes' => 1]);
 
 <a name="updating-json-columns"></a>
-### Updating JSON Columns
+### Updating JSON Columns - Aktualizacja kolumn JSON
 
-When updating a JSON column, you should use `->` syntax to access the appropriate key in the JSON object. This operation is only supported on databases that support JSON columns:
+Podczas aktualizowania kolumny JSON należy użyć składni `->`, aby uzyskać dostęp do odpowiedniego klucza w obiekcie JSON. Ta operacja jest obsługiwana tylko w bazach danych obsługujących kolumny JSON:
 
     DB::table('users')
                 ->where('id', 1)
                 ->update(['options->enabled' => true]);
 
 <a name="increment-and-decrement"></a>
-### Increment & Decrement
+### Increment & Decrement - Inkrementacja i Dekrementacja
 
-The query builder also provides convenient methods for incrementing or decrementing the value of a given column. This is simply a shortcut, providing a more expressive and terse interface compared to manually writing the `update` statement.
+Kreator zapytań zapewnia również wygodne metody zwiększania lub zmniejszania wartości danej kolumny. Jest to po prostu skrót, zapewniający bardziej wyrazisty i zwięzły interfejs w porównaniu do ręcznego pisania instrukcji `update`.
 
-Both of these methods accept at least one argument: the column to modify. A second argument may optionally be passed to control the amount by which the column should be incremented or decremented:
+Obie te metody akceptują co najmniej jeden argument: kolumnę do modyfikacji. Drugi argument może być opcjonalnie przekazany w celu kontrolowania ilości, o jaką kolumna powinna być zwiększana lub zmniejszana:
 
     DB::table('users')->increment('votes');
 
@@ -599,30 +601,31 @@ Both of these methods accept at least one argument: the column to modify. A seco
 
     DB::table('users')->decrement('votes', 5);
 
-You may also specify additional columns to update during the operation:
+Możesz także określić dodatkowe kolumny do aktualizacji podczas operacji:
 
     DB::table('users')->increment('votes', 1, ['name' => 'John']);
 
 <a name="deletes"></a>
-## Deletes
+## Deletes - Usunięcia
 
-The query builder may also be used to delete records from the table via the `delete` method. You may constrain `delete` statements by adding `where` clauses before calling the `delete` method:
+Konstruktora zapytań można również użyć do usunięcia rekordów z tabeli za pomocą metody `delete`. Możesz ograniczyć instrukcje `delete`, dodając klauzule` where` przed wywołaniem metody `delete`:
 
     DB::table('users')->delete();
 
     DB::table('users')->where('votes', '>', 100)->delete();
 
-If you wish to truncate the entire table, which will remove all rows and reset the auto-incrementing ID to zero, you may use the `truncate` method:
+Jeśli chcesz skrócić całą tabelę, co spowoduje usunięcie wszystkich wierszy i zresetowanie automatycznie zwiększającego ID do zera, możesz użyć metody `truncate`:
 
     DB::table('users')->truncate();
 
 <a name="pessimistic-locking"></a>
-## Pessimistic Locking
+## Pessimistic Locking - Pesymistyczne blokowanie
 
-The query builder also includes a few functions to help you do "pessimistic locking" on your `select` statements. To run the statement with a "shared lock", you may use the `sharedLock` method on a query. A shared lock prevents the selected rows from being modified until your transaction commits:
+Kreator zapytań zawiera również kilka funkcji ułatwiających "pesymistyczne blokowanie" w instrukcjach `select`. Aby uruchomić instrukcję z "udostępnionym zamkiem", możesz użyć metody `sharedLock` w zapytaniu. Wspólna blokada zapobiega modyfikowaniu wybranych wierszy do momentu zatwierdzenia transakcji:
 
     DB::table('users')->where('votes', '>', 100)->sharedLock()->get();
 
-Alternatively, you may use the `lockForUpdate` method. A "for update" lock prevents the rows from being modified or from being selected with another shared lock:
+Alternatywnie możesz użyć metody `lockForUpdate`. Blokada "dla aktualizacji" uniemożliwia modyfikację wierszy lub ich wybór przy użyciu innej blokady współdzielonej:
+
 
     DB::table('users')->where('votes', '>', 100)->lockForUpdate()->get();
