@@ -1,6 +1,6 @@
 # Redis
 
-- [Introduction - Wprowadzenie(#introduction)
+- [Introduction - Wprowadzenie](#introduction)
     - [Configuration - Konfiguracja](#configuration)
     - [Predis](#predis)
     - [PhpRedis](#phpredis)
