@@ -1,57 +1,59 @@
 # Release Notes
 
-- [Versioning Scheme](#versioning-scheme)
-- [Support Policy](#support-policy)
-- [Laravel 5.5](#laravel-5.5)
+- [Versioning Scheme - Schemat wersjonowania](#versioning-scheme)
+- [Support Policy - Zasady pomocy technicznej](#support-policy)
+- [Laravel 5.5 (LTS)](#laravel-5.5)
 
 <a name="versioning-scheme"></a>
-## Versioning Scheme
+## Versioning Scheme - Schemat wersjonowania
 
-Laravel's versioning scheme maintains the following convention: `paradigm.major.minor`. Major framework releases are released every six months (February and August), while minor releases may be released as often as every week. Minor releases should **never** contain breaking changes.
+Schemat wersjonowania Laravel utrzymuje następującą konwencję: `paradigm.major.minor`. Ważniejsze (major) wydania framework-a są wydawane co sześć miesięcy (luty i sierpień), podczas gdy niewielkie wydania mogą być publikowane tak często, jak co tydzień. Drobne wydania powinny **nigdy** nie zawierać zmian łamania.
 
-When referencing the Laravel framework or its components from your application or package, you should always use a version constraint such as `5.5.*`, since major releases of Laravel do include breaking changes. However, we strive to always ensure you may update to a new major release in one day or less.
+Podczas odwoływania się do frameworka Laravel lub jego komponentów z aplikacji lub pakietu, zawsze powinieneś używać ograniczeń wersji, takich jak `5.5.*`, Ponieważ główne wersje Laravel zawierają zmiany zrywające. Staramy się jednak zawsze zapewniać aktualizację do nowej wersji głównej w ciągu jednego dnia lub mniej.
 
-Paradigm shifting releases are separated by many years and represent fundamental shifts in the framework's architecture and conventions. Currently, there is no paradigm shifting release under development.
+Przesunięcia paradygmatu są rozdzielane przez wiele lat i stanowią fundamentalne przesunięcia w architekturze i konwencjach architektury. Obecnie nie ma opracowywanej zmiany paradygmatu.
 
-#### Why Doesn't Laravel Use Semantic Versioning?
+#### Why Doesn't Laravel Use Semantic Versioning? - Dlaczego Laravel nie używa wersji semantycznej?
 
-On one hand, all optional components of Laravel (Cashier, Dusk, Valet, Socialite, etc.) **do** use semantic versioning. However, the Laravel framework itself does not. The reason for this is because semantic versioning is a "reductionist" way of determining if two pieces of code are compatible. Even when using semantic versioning, you still must install the upgraded package and run your automated test suite to know if anything is *actually* incompatible with your code base.
+Z jednej strony wszystkie opcjonalne komponenty Laravel (Cashier, Dusk, Valet, Socialite itp.) **wykorzystują** semantyczną wersję. Jednak sama struktura Laravel nie. Powodem tego jest to, że semantyczne wersjonowanie jest "redukcjonistycznym" sposobem określania, czy dwa kawałki kodu są kompatybilne. Nawet jeśli używasz semantycznego wersjonowania, nadal musisz zainstalować uaktualniony pakiet i uruchomić swój automatyczny zestaw testów, aby dowiedzieć się, czy coś jest **faktycznie** niezgodne z bazą kodu.
 
 So, instead, the Laravel framework uses a versioning scheme that is more communicative of the actual scope of the release. Furthermore, since minor releases **never** contain intentional breaking changes, you should never receive a breaking change as long as your version constraints follow the `paradigm.major.*` convention.
+Zamiast tego, struktura Laravel używa schematu wersjonowania, który jest bardziej komunikatywny dla faktycznego zakresu wydania. Co więcej, skoro pomniejsze wydania **nigdy** nie zawierają intencjonalnych zmian łamania, nigdy nie powinieneś otrzymywać zmian łamania, o ile ograniczenia wersji są zgodne z konwencją `paradigm.major.*`.
 
 <a name="support-policy"></a>
-## Support Policy
+## Support Policy - Zasady pomocy technicznej
 
-For LTS releases, such as Laravel 5.5, bug fixes are provided for 2 years and security fixes are provided for 3 years. These releases provide the longest window of support and maintenance. For general releases, bug fixes are provided for 6 months and security fixes are provided for 1 year.
+W przypadku wydań LTS, takich jak Laravel 5.5, poprawki są dostarczane przez 2 lata, a poprawki bezpieczeństwa są dostarczane przez 3 lata. Te wydania zapewniają najdłuższe okno obsługi i konserwacji. W przypadku wersji ogólnych poprawki są dostarczane przez 6 miesięcy, a poprawki bezpieczeństwa są dostarczane przez 1 rok.
 
 <a name="laravel-5.5"></a>
 ## Laravel 5.5 (LTS)
 
-Laravel 5.5 continues the improvements made in Laravel 5.4 by adding package auto-detection, API resources / transformations, auto-registration of console commands, queued job chaining, queued job rate limiting, time based job attempts, renderable mailables, renderable and reportable exceptions, more consistent exception handling, database testing improvements, simpler custom validation rules, React front-end presets, `Route::view` and `Route::redirect` methods, "locks" for the Memcached and Redis cache drivers, on-demand notifications, headless Chrome support in Dusk, convenient Blade shortcuts, improved trusted proxy support, and more.
+Laravel 5.5 kontynuuje ulepszenia wprowadzone w Laravel 5.4, dodając automatyczne wykrywanie pakietów, zasoby API / transformacje, automatyczną rejestrację poleceń konsoli, kolejkowanie zadań w kolejce, ograniczanie liczby zadań w kolejce, próby zadań oparte na czasie, renderowalne skrzynki pocztowe, możliwe do renderowania i zgłaszane wyjątki, bardziej spójna obsługa wyjątków, udoskonalenia testowania baz danych, prostsze niestandardowe reguły sprawdzania poprawności, React front-end presets, metody `Route::view` i `Route::redirect`, "blokady" dla sterowników pamięci podręcznej Memcached i Redis, powiadomienia na żądanie , bezgłowe wsparcie Chrome w Dusk, wygodne skróty Blade, ulepszone wsparcie dla zaufanego proxy i wiele więcej.
 
-In addition, Laravel 5.5 coincides with the release of [Laravel Horizon](https://horizon.laravel.com), a beautiful new queue dashboard and configuration system for your Redis based Laravel queues.
+Ponadto Laravel 5.5 zbiega się z wydaniem [Laravel Horizon](https://horizon.laravel.com), pięknym nowym panelem kontrolnym kolejki i systemem konfiguracji dla twoich kolejek Laravel opartych na Redis.
 
-> {tip} This documentation summarizes the most notable improvements to the framework; however, more thorough change logs are always available [on GitHub](https://github.com/laravel/framework/blob/5.5/CHANGELOG-5.5.md).
+> {tip} W tej dokumentacji podsumowano najważniejsze ulepszenia w framework-u; jednak bardziej szczegółowe dzienniki zmian są zawsze dostępne [na GitHubie](https://github.com/laravel/framework/blob/5.5/CHANGELOG-5.5.md).
 
 ### Laravel Horizon
 
-Horizon provides a beautiful dashboard and code-driven configuration for your Laravel powered Redis queues. Horizon allows you to easily monitor key metrics of your queue system such as job throughput, runtime, and job failures.
+Horizon zapewnia piękny pulpit nawigacyjny i konfigurację opartą na kodzie dla twoich kolejek Laravel zasilanych Redis. Horizon umożliwia łatwe monitorowanie kluczowych parametrów systemu kolejki, takich jak przepustowość pracy, środowisko wykonawcze i awarie zadań.
 
-All of your worker configuration is stored in a single, simple configuration file, allowing your configuration to stay in source control where your entire team can collaborate.
+Cała konfiguracja pracownika jest przechowywana w jednym, prostym pliku konfiguracyjnym, dzięki czemu konfiguracja pozostaje pod kontrolą źródła, z którym cały zespół może współpracować.
 
 For more information on Horizon, check out the [full Horizon documentation](/docs/{{version}}/horizon)
+Aby uzyskać więcej informacji na temat Horizon, zapoznaj się z [dokumentacją pełnego horyzontu](/docs/{{version}}/horizon)
 
 ### Package Discovery
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/5) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/5) dla tej funkcji dostępny na Laracastach.
 
-In previous versions of Laravel, installing a package typically required several additional steps such as adding the service provider to your `app` configuration file and registering any relevant facades. However, beginning with Laravel 5.5, Laravel can automatically detect and register service providers and facades for you.
+W poprzednich wersjach Laravel instalacja pakietu zazwyczaj wymagała kilku dodatkowych kroków, takich jak dodanie dostawcy usług do pliku konfiguracyjnego `app` i rejestracja odpowiednich fasad. Jednak począwszy od wersji Laravel 5.5, Laravel może automatycznie wykrywać i rejestrować dostawców usług i fasad.
 
-For example, you can experience this by installing the popular `barryvdh/laravel-debugbar` package into your Laravel application. Once the package is installed via Composer, the debug bar will be available to your application with no additional configuration:
+Na przykład możesz tego doświadczyć instalując popularny pakiet `barryvdh/laravel-debugbar` w swojej aplikacji Laravel. Po zainstalowaniu pakietu przez Composer, pasek debugowania będzie dostępny dla twojej aplikacji bez dodatkowej konfiguracji:
 
     composer require barryvdh/laravel-debugbar
 
-Package developers only need to add their service providers and facades to their package's `composer.json` file:
+Deweloperzy pakietów muszą tylko dodawać swoich dostawców usług i fasady do pliku `composer.json` pakietu:
 
     "extra": {
         "laravel": {
@@ -61,13 +63,13 @@ Package developers only need to add their service providers and facades to their
         }
     },
 
-For more information on updating your packages to use service provider and facade discovery, check out the full documentation on [package development](/docs/{{version}}/packages).
+Aby uzyskać więcej informacji na temat aktualizowania pakietów w celu skorzystania z usług dostawcy i odkrywania fasad, zapoznaj się z pełną dokumentacją [package development](/docs/{{version}}/packages).
 
 ### API Resources
 
-When building an API, you may need a transformation layer that sits between your Eloquent models and the JSON responses that are actually returned to your application's users. Laravel's resource classes allow you to expressively and easily transform your models and model collections into JSON.
+Podczas budowania interfejsu API może być potrzebna warstwa transformacji, która znajduje się między modelami wymownymi a odpowiedziami JSON, które są faktycznie zwracane użytkownikom aplikacji. Klasy zasobów Laravel umożliwiają ekspresyjną i łatwą transformację modeli i kolekcji modeli w JSON.
 
-A resource class represents a single model that needs to be transformed into a JSON structure. For example, here is a simple `UserResource` class:
+Klasa zasobów reprezentuje pojedynczy model, który musi zostać przekształcony w strukturę JSON. Na przykład tutaj jest prosta klasa `UserResource`:
 
     <?php
 
@@ -95,13 +97,13 @@ A resource class represents a single model that needs to be transformed into a J
         }
     }
 
-Of course, this is only the most basic example of an API resource. Laravel also provides a variety of methods to help you when building your resources and resource collections. For more information, check out the [full documentation](/docs/{{version}}/eloquent-resources) on API resources.
+Oczywiście jest to tylko najbardziej podstawowy przykład zasobu API. Laravel oferuje także wiele metod, które pomogą ci budować zasoby i kolekcje zasobów. Aby uzyskać więcej informacji, zapoznaj się z [pełną dokumentacją](/docs/{{version}}/eloquent-resources) na temat zasobów API.
 
 ### Console Command Auto-Registration
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/12) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/12) dla tej funkcji dostępnej na Laracastach.
 
-When creating new console commands, you no longer are required to manually list them in the `$commands` property of your Console kernel. Instead, a new `load` method is called from the `commands` method of your kernel, which will scan the given directory for any console commands and register them automatically:
+Podczas tworzenia nowych poleceń konsoli nie trzeba już ręcznie je umieszczać we właściwości `$commands` jądra konsoli. Zamiast tego, nowa metoda `load` jest wywoływana z metody `commands` twojego jądra, która skanuje dany katalog pod kątem dowolnych poleceń konsoli i rejestruje je automatycznie:
 
     /**
      * Register the commands for the application.
@@ -117,21 +119,21 @@ When creating new console commands, you no longer are required to manually list 
 
 ### New Frontend Presets
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/4) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/4) dla tej funkcji dostępnej na Laracastach.
 
-While the basic Vue scaffolding is still included in Laravel 5.5, several new frontend preset options are now available. In a fresh Laravel application, you can swap the Vue scaffolding for React scaffolding using the `preset` command:
+Chociaż podstawowe rusztowanie Vue jest nadal zawarte w Laravel 5.5, dostępnych jest teraz kilka nowych opcji ustawień frontendu. W świeżej aplikacji Laravel możesz zamienić rusztowanie Vue na rusztowanie React za pomocą polecenia `preset`:
 
     php artisan preset react
 
-Or, you can remove the JavaScript and CSS framework scaffolding entirely using the `none` preset. This preset will leave your application with a plain Sass file and a few simple JavaScript utilities:
+Możesz także całkowicie usunąć szkielet framework-a JavaScript i CSS, używając ustawienia "none". To ustawienie pozostawi Twoją aplikację prostym plikiem Sass i kilkoma prostymi narzędziami JavaScript:
 
     php artisan preset none
 
-> {note} These commands are only intended to be run on fresh Laravel installations. They should not be used on existing applications.
+> {note} Te polecenia mają być uruchamiane tylko w nowych instalacjach Laravel. Nie powinny być używane w istniejących aplikacjach.
 
 ### Queued Job Chaining
 
-Job chaining allows you to specify a list of queued jobs that should be run in sequence. If one job in the sequence fails, the rest of the jobs will not be run. To execute a queued job chain, you may use the `withChain` method on any of your dispatchable jobs:
+Łańcuch zadań umożliwia określenie listy oczekujących zadań, które powinny być uruchamiane kolejno. Jeśli jedno zadanie w sekwencji nie powiedzie się, pozostałe zadania nie zostaną uruchomione. Aby wykonać oczekujący łańcuch zadań, możesz użyć metody `withChain` dla dowolnych swoich zadań do wysłania:
 
     ProvisionServer::withChain([
         new InstallNginx,
@@ -140,7 +142,7 @@ Job chaining allows you to specify a list of queued jobs that should be run in s
 
 ### Queued Job Rate Limiting
 
-If your application interacts with Redis, you may now throttle your queued jobs by time or concurrency. This feature can be of assistance when your queued jobs are interacting with APIs that are also rate limited. For example, you may throttle a given type of job to only run 10 times every 60 seconds:
+Jeśli twoja aplikacja współdziała z Redis, możesz teraz dezaktywować swoje zadania w kolejce według czasu lub współbieżności. Ta funkcja może być pomocna, gdy zadania w kolejce wchodzą w interakcje z interfejsami API, które są również ograniczone szybkością. Na przykład możesz dławić dany typ zadania, aby uruchamiać go tylko 10 razy co 60 sekund:
 
     Redis::throttle('key')->allow(10)->every(60)->then(function () {
         // Job logic...
@@ -150,9 +152,9 @@ If your application interacts with Redis, you may now throttle your queued jobs 
         return $this->release(10);
     });
 
-> {tip} In the example above, the `key` may be any string that uniquely identifies the type of job you would like to rate limit. For example, you may wish to construct the key based on the class name of the job and the IDs of the Eloquent models it operates on.
+> {tip} W powyższym przykładzie `klucz` może być dowolnym ciągiem, który jednoznacznie identyfikuje typ zadania, dla którego chcesz wyznaczyć limit. Na przykład możesz chcieć skonstruować klucz na podstawie nazwy klasy zadania i identyfikatorów modeli wymownych, na których on działa.
 
-Alternatively, you may specify the maximum number of workers that may simultaneously process a given job. This can be helpful when a queued job is modifying a resource that should only be modified by one job at a time. For example, we may limit jobs of a given type to only be processed by one worker at a time:
+Alternatywnie możesz określić maksymalną liczbę pracowników, którzy mogą jednocześnie przetwarzać dane zadanie. Może to być pomocne, gdy zadanie w kolejce modyfikuje zasób, który powinien być modyfikowany tylko przez jedno zadanie naraz. Na przykład możemy ograniczyć zadania danego typu, które będą przetwarzane tylko przez jednego pracownika naraz:
 
     Redis::funnel('key')->limit(1)->then(function () {
         // Job logic...
@@ -164,7 +166,7 @@ Alternatively, you may specify the maximum number of workers that may simultaneo
 
 ### Time Based Job Attempts
 
-As an alternative to defining how many times a job may be attempted before it fails, you may now define a time at which the job should timeout. This allows a job to be attempted any number of times within a given time frame. To define the time at which a job should timeout, add a `retryUntil` method to your job class:
+Jako alternatywę do określenia, ile razy można wykonać zadanie, zanim się nie powiedzie, możesz teraz zdefiniować czas, w którym zadanie powinno upłynąć. Pozwala to na podjęcie próby dowolną liczbę razy w określonym przedziale czasowym. Aby zdefiniować czas, w którym zadanie powinno mieć limit czasu, dodaj do swojej klasy zadania metodę `retryUntil`:
 
     /**
      * Determine the time at which the job should timeout.
@@ -176,17 +178,17 @@ As an alternative to defining how many times a job may be attempted before it fa
         return now()->addSeconds(5);
     }
 
-> {tip} You may also define a `retryUntil` method on your queued event listeners.
+> {tip} Możesz także zdefiniować metodę `retryUntil` na detektorach zdarzeń w kolejce.
 
 ### Validation Rule Objects
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/7) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/7) dla tej funkcji dostępnej na Laracastach.
 
-Validation rule objects provide a new, compact way of adding custom validation rules to your application. In previous versions of Laravel, the `Validator::extend` method was used to add custom validation rules via Closures. However, this can grow cumbersome. In Laravel 5.5, a new `make:rule` Artisan command will generate a new validation rule in the `app/Rules` directory:
+Obiekty reguł walidacji zapewniają nowy, zwarty sposób dodawania niestandardowych reguł sprawdzania poprawności do aplikacji. W poprzednich wersjach Laravel zastosowano metodę `Validator::extend` w celu dodania niestandardowych reguł sprawdzania poprawności poprzez Closures. Jednak może to być uciążliwe. W Laravel 5.5 nowa instrukcja `make:rule` Artisan wygeneruje nową regułę walidacji w katalogu` app/Rules`:
 
     php artisan make:rule ValidName
 
-A rule object only has two methods: `passes` and `message`. The `passes` method receives the attribute value and name, and should return `true` or `false` depending on whether the attribute value is valid or not. The `message` method should return the validation error message that should be used when validation fails:
+Obiekt reguły ma tylko dwie metody: `passses` i `message`. Metoda `pass` przyjmuje wartość atrybutu i nazwę i powinna zwracać wartość `true` lub `false` w zależności od tego, czy wartość atrybutu jest poprawna czy nie. Metoda `message` powinna zwrócić komunikat o błędzie sprawdzania poprawności, który powinien zostać użyty podczas niepowodzenia sprawdzania poprawności:
 
     <?php
 
@@ -219,7 +221,7 @@ A rule object only has two methods: `passes` and `message`. The `passes` method 
         }
     }
 
-Once the rule has been defined, you may use it by simply passing an instance of the rule object with your other validation rules:
+Po zdefiniowaniu reguły możesz jej użyć, po prostu przekazując instancję obiektu reguły wraz z innymi regułami sprawdzania poprawności:
 
     use App\Rules\ValidName;
 
@@ -229,11 +231,11 @@ Once the rule has been defined, you may use it by simply passing an instance of 
 
 ### Trusted Proxy Integration
 
-When running applications behind a load balancer that terminates TLS / SSL certificates, you may notice your application sometimes does not generate HTTPS links. Typically this is because your application is being forwarded traffic from your load balancer on port 80 and does not know it should generate secure links.
+Podczas uruchamiania aplikacji za równoważnikiem obciążenia, który kończy certyfikaty TLS / SSL, możesz zauważyć, że aplikacja czasami nie generuje łączy HTTPS. Zazwyczaj dzieje się tak dlatego, że Twoja aplikacja jest przekierowywana z systemu równoważenia obciążenia na porcie 80 i nie wie, że powinna generować bezpieczne linki.
 
-To solve this, many Laravel users install the [Trusted Proxies](https://github.com/fideloper/TrustedProxy) package by Chris Fidao. Since this is such a common use case, Chris' package now ships with Laravel 5.5 by default.
+Aby rozwiązać ten problem, wielu użytkowników Laravel instaluje pakiet [Trusted Proxies](https://github.com/fideloper/TrustedProxy) autorstwa Chrisa Fidao. Ponieważ jest to tak powszechny przypadek użycia, pakiet Chrisa domyślnie jest dostarczany z Laravel 5.5.
 
-A new `App\Http\Middleware\TrustProxies` middleware is included in the default Laravel 5.5 application. This middleware allows you to quickly customize the proxies that should be trusted by your application:
+Nowe oprogramowanie pośredniczące `App\Http\Middleware\TrustProxies` jest zawarte w domyślnej aplikacji Laravel 5.5. To oprogramowanie pośrednie pozwala szybko dostosować serwery proxy, które powinny być zaufane przez aplikację:
 
     <?php
 
@@ -267,7 +269,7 @@ A new `App\Http\Middleware\TrustProxies` middleware is included in the default L
 
 ### On-Demand Notifications
 
-Sometimes you may need to send a notification to someone who is not stored as a "user" of your application. Using the new `Notification::route` method, you may specify ad-hoc notification routing information before sending the notification:
+Czasami może być konieczne wysłanie powiadomienia do osoby, która nie jest zapisana jako "użytkownik" aplikacji. Korzystając z nowej metody `Notification::route`, możesz określić dane routingu powiadomienia ad-hoc przed wysłaniem powiadomienia:
 
     Notification::route('mail', 'taylor@laravel.com')
                 ->route('nexmo', '5555555555')
@@ -275,9 +277,9 @@ Sometimes you may need to send a notification to someone who is not stored as a 
 
 ### Renderable Mailables
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/6) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/6) dla tej funkcji dostępnej na Laracastach.
 
-Mailables can now be returned directly from routes, allowing you to quickly preview your mailable's designs in the browser:
+Mailables mogą teraz zostać zwrócone bezpośrednio z tras, co pozwala na szybki podgląd projektów pocztowych w przeglądarce:
 
     Route::get('/mailable', function () {
         $invoice = App\Invoice::find(1);
@@ -287,9 +289,9 @@ Mailables can now be returned directly from routes, allowing you to quickly prev
 
 ### Renderable & Reportable Exceptions
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/18) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo] https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/18) dla tej funkcji dostępnej na Laracastach.
 
-In previous versions of Laravel, you may have had to resort to "type checking" in your exception handler in order to render a custom response for a given exception. For instance, you may have written code like this in your exception handler's `render` method:
+W poprzednich wersjach Laravel, być może trzeba było użyć "sprawdzania typów" w swojej procedurze obsługi wyjątków, aby wygenerować niestandardową odpowiedź dla danego wyjątku. Na przykład, możesz napisać taki kod w swojej metodzie `render` wyjątku:
 
     /**
      * Render an exception into an HTTP response.
@@ -307,7 +309,7 @@ In previous versions of Laravel, you may have had to resort to "type checking" i
         return parent::render($request, $exception);
     }
 
-In Laravel 5.5, you may now define a `render` method directly on your exceptions. This allows you to place the custom response rendering logic directly on the exception, which helps avoid conditional logic accumulation in your exception handler. If you would like to also customize the reporting logic for the exception, you may define a `report` method on the class:
+W Laravel 5.5 możesz teraz zdefiniować metodę `render` bezpośrednio na swoich wyjątkach. Umożliwia to umieszczenie logiki niestandardowego renderowania odpowiedzi bezpośrednio na wyjątku, co pomaga uniknąć warunkowego gromadzenia logiki w obsłudze wyjątków. Jeśli chcesz również dostosować logikę raportowania dla wyjątku, możesz zdefiniować metodę `report` w klasie:
 
     <?php
 
@@ -341,9 +343,9 @@ In Laravel 5.5, you may now define a `render` method directly on your exceptions
 
 ### Request Validation
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/2) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/2) dla tej funkcji dostępnej na Laracastach.
 
-The `Illuminate\Http\Request` object now provides a `validate` method, allowing you to quickly validate an incoming request from a route Closure or controller:
+Obiekt `Illuminate\Http\Request` udostępnia teraz metodę `validate`, która umożliwia szybkie sprawdzenie przychodzącego żądania z Closure trasy lub kontrolera:
 
     use Illuminate\Http\Request;
 
@@ -358,7 +360,7 @@ The `Illuminate\Http\Request` object now provides a `validate` method, allowing 
 
 ### Consistent Exception Handling
 
-Validation exception handling is now consistent throughout the framework. Previously, there were multiple locations in the framework that required customization to change the default format for JSON validation error responses. In addition, the default format for JSON validation responses in Laravel 5.5 now adheres to the following convention:
+Obsługa wyjątków walidacyjnych jest teraz spójna w całym systemie. Poprzednio w strukturze istniało wiele lokalizacji wymagających dostosowywania w celu zmiany domyślnego formatu odpowiedzi na błędy sprawdzania poprawności JSON. Ponadto domyślny format odpowiedzi sprawdzania poprawności JSON w Laravel 5.5 jest teraz zgodny z następującą konwencją:
 
     {
         "message": "The given data was invalid.",
@@ -374,7 +376,7 @@ Validation exception handling is now consistent throughout the framework. Previo
         }
     }
 
-All JSON validation error formatting can be controlled by defining a single method on your `App\Exceptions\Handler` class. For example, the following customization will format JSON validation responses using the Laravel 5.4 convention.
+Wszystkie formatowanie błędów sprawdzania poprawności JSON można kontrolować, definiując pojedynczą metodę w klasie `App\Exceptions\Handler`. Na przykład poniższa personalizacja sformatuje odpowiedzi sprawdzania poprawności JSON przy użyciu konwencji Laravel 5.5.
 
     use Illuminate\Validation\ValidationException;
 
@@ -392,7 +394,7 @@ All JSON validation error formatting can be controlled by defining a single meth
 
 ### Cache Locks
 
-The Redis and Memcached cache drivers now have support for obtaining and releasing atomic "locks". This provides a simple method of obtaining arbitrary locks without worrying about race conditions. For example, before performing a task, you may wish to obtain a lock so no other processes attempt the same task that is already in progress:
+Sterowniki pamięci podręcznej Redis i Memcached mają teraz obsługę uzyskiwania i zwalniania atomowych "blokad". Zapewnia to prostą metodę uzyskiwania arbitralnych blokad bez martwienia się o warunki wyścigu. Na przykład przed wykonaniem zadania możesz chcieć uzyskać blokadę, aby żaden inny proces nie próbował wykonać tego samego zadania, które jest już w toku:
 
     if (Cache::lock('lock-name', 60)->get()) {
         // Lock obtained for 60 seconds, continue processing...
@@ -402,13 +404,13 @@ The Redis and Memcached cache drivers now have support for obtaining and releasi
         // Lock was not able to be obtained...
     }
 
-Or, you may pass a Closure to the `get` method. The Closure will only be executed if the lock can be obtained and the lock will automatically be released after the Closure is executed:
+Lub możesz przekazać Closure do metody `get`. Closure zostanie wykonane tylko wtedy, gdy można uzyskać lok, a blokada zostanie automatycznie zwolniona po wykonaniu Closure:
 
     Cache::lock('lock-name', 60)->get(function () {
         // Lock obtained for 60 seconds...
     });
 
-In addition, you may "block" until the lock becomes available:
+Ponadto możesz "zablokować", aż blokada stanie się dostępna:
 
     if (Cache::lock('lock-name', 60)->block(10)) {
         // Wait for a maximum of 10 seconds for the lock to become available...
@@ -416,9 +418,9 @@ In addition, you may "block" until the lock becomes available:
 
 ### Blade Improvements
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/10) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/10) dla tej funkcji dostępnej na Laracastach.
 
-Programming a custom directive is sometimes more complex than necessary when defining simple, custom conditional statements. For that reason, Blade now provides a `Blade::if` method which allows you to quickly define custom conditional directives using Closures. For example, let's define a custom conditional that checks the current application environment. We may do this in the `boot` method of our `AppServiceProvider`:
+Programowanie niestandardowej dyrektywy jest czasami bardziej złożone niż to konieczne podczas definiowania prostych, niestandardowych instrukcji warunkowych. Z tego powodu Blade oferuje teraz metodę `Blade::if`, która pozwala szybko zdefiniować niestandardowe dyrektywy warunkowe za pomocą Closures. Na przykład, zdefiniujmy niestandardowy warunek, który sprawdza bieżące środowisko aplikacji. Możemy to zrobić w metodzie `boot` naszego `AppServiceProvider`:
 
     use Illuminate\Support\Facades\Blade;
 
@@ -434,7 +436,7 @@ Programming a custom directive is sometimes more complex than necessary when def
         });
     }
 
-Once the custom conditional has been defined, we can easily use it on our templates:
+Po zdefiniowaniu warunku niestandardowego możemy z łatwością użyć go w naszych szablonach:
 
     @env('local')
         // The application is in the local environment...
@@ -442,7 +444,7 @@ Once the custom conditional has been defined, we can easily use it on our templa
         // The application is not in the local environment...
     @endenv
 
-In addition to the ability to easily define custom Blade conditional directives, new shortcuts have been added to quickly check the authentication status of the current user:
+Poza możliwością łatwego definiowania niestandardowych dyrektyw warunkowych Blade, dodano nowe skróty, aby szybko sprawdzić status uwierzytelniania bieżącego użytkownika:
 
     @auth
         // The user is authenticated...
@@ -454,13 +456,13 @@ In addition to the ability to easily define custom Blade conditional directives,
 
 ### New Routing Methods
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/16) for this feature available on Laracasts.
+> {video} Jest bezpłatny [samouczek wideo](https://laracasts.com/series/whats-new-in-laravel-5-5/episodes/16) dla tej funkcji dostępnej na Laracastach.
 
-If you are defining a route that redirects to another URI, you may now use the `Route::redirect` method. This method provides a convenient shortcut so that you do not have to define a full route or controller for performing a simple redirect:
+Jeśli definiujesz trasę, która przekierowuje do innego URI, możesz teraz użyć metody `Route::redirect`. Ta metoda zapewnia wygodny skrót, dzięki czemu nie trzeba definiować pełnej trasy ani kontrolera do wykonywania prostego przekierowania:
 
     Route::redirect('/here', '/there', 301);
 
-If your route only needs to return a view, you may now use the `Route::view` method. Like the `redirect` method, this method provides a simple shortcut so that you do not have to define a full route or controller. The `view` method accepts a URI as its first argument and a view name as its second argument. In addition, you may provide an array of data to pass to the view as an optional third argument:
+Jeśli twoja trasa musi tylko zwrócić widok, możesz teraz użyć metody `Route::view`. Podobnie jak w przypadku metody `redirect`, ta metoda zapewnia prosty skrót, dzięki czemu nie trzeba definiować pełnej trasy ani kontrolera. Metoda `view` akceptuje URI jako swój pierwszy argument, a nazwę widoku jako swój drugi argument. Ponadto możesz podać tablicę danych do przekazania do widoku jako opcjonalnego trzeciego argumentu:
 
     Route::view('/welcome', 'welcome');
 
@@ -470,7 +472,7 @@ If your route only needs to return a view, you may now use the `Route::view` met
 
 #### The `sticky` Option
 
-When configuring read / write database connections, a new `sticky` configuration option is available:
+Podczas konfigurowania połączeń do odczytu i zapisu bazy danych dostępna jest nowa opcja konfiguracji `sticky`:
 
     'mysql' => [
         'read' => [
@@ -489,4 +491,4 @@ When configuring read / write database connections, a new `sticky` configuration
         'prefix'    => '',
     ],
 
-The `sticky` option is an *optional* value that can be used to allow the immediate reading of records that have been written to the database during the current request cycle. If the `sticky` option is enabled and a "write" operation has been performed against the database during the current request cycle, any further "read" operations will use the "write" connection. This ensures that any data written during the request cycle can be immediately read back from the database during that same request. It is up to you to decide if this is the desired behavior for your application.
+Opcja `sticky` jest *opcjonalną* wartością, która może być użyta do natychmiastowego odczytu zapisów, które zostały zapisane w bazie danych podczas bieżącego cyklu żądania. Jeśli włączona jest opcja `sticky` i operacja "write" została przeprowadzona względem bazy danych podczas bieżącego cyklu żądania, wszelkie dalsze operacje "read" będą korzystać z połączenia "write". Zapewnia to, że wszelkie dane zapisane podczas cyklu żądania mogą być natychmiast odczytywane z bazy danych podczas tego samego żądania. To ty decydujesz, czy jest to pożądane zachowanie dla twojej aplikacji.
