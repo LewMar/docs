@@ -1,21 +1,21 @@
 # Upgrade Guide
 
-- [Upgrading To 5.5.0 From 5.4](#upgrade-5.5.0)
+- [Upgrading To 5.5.0 From 5.4 - Aktualizacja do wersji 5.5.0 Od 5.4](#upgrade-5.5.0)
 
 <a name="upgrade-5.5.0"></a>
-## Upgrading To 5.5.0 From 5.4
+## Upgrading To 5.5.0 From 5.4 - Aktualizacja do wersji 5.5.0 Od 5.4
 
-#### Estimated Upgrade Time: 1 Hour
+#### Estimated Upgrade Time: 1 Hour - Szacowany czas aktualizacji: 1 godzina
 
-> {note} We attempt to document every possible breaking change. Since some of these breaking changes are in obscure parts of the framework only a portion of these changes may actually affect your application.
+> {note} Staramy się udokumentować każdą możliwą zmianę przełomową. Ponieważ niektóre z tych przełomowych zmian są w mrocznych częściach struktury, tylko część tych zmian może wpłynąć na twoją aplikację.
 
 ### PHP
 
-Laravel 5.5 requires PHP 7.0.0 or higher.
+Laravel 5.5 wymaga PHP 7.0.0 lub nowszego.
 
-### Updating Dependencies
+### Updating Dependencies - Aktualizacja zależności
 
-Update your `laravel/framework` dependency to `5.5.*` in your `composer.json` file. In addition, you should update your `phpunit/phpunit` dependency to `~6.0`. Next, add the `filp/whoops` package with version `~2.0` to the `require-dev` section of your `composer.json` file. Finally, in the `scripts` section of your `composer.json` file, add the `package:discover` command to the `post-autoload-dump` event:
+Zaktualizuj zależność `laravel/framework` do `5.5.*`. W pliku `composer.json`. Ponadto powinieneś zaktualizować swoją zależność `phpunit/phpunit` na `~ 6.0`. Następnie dodaj pakiet `filp/whoops` z wersją `~2.0` do sekcji `require-dev` w pliku `composer.json`. Na koniec, w sekcji `scripts` pliku `composer.json` dodaj polecenie `package:discover` do zdarzenia `post-autoload-dump`:
 
     "scripts": {
         ...
@@ -25,61 +25,62 @@ Update your `laravel/framework` dependency to `5.5.*` in your `composer.json` fi
         ],
     }
 
-Of course, don't forget to examine any 3rd party packages consumed by your application and verify you are using the proper version for Laravel 5.5 support.
+Oczywiście, nie zapomnij sprawdzić pakietów zewnętrznych używanych przez twoją aplikację i sprawdź, czy korzystasz z właściwej wersji dla obsługi Laravel 5.5.
 
-#### Laravel Installer
+#### Laravel Installer - Instalator Laravel
 
-> {tip} If you commonly use the Laravel installer via `laravel new`, you should update your Laravel installer package using the `composer global update` command.
+> {tip} Jeśli często używasz instalatora Laravel przez `laravel new`, powinieneś zaktualizować swój pakiet instalacyjny Laravel za pomocą komendy `composer global update`.
+
 
 #### Laravel Dusk
 
-Laravel Dusk `2.0.0` has been released to provide compatibility with Laravel 5.5 and headless Chrome testing.
+Laravel Dusk `2.0.0` został wydany w celu zapewnienia zgodności z Laravel 5.5 i bezgłowymi testami Chrome.
 
 #### Pusher
 
-The Pusher event broadcasting driver now requires version `~3.0` of the Pusher SDK.
+Sterownik rozgłaszania zdarzeń Pusher wymaga teraz wersji `~3.0` z Pusher SDK.
 
 #### Swift Mailer
 
-Laravel 5.5 requires version `~6.0` of Swift Mailer.
+Laravel 5.5 wymaga wersji `~6.0` Swift Mailera.
 
 ### Artisan
 
-#### Auto-Loading Commands
+#### Auto-Loading Commands - Automatyczne ładowanie poleceń
 
-In Laravel 5.5, Artisan can automatically discover commands so that you do not have to manually register them in your kernel. To take advantage of this new feature, you should add the following line to the `commands` method of your  `App\Console\Kernel` class:
+W Laravel 5.5, Artisan może automatycznie wykrywać polecenia, dzięki czemu nie musisz ręcznie rejestrować ich w jądrze. Aby skorzystać z tej nowej funkcji, dodaj następujący wiersz do metody `commands` klasy `App\Console\Kernel`:
 
     $this->load(__DIR__.'/Commands');
 
-#### The `fire` Method
+#### The `fire` Method - Metoda `fire`
 
-Any `fire` methods present on your Artisan commands should be renamed to `handle`.
+Wszelkie metody `fire` obecne w twoich komendach Artisan powinny zostać przemianowane na `handle`.
 
-#### The `optimize` Command
+#### The `optimize` Command - Komenda `optimize`
 
-With recent improvements to PHP op-code caching, the `optimize` Artisan command is no longer needed. You should remove any references to this command from your deployment scripts as it will be removed in a future release of Laravel.
+Dzięki ostatnim ulepszeniom w buforowaniu kodu op-code PHP, polecenie `optimize` Artisan nie jest już potrzebne. Powinieneś usunąć wszelkie odwołania do tego polecenia ze skryptów wdrażania, ponieważ zostaną one usunięte w przyszłej wersji Laravel.
 
-### Authorization
+### Authorization - Upoważnienie
 
-#### The `authorizeResource` Controller Method
+#### The `authorizeResource` Controller Method - Metoda kontrolera `authorizeResource`
 
-When passing a multi-word model name to the `authorizeResource` method, the resulting route segment will now be "snake" case, matching the behavior of resource controllers.
+Podczas przekazywania nazwy słowa składającego się z wielu wyrazów do metody `authorizeResource` wynikowy segment trasy będzie teraz wyglądał jak "wąż ", dopasowując zachowanie kontrolerów zasobów.
 
 #### The `before` Policy Method
 
-The `before` method of a policy class will not be called if the class doesn't contain a method matching the name of the ability being checked.
+Metoda `before` klasy polityki nie zostanie wywołana, jeśli klasa nie zawiera metody pasującej do nazwy sprawdzanej umiejętności.
 
 ### Cache
 
-#### Database Driver
+#### Database Driver -Sterownik Bazy danych
 
-If you are using the database cache driver, you should run `php artisan cache:clear` when deploying your upgraded Laravel 5.5 application for the first time.
+Jeśli używasz sterownika pamięci podręcznej bazy danych, podczas instalowania uaktualnionej aplikacji Laravel 5.5 po raz pierwszy powinieneś uruchomić `php artisan cache:clear`.
 
 ### Eloquent
 
-#### The `belongsToMany` Method
+#### The `belongsToMany` Method - Metoda `belongsToMany`
 
-If you are overriding the `belongsToMany` method on your Eloquent model, you should update your method signature to reflect the addition of new arguments:
+Jeśli nadpisujesz metodę `belongsToMany` w swoim modelu Wymownym, powinieneś zaktualizować swóje oznaczenie metody, dodając nowe argumenty:
 
     /**
      * Define a many-to-many relationship.
@@ -102,15 +103,16 @@ If you are overriding the `belongsToMany` method on your Eloquent model, you sho
 
 #### BelongsToMany `getQualifiedRelatedKeyName`
 
-The `getQualifiedRelatedKeyName` method has been renamed to `getQualifiedRelatedPivotKeyName`.
+Nazwa metody `getQualifiedRelatedKeyName` została zmieniona na `getQualifiedRelatedPivotKeyName`.
 
 #### BelongsToMany `getQualifiedForeignKeyName`
 
 The `getQualifiedForeignKeyName` method has been renamed to `getQualifiedForeignPivotKeyName`.
+Metoda `getQualifiedForeignKeyName` została zmieniona na `getQualifiedForeignPivotKeyName`.
 
-#### Model `is` Method
+#### Model `is` Method - Metoda `is` Model-u
 
-If you are overriding the `is` method of your Eloquent model, you should remove the `Model` type-hint from the method. This allows the `is` method to receive `null` as an argument:
+Jeśli nadpisujesz metodę `is` swojego modelu Eloquent, powinieneś usunąć metodę typu `Model` z metody. Dzięki temu metoda `is` może odbierać `null` jako argument:
 
     /**
      * Determine if two models have the same ID and belong to the same table.
@@ -123,44 +125,44 @@ If you are overriding the `is` method of your Eloquent model, you should remove 
         //
     }
 
-#### Model `$events` Property
+#### Model `$events` Property - Właściwość Model-u `$events`
 
-The `$events` property on your models should be renamed to `$dispatchesEvents`. This change was made because of a high number of users needing to define an `events` relationship, which caused a conflict with the old property name.
+Właściwość `$events` w modelach powinna mieć zmienioną nazwę na `$dispatchesEvents`. Ta zmiana została dokonana ze względu na dużą liczbę użytkowników, którzy musieli zdefiniować relację `events`, która spowodowała konflikt ze starą nazwą właściwości.
 
-#### Pivot `$parent` Property
+#### Pivot `$parent` Property - Właściwości Pivot `$parent`
 
-The protected `$parent` property on the `Illuminate\Database\Eloquent\Relations\Pivot` class has been renamed to `$pivotParent`.
+Chroniona własność `$parent` w klasie `Illuminate\Database\Eloquent\Relations\Pivot` została zmieniona na `$pivotParent`.
 
-#### Relationship `create` Methods
+#### Relationship `create` Methods - Metody relacji `create`
 
-The `BelongsToMany`, `HasOneOrMany`, and `MorphOneOrMany` classes' `create` methods have been modified to provide a default value for the `$attributes` argument. If you are overriding these methods, you should update your signatures to match the new definition:
+Metody `create` klas `BelongsToMany`, `HasOneOrMany` i `MorphOneOrMany` zostały zmodyfikowane, aby zapewnić domyślną wartość argumentu `$attributes`. Jeśli nadpisujesz te metody, zaktualizuj swoje podpisy tak, aby pasowały do nowej definicji:
 
     public function create(array $attributes = [])
     {
         //
     }
 
-#### Soft Deleted Models
+#### Soft Deleted Models - Miękie usuwanie modeli
 
-When deleting a "soft deleted" model, the `exists` property on the model will remain `true`.
+Podczas usuwania modelu "miękkiego usunięcia" właściwość `exists` w modelu pozostanie `true`.
 
-#### `withCount` Column Formatting
+#### `withCount` Column Formatting - Formatowanie kolumny `withCount`
 
-When using an alias, the `withCount` method will no longer automatically append `_count` onto the resulting column name. For example, in Laravel 5.4, the following query would result in a `bar_count` column being added to the query:
+Gdy używasz aliasu, metoda `withCount` nie będzie automatycznie dodawać `_count` do wynikowej nazwy kolumny. Na przykład w Laravel 5.4, następujące zapytanie spowoduje dodanie kolumny `bar_count` do zapytania:
 
     $users = User::withCount('foo as bar')->get();
 
-However, in Laravel 5.5, the alias will be used exactly as it is given. If you would like to append `_count` to the resulting column, you must specify that suffix when defining the alias:
+Jednak w Laravel 5.5, alias będzie używany dokładnie tak, jak jest podany. Jeśli chcesz wstawić `_count` do wynikowej kolumny, musisz określić ten sufiks podczas definiowania aliasu:
 
     $users = User::withCount('foo as bar_count')->get();
 
-#### Model Methods & Attribute Names
+#### Model Methods & Attribute Names - Metody modelów i nazwy atrybutów
 
-To prevent accessing a model's private properties when using array access, it's no longer possible to have a model method with the same name as an attribute or property. Doing so will cause exceptions to be thrown when accessing the model's attributes via array access (`$user['name']`) or the `data_get` helper function.
+Aby uniemożliwić dostęp do prywatnych właściwości modelu podczas korzystania z dostępu do tablicy, nie można już stosować metody modelu o tej samej nazwie, co atrybut lub właściwość. Spowoduje to wywołanie wyjątków podczas uzyskiwania dostępu do atrybutów modelu za pośrednictwem dostępu do tablicy (`$user['name']`) lub funkcji pomocniczej `data_get`.
 
-### Exception Format
+### Exception Format - Format wyjątków
 
-In Laravel 5.5, all exceptions, including validation exceptions, are converted into HTTP responses by the exception handler. In addition, the default format for JSON validation errors has changed. The new format conforms to the following convention:
+W Laravel 5.5 wszystkie wyjątki, w tym wyjątki sprawdzania poprawności, są konwertowane na odpowiedzi HTTP przez procedurę obsługi wyjątku. Skonsultować się z JSON. Nowy format jest zgodny z następującą konwencją:
 
     {
         "message": "The given data was invalid.",
@@ -176,7 +178,7 @@ In Laravel 5.5, all exceptions, including validation exceptions, are converted i
         }
     }
 
-However, if you would like to maintain the Laravel 5.4 JSON error format, you may add the following method to your `App\Exceptions\Handler` class:
+Jeśli jednak chcesz zachować format błędu Laravel 5.4 JSON, możesz dodać następującą metodę do klasy `App\Exceptions\Handler`:
 
     use Illuminate\Validation\ValidationException;
 
@@ -192,13 +194,13 @@ However, if you would like to maintain the Laravel 5.4 JSON error format, you ma
         return response()->json($exception->errors(), $exception->status);
     }
 
-#### JSON Authentication Attempts
+#### JSON Authentication Attempts - Próby uwierzytelnienia JSON
 
-This change also affects the validation error formatting for authentication attempts made over JSON. In Laravel 5.5, JSON authentication failures will return the error messages following the new formatting convention described above.
+Ta zmiana wpływa również na formatowanie błędów sprawdzania poprawności dla prób uwierzytelnienia wykonanych za pomocą JSON. W Laravel 5.5, błędy uwierzytelniania JSON zwrócą komunikaty o błędach zgodnie z nową konwencją formatowania opisaną powyżej.
 
-#### A Note On Form Requests
+#### A Note On Form Requests - Uwaga dotycząca żądań formularzy
 
-If you were customizing the response format of an individual form request, you should now override the `failedValidation` method of that form request, and throw an `HttpResponseException` instance containing your custom response:
+Jeśli dostosowywałeś format odpowiedzi pojedynczego żądania formularza, powinieneś teraz zastąpić metodę `failedValidation` tego żądania formularza i rzucić instancję `HttpResponseException` zawierającą twoją niestandardową odpowiedź:
 
     use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -219,15 +221,15 @@ If you were customizing the response format of an individual form request, you s
 
 #### The `files` Method
 
-The `files` method of the `Illuminate\Filesystem\Filesystem` class has changed its signature to add the `$hidden` argument and now returns an array of `SplFileInfo` objects, similar to the `allFiles` method. Previously, the `files` method returned an array of string path names. The new signature is as follows:
+Metoda `files` klasy `Illuminate\Filesystem\Filesystem` zmieniła swoje oznaczenie , dodając argument `$hidden`, a teraz zwraca tablicę obiektów `SplFileInfo`, podobnie jak metoda `allFiles`. Poprzednio metoda `files` zwróciła tablicę nazw ścieżek tekstowych. Nowe oznaczenie jest następujące:
 
     public function files($directory, $hidden = false)
 
 ### Mail
 
-#### Unused Parameters
+#### Unused Parameters - Niewykorzystane parametry
 
-The unused `$data` and `$callback` arguments were removed from the `Illuminate\Contracts\Mail\MailQueue` contract's `queue` and `later` methods:
+Nieużywane argumenty `$data` i` $callback` zostały usunięte z metod `queue` i ` later` kontraktu `Illuminate\Contracts\Mail\MailQueue`:
 
     /**
      * Queue a new e-mail message for sending.
@@ -250,9 +252,9 @@ The unused `$data` and `$callback` arguments were removed from the `Illuminate\C
 
 ### Queues
 
-#### The `dispatch` Helper
+#### The `dispatch` Helper - Pomocnik `dispatch`
 
-If you would like to dispatch a job that runs immediately and returns a value from the `handle` method, you should use the `dispatch_now` or `Bus::dispatchNow` method to dispatch the job:
+Jeśli chcesz wysłać zadanie, które działa natychmiast i zwraca wartość z metody `handle`, powinieneś użyć metody `dispatch_now` lub `Bus::dispatchNow` do wysłania zadania:
 
     use Illuminate\Support\Facades\Bus;
 
@@ -262,9 +264,9 @@ If you would like to dispatch a job that runs immediately and returns a value fr
 
 ### Requests
 
-#### The `all` Method
+#### The `all` Method - Metoda `all`
 
-If you are overriding the `all` method of the `Illuminate\Http\Request` class, you should update your method signature to reflect the new `$keys` argument:
+Jeśli nadpisujesz metodę `all` klasy `Illuminate\Http\Request`, powinieneś zaktualizować swoje oznaczenie metody, aby odzwierciedlić nowy argument `$keys`:
 
     /**
      * Get all of the input and files for the request.
@@ -277,87 +279,89 @@ If you are overriding the `all` method of the `Illuminate\Http\Request` class, y
         //
     }
 
-#### The `has` Method
+#### The `has` Method - Metoda `has`
 
-The `$request->has` method will now return `true` even if the input value is an empty string or `null`. A new `$request->filled` method has been added that provides the previous behavior of the `has` method.
+Metoda `$request->has` zwraca teraz wartość `true`, nawet jeśli wartość wejściowa jest pustym łańcuchem lub `null`. Dodano nową metodę `$request->filled`, która zapewnia poprzednie zachowanie metody `has`.
 
-#### The `intersect` Method
+#### The `intersect` Method - Metoda `intersect`
 
-The `intersect` method has been removed. You may replicate this behavior using `array_filter` on a call to `$request->only`:
+Metoda `intersect` została usunięta. Możesz replikować to zachowanie używając `array_filter` w wywołaniu `$request->only`:
+
 
     return array_filter($request->only('foo'));
 
-#### The `only` Method
+#### The `only` Method - Metoda `only`
 
-The `only` method will now only return attributes that are actually present in the request payload. If you would like to preserve the old behavior of the `only` method, you may use the `all` method instead.
+Metoda `only` zwróci teraz tylko te atrybuty, które są rzeczywiście obecne w ładunku żądania. Jeśli chcesz zachować stare zachowanie metody `only`, możesz zamiast tego użyć metody `all`.
 
     return $request->all('foo');
 
-#### The `request()` Helper
+#### The `request()` Helper - Pomocnik `request()`
 
-The `request` helper will no longer retrieve nested keys. If needed, you may use the `input` method of the request to achieve this behavior:
+Pomocnik `request` nie będzie już odzyskiwał zagnieżdżonych kluczy. W razie potrzeby możesz użyć metody `input` żądania, aby osiągnąć to zachowanie:
 
     return request()->input('filters.date');
 
-### Testing
+### Testing - Testowanie
 
-#### Authentication Assertions
+#### Authentication Assertions - Asercje uwierzytelniania
 
-Some authentication assertions were renamed for better consistency with the rest of the framework's assertions:
+Niektóre asercje uwierzytelniające zostały zmienione pod kątem lepszej spójności z pozostałymi elementami asercji:
 
 <div class="content-list" markdown="1">
-- `seeIsAuthenticated` was renamed to `assertAuthenticated`.
-- `dontSeeIsAuthenticated` was renamed to `assertGuest`.
-- `seeIsAuthenticatedAs` was renamed to `assertAuthenticatedAs`.
-- `seeCredentials` was renamed to `assertCredentials`.
-- `dontSeeCredentials` was renamed to `assertInvalidCredentials`.
+- `seeIsAuthenticated` zmienił nazwę na `assertAuthenticated`.
+- `dontSeeIsAuthenticated` zmienił nazwę na `assertGuest`.
+- `seeIsAuthenticatedAs` zmienił nazwę na `assertAuthenticatedAs`.
+- `seeCredentials` zmienił nazwę na `assertCredentials`.
+- `dontSeeCredentials` zmienił nazwę na `assertInvalidCredentials`.
 </div>
 
 #### Mail Fake
 
-If you are using the `Mail` fake to determine if a mailable was **queued** during a request, you should now use `Mail::assertQueued` instead of `Mail::assertSent`. This distinction allows you to specifically assert that the mail was queued for background sending and not sent during the request itself.
+Jeśli używasz fałszywki `Mail` w celu ustalenia, czy program pocztowy **został umieszczony w kolejce** podczas żądania, powinieneś teraz użyć `Mail::assertQueued` zamiast `Mail::assertSent`. To rozróżnienie pozwala wyraźnie stwierdzić, że poczta była w kolejce do wysłania w tle i nie została wysłana podczas samego żądania.
 
 #### Tinker
 
-Laravel Tinker now supports omitting namespaces when referring to your application classes. This feature requires an optimized Composer class-map, so you should add the `optimize-autoloader` directive to the `config` section of your `composer.json` file:
+Laravel Tinker obsługuje teraz pomijanie obszarów nazw podczas odwoływania się do klas aplikacji. Ta funkcja wymaga zoptymalizowanej mapy klasy Composer, więc powinieneś dodać dyrektywę `optimize-autoloader` do sekcji `config` pliku `composer.json`:
 
     "config": {
         ...
         "optimize-autoloader": true
     }
 
-### Translation
+### Translation - Tłumaczenie
 
 #### The `LoaderInterface`
 
-The `Illuminate\Translation\LoaderInterface` interface has been moved to `Illuminate\Contracts\Translation\Loader`.
+`Illuminate\Translation\LoaderInterface` interfejs został przeniesiony do `Illuminate\Contracts\Translation\Loader`.
 
-### Validation
+### Validation - Uprawomocnienie
 
-#### Validator Methods
+#### Validator Methods - Sprawdzanie poprawności
 
-All of the validator's validation methods are now `public` instead of `protected`.
+Wszystkie metody sprawdzania poprawności są teraz `public` zamiast `protected`.
 
-### Views
+### Views - Widoki
 
-#### Dynamic "With" Variable Names
+#### Dynamic "With" Variable Names - Dynamiczna nazwa zmiennej "With"
 
 When allowing the dynamic `__call` method to share variables with a view, these variables will automatically use "camel" case. For example, given the following:
+Po zezwoleniu dynamicznej metodzie `__call` na współdzielenie zmiennych z widokiem, zmienne te będą automatycznie używać "camel" case. Na przykład, biorąc pod uwagę:
 
     return view('pool')->withMaximumVotes(100);
 
-The `maximumVotes` variable may be accessed in the template like so:
+Zmienna `maximumVotes` może być dostępna w szablonie w następujący sposób:
 
     {{ $maximumVotes }}
 
-#### `@php` Blade Directive
+#### `@php` Blade Directive - Dyrektywa `@php` w blade
 
-The `@php` blade directive no longer accepts inline tags. Instead, use the full form of the directive:
+Dyrektywa blade `@php` nie przyjmuje już tagów wbudowanych. Zamiast tego użyj pełnej wersji dyrektywy:
 
     @php
         $teamMember = true;
     @endphp
 
-### Miscellaneous
+### Miscellaneous - Różne
 
-We also encourage you to view the changes in the `laravel/laravel` [GitHub repository](https://github.com/laravel/laravel). While many of these changes are not required, you may wish to keep these files in sync with your application. Some of these changes will be covered in this upgrade guide, but others, such as changes to configuration files or comments, will not be. You can easily view the changes with the [GitHub comparison tool](https://github.com/laravel/laravel/compare/5.4...master) and choose which updates are important to you.
+Zachęcamy również do przeglądania zmian w `laravel/laravel` [repozytorium GitHub](https://github.com/laravel/laravel). Chociaż wiele z tych zmian nie jest wymaganych, możesz chcieć synchronizować te pliki z aplikacją. Niektóre z tych zmian zostaną omówione w tym przewodniku aktualizacji, ale inne, takie jak zmiany w plikach konfiguracyjnych lub komentarzach, nie będą. Możesz łatwo przeglądać zmiany za pomocą [narzędzia porównywania GitHub](https://github.com/laravel/laravel/compare/5.4...master) i wybrać, które aktualizacje są dla Ciebie ważne.
