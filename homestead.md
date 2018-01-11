@@ -311,7 +311,7 @@ Homestead obsługuje kilka typów witryn, które pozwalają łatwo uruchamiać p
     sites:
         - map: symfony2.test
           to: /home/vagrant/code/Symfony/web
-          type: symfony2
+          type: "symfony2"
 
 Dostępne typy witryn to: `apache`, `laravel` (domyślnie), `proxy`, `silverstripe`, `statamic`, `symfony2`, and `symfony4`.
 
