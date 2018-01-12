@@ -1,20 +1,20 @@
 # Database Testing
 
-- [Introduction](#introduction)
-- [Generating Factories](#generating-factories)
-- [Resetting The Database After Each Test](#resetting-the-database-after-each-test)
-- [Writing Factories](#writing-factories)
-    - [Factory States](#factory-states)
-- [Using Factories](#using-factories)
-    - [Creating Models](#creating-models)
-    - [Persisting Models](#persisting-models)
-    - [Relationships](#relationships)
-- [Available Assertions](#available-assertions)
+- [Introduction - Wprowadzenie](#introduction)
+- [Generating Factories - Generowanie fabryk](#generating-factories)
+- [Resetting The Database After Each Test - Resetowanie bazy danych po każdym teście](#resetting-the-database-after-each-test)
+- [Writing Factories - Pisanie fabryk](#writing-factories)
+    - [Factory States - Stany fabryki](#factory-states)
+- [Using Factories - Korzystanie z fabryk](#using-factories)
+    - [Creating Models - Tworzenie modeli](#creating-models)
+    - [Persisting Models - Trwałe modele](#persisting-models)
+    - [Relationships - Relacje](#relationships)
+- [Available Assertions- Dostępne twierdzenia](#available-assertions)
 
 <a name="introduction"></a>
-## Introduction
+## Introduction - Wprowadzenie
 
-Laravel provides a variety of helpful tools to make it easier to test your database driven applications. First, you may use the `assertDatabaseHas` helper to assert that data exists in the database matching a given set of criteria. For example, if you would like to verify that there is a record in the `users` table with the `email` value of `sally@example.com`, you can do the following:
+Laravel oferuje szereg pomocnych narzędzi, które ułatwiają testowanie aplikacji opartych na bazach danych. Po pierwsze, możesz użyć pomocnika `assertDatabaseHas`, aby potwierdzić, że dane istnieją w bazie danych pasującej do podanego zestawu kryteriów. Na przykład, jeśli chcesz sprawdzić, czy w tabeli `users` znajduje się rekord z wartością `sally@example.com` kolumny `email`, możesz wykonać następujące czynności:
 
     public function testDatabase()
     {
@@ -25,27 +25,27 @@ Laravel provides a variety of helpful tools to make it easier to test your datab
         ]);
     }
 
-You can also use the `assertDatabaseMissing` helper to assert that data does not exist in the database.
+Można również użyć helpera `assertDatabaseMissing`, aby stwierdzić, że dane nie istnieją w bazie danych.
 
-Of course, the `assertDatabaseHas` method and other helpers like it are for convenience. You are free to use any of PHPUnit's built-in assertion methods to supplement your tests.
+Oczywiście, metoda `assertDatabaseHas` i inne podobne pomoce są dla wygody. Możesz dowolnie korzystać z wbudowanych metod asercji PHPUnit, aby uzupełnić swoje testy.
 
 <a name="generating-factories"></a>
-## Generating Factories
+## Generating Factories - Generowanie fabryk
 
-To create a factory, use the `make:factory` [Artisan command](/docs/{{version}}/artisan):
+Aby utworzyć fabrykę, użyj `make:factory` [polecenie Artisan](/docs/{{version}}/artisan):
 
     php artisan make:factory PostFactory
 
-The new factory will be placed in your `database/factories` directory.
+Nowa fabryka zostanie umieszczona w twoim katalogu `database/factories`.
 
-The `--model` option may be used to indicate the name of the model created by the factory. This option will pre-fill the generated factory file with the given model:
+Opcja `--model` może być użyta do wskazania nazwy modelu stworzonego przez fabrykę. Ta opcja wstępnie wypełni wygenerowany plik fabryki danym modelem:
 
     php artisan make:factory PostFactory --model=Post
 
 <a name="resetting-the-database-after-each-test"></a>
-## Resetting The Database After Each Test
+## Resetting The Database After Each Test - Resetowanie bazy danych po każdym teście
 
-It is often useful to reset your database after each test so that data from a previous test does not interfere with subsequent tests. The `RefreshDatabase` trait takes the most optimal approach to migrating your test database depending on if you are using an in-memory database or a traditional database. Simply use the trait on your test class and everything will be handled for you:
+Często przydaje się resetowanie bazy danych po każdym teście, aby dane z poprzedniego testu nie kolidowały z kolejnymi testami. Właściwość `RefreshDatabase` przyjmuje najbardziej optymalne podejście do migracji bazy testowej w zależności od tego, czy korzystasz z bazy danych w pamięci czy z tradycyjnej bazy danych. Po prostu użyj cechy na swojej klasie testowej i wszystko będzie dla ciebie obsługiwane:
 
     <?php
 
@@ -73,9 +73,9 @@ It is often useful to reset your database after each test so that data from a pr
     }
 
 <a name="writing-factories"></a>
-## Writing Factories
+## Writing Factories - Pisanie fabryk
 
-When testing, you may need to insert a few records into your database before executing your test. Instead of manually specifying the value of each column when you create this test data, Laravel allows you to define a default set of attributes for each of your [Eloquent models](/docs/{{version}}/eloquent) using model factories. To get started, take a look at the `database/factories/UserFactory.php` file in your application. Out of the box, this file contains one factory definition:
+Podczas testowania może zajść potrzeba wstawienia kilku rekordów do bazy danych przed wykonaniem testu. Zamiast ręcznie określać wartość każdej kolumny podczas tworzenia tych danych testowych, Laravel umożliwia zdefiniowanie domyślnego zestawu atrybutów dla każdego z [modeli wymownych](/docs/{{version}}/eloquent) przy użyciu modeli. Aby rozpocząć, spójrz na plik `database/factoryories/UserFactory.php` w swojej aplikacji. Po wyjęciu z pudełka ten plik zawiera jedną definicję fabryczną:
 
     use Faker\Generator as Faker;
 
@@ -90,20 +90,20 @@ When testing, you may need to insert a few records into your database before exe
         ];
     });
 
-Within the Closure, which serves as the factory definition, you may return the default test values of all attributes on the model. The Closure will receive an instance of the [Faker](https://github.com/fzaninotto/Faker) PHP library, which allows you to conveniently generate various kinds of random data for testing.
+W ramach Closure, które służy jako definicja fabryczna, możesz zwrócić domyślne wartości testowe wszystkich atrybutów w modelu. The Closure otrzyma instancję biblioteki PHP [Faker](https://github.com/fzaninotto/Faker), która pozwala wygodnie generować różne rodzaje losowych danych do testowania.
 
-You may also create additional factory files for each model for better organization. For example, you could create `UserFactory.php` and `CommentFactory.php` files within your `database/factories` directory. All of the files within the `factories` directory will automatically be loaded by Laravel.
+Możesz także utworzyć dodatkowe pliki fabryczne dla każdego modelu dla lepszej organizacji. Na przykład możesz utworzyć pliki `UserFactory.php` i `CommentFactory.php` w swoim katalogu `database/factories`. Wszystkie pliki w katalogu `factories` zostaną automatycznie załadowane przez Laravel.
 
 <a name="factory-states"></a>
-### Factory States
+### Factory States - Stany fabryki
 
-States allow you to define discrete modifications that can be applied to your model factories in any combination. For example, your `User` model might have a `delinquent` state that modifies one of its default attribute values. You may define your state transformations using the `state` method. For simple states, you may pass an array of attribute modifications:
+Stany umożliwiają zdefiniowanie dyskretnych modyfikacji, które można zastosować do fabryk modeli w dowolnej kombinacji. Na przykład twój model `User` może mieć stan` delinquent`, który modyfikuje jedną z jego domyślnych wartości atrybutów. Możesz zdefiniować transformacje stanu za pomocą metody `state`. W przypadku prostych stanów możesz przekazać tablicę modyfikacji atrybutów:
 
     $factory->state(App\User::class, 'delinquent', [
         'account_status' => 'delinquent',
     ]);
 
-If your state requires calculation or a `$faker` instance, you may use a Closure to calculate the state's attribute modifications:
+Jeśli twój stan wymaga obliczenia lub instancji `$faker`, możesz użyć Closure, aby obliczyć modyfikacje atrybutów stanu:
 
     $factory->state(App\User::class, 'address', function ($faker) {
         return [
@@ -112,12 +112,12 @@ If your state requires calculation or a `$faker` instance, you may use a Closure
     });
 
 <a name="using-factories"></a>
-## Using Factories
+## Using Factories - Korzystanie z fabryk
 
 <a name="creating-models"></a>
-### Creating Models
+### Creating Models - Tworzenie modeli
 
-Once you have defined your factories, you may use the global `factory` function in your tests or seed files to generate model instances. So, let's take a look at a few examples of creating models. First, we'll use the `make` method to create models but not save them to the database:
+Po zdefiniowaniu swoich fabryk możesz użyć globalnej funkcji `factory` w swoich testach lub plikach źródłowych do wygenerowania instancji modelu. Spójrzmy więc na kilka przykładów tworzenia modeli. Najpierw użyjemy metody `make` do tworzenia modeli, ale nie zapisywania ich w bazie danych:
 
     public function testDatabase()
     {
@@ -126,31 +126,31 @@ Once you have defined your factories, you may use the global `factory` function 
         // Use model in tests...
     }
 
-You may also create a Collection of many models or create models of a given type:
+Możesz także utworzyć kolekcję wielu modeli lub utworzyć modele danego typu:
 
     // Create three App\User instances...
     $users = factory(App\User::class, 3)->make();
 
-#### Applying States
+#### Applying States - Dołaczanie stanów
 
-You may also apply any of your [states](#factory-states) to the models. If you would like to apply multiple state transformations to the models, you should specify the name of each state you would like to apply:
+Możesz również zastosować dowolny ze swoich [stanów](#factory-states) do modeli. Aby zastosować do modelu wiele transformacji stanów, należy podać nazwę każdego stanu, który ma zostać zastosowany:
 
     $users = factory(App\User::class, 5)->states('delinquent')->make();
 
     $users = factory(App\User::class, 5)->states('premium', 'delinquent')->make();
 
-#### Overriding Attributes
+#### Overriding Attributes - Przesłanianie atrybutów
 
-If you would like to override some of the default values of your models, you may pass an array of values to the `make` method. Only the specified values will be replaced while the rest of the values remain set to their default values as specified by the factory:
+Jeśli chcesz zastąpić niektóre z domyślnych wartości modeli, możesz przekazać tablicę wartości do metody `make`. Tylko określone wartości zostaną zastąpione, a pozostałe wartości pozostaną ustawione na wartości domyślne określone przez producenta:
 
     $user = factory(App\User::class)->make([
         'name' => 'Abigail',
     ]);
 
 <a name="persisting-models"></a>
-### Persisting Models
+### Persisting Models - Trwałe modele
 
-The `create` method not only creates the model instances but also saves them to the database using Eloquent's `save` method:
+Metoda `create` nie tylko tworzy instancje modelu, ale także zapisuje je w bazie danych przy użyciu metody `save` Eloquent:
 
     public function testDatabase()
     {
@@ -163,16 +163,16 @@ The `create` method not only creates the model instances but also saves them to 
         // Use model in tests...
     }
 
-You may override attributes on the model by passing an array to the `create` method:
+Można nadpisywać atrybuty w modelu, przekazując tablicę do metody `create`:
 
     $user = factory(App\User::class)->create([
         'name' => 'Abigail',
     ]);
 
 <a name="relationships"></a>
-### Relationships
+### Relationships - Relacje
 
-In this example, we'll attach a relation to some created models. When using the `create` method to create multiple models, an Eloquent [collection instance](/docs/{{version}}/eloquent-collections) is returned, allowing you to use any of the convenient functions provided by the collection, such as `each`:
+W tym przykładzie dołączymy relację do niektórych utworzonych modeli. Używając metody  `create` do tworzenia wielu modeli, zwracana jest Eloquent [instancja kolekcji](/docs/{{version}}/eloquent-collections), co umożliwia korzystanie z wygodnych funkcji dostępnych w kolekcji, takich jak  `each`:
 
     $users = factory(App\User::class, 3)
                ->create()
@@ -180,9 +180,10 @@ In this example, we'll attach a relation to some created models. When using the 
                     $u->posts()->save(factory(App\Post::class)->make());
                 });
 
-#### Relations & Attribute Closures
+#### Relations & Attribute Closures - Relacje i atrybuty Closures
 
 You may also attach relationships to models using Closure attributes in your factory definitions. For example, if you would like to create a new `User` instance when creating a `Post`, you may do the following:
+Możesz także dołączać relacje do modeli przy użyciu atrybutów Closure w definicjach fabrycznych. Na przykład, jeśli chcesz utworzyć nową instancję `User` podczas tworzenia `Post`, możesz wykonać następujące czynności:
 
     $factory->define(App\Post::class, function ($faker) {
         return [
@@ -194,7 +195,7 @@ You may also attach relationships to models using Closure attributes in your fac
         ];
     });
 
-These Closures also receive the evaluated attribute array of the factory that defines them:
+Te Closures otrzymują również oszacowaną tablicę atrybutów fabryki, która je definiuje:
 
     $factory->define(App\Post::class, function ($faker) {
         return [
@@ -210,12 +211,12 @@ These Closures also receive the evaluated attribute array of the factory that de
     });
 
 <a name="available-assertions"></a>
-## Available Assertions
+## Available Assertions - Dostępne twierdzenia
 
-Laravel provides several database assertions for your [PHPUnit](https://phpunit.de/) tests:
+Laravel zapewnia kilka asercji bazy danych dla testów [PHPUnit](https://phpunit.de/):
 
-Method  | Description
+Metoda  | Opis
 ------------- | -------------
-`$this->assertDatabaseHas($table, array $data);`  |  Assert that a table in the database contains the given data.
-`$this->assertDatabaseMissing($table, array $data);`  |  Assert that a table in the database does not contain the given data.
-`$this->assertSoftDeleted($table, array $data);`  |  Assert that the given record has been soft deleted.
+`$this->assertDatabaseHas($table, array $data);`  |  Twierdzimy, że tabela w bazie danych zawiera dane.
+`$this->assertDatabaseMissing($table, array $data);`  |  Twierdzimy, że tabela w bazie danych nie zawiera danych.
+`$this->assertSoftDeleted($table, array $data);`  |  Twierdzimy, że dany rekord został delikatnie usunięty.
