@@ -533,14 +533,14 @@ Możesz posłuchać zdarzenia join przez metodę `listen` Echa:
 
 Czasami możesz chcieć nadać zdarzenie innym podłączonym klientom bez rrejestrowania w aplikację Laravel. Może to być szczególnie przydatne w przypadku takich powiadomień, jak "pisząc", w których chcesz powiadomić użytkowników swojej aplikacji, że inny użytkownik pisze wiadomość na danym ekranie. Aby transmitować zdarzenia klienta, możesz użyć metody `whisper` Echa:
 
-    Echo.channel('chat')
+    Echo.private('chat')
         .whisper('typing', {
             name: this.user.name
         });
 
 Aby nasłuchiwać zdarzeń klienta, możesz użyć metody `listenForWhisper`:
 
-    Echo.channel('chat')
+    Echo.private('chat')
         .listenForWhisper('typing', (e) => {
             console.log(e.name);
         });

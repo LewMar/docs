@@ -47,7 +47,7 @@ Możesz zdefiniować wszystkie zaplanowane zadania w metodzie `schedule` klasy `
          * @var array
          */
         protected $commands = [
-            \App\Console\Commands\Inspire::class,
+            //
         ];
 
         /**

@@ -229,7 +229,7 @@ Oprócz już omówionych dyrektyw warunkowych, dyrektywy `@isset` i `@empty` mog
         // $records is "empty"...
     @endempty
 
-#### Authentication Shortcuts - Skróty uwierzytelniania
+#### Authentication Directives - Dyrektywy uwierzytelniające
 
 Dyrektywy `@auth` i `@guest` mogą być użyte do szybkiego ustalenia, czy bieżący użytkownik jest uwierzytelniony, czy jest gościem:
 
@@ -250,6 +250,18 @@ Jeśli jest taka potrzeba, możesz określić [zabezpieczenie autoryzacji](/docs
     @guest('admin')
         // The user is not authenticated...
     @endguest
+
+#### Section Directives - Dyrektywy sekcji
+
+Możesz sprawdzić, czy sekcja ma zawartość za pomocą dyrektywy `@hasSection`:
+
+    @hasSection('navigation')
+        <div class="pull-right">
+            @yield('navigation')
+        </div>
+
+        <div class="clearfix"></div>
+    @endif
 
 <a name="switch-statements"></a>
 ### Switch Statements - Deklaracje Przełączania

@@ -80,13 +80,11 @@ Podczas testowania może zajść potrzeba wstawienia kilku rekordów do bazy dan
     use Faker\Generator as Faker;
 
     $factory->define(App\User::class, function (Faker $faker) {
-        static $password;
-
         return [
             'name' => $faker->name,
             'email' => $faker->unique()->safeEmail,
-            'password' => $password ?: $password = bcrypt('secret'),
-            'remember_token' => str_random(10),
+            'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret, można też tak 
+            'remember_token' => str_random(10),                                           //'password' => $password ?: $password = bcrypt('secret')
         ];
     });
 

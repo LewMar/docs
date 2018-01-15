@@ -57,7 +57,7 @@ Katalog `config`, jak sama nazwa wskazuje, zawiera wszystkie pliki konfiguracyjn
 <a name="the-database-directory"></a>
 #### The Database Directory - Katalog bazy danych
 
-Katalog `database` zawiera migrację bazy danych i nasiona. Jeśli chcesz, możesz również użyć tego katalogu do przechowywania bazy danych SQLite.
+Katalog `database` zawiera migrację bazy danych, modelowe fabryki i nasiona. Jeśli chcesz, możesz również użyć tego katalogu do przechowywania bazy danych SQLite.
 
 <a name="the-public-directory"></a>
 #### The Public Directory - Publiczny katalog
