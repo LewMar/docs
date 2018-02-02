@@ -105,7 +105,7 @@ Zmienna `{{ $slot }}` zawiera treść, którą chcemy wprowadzić do komponentu.
         <strong>Whoops!</strong> Something went wrong!
     @endcomponent
 
-Czasami pomocne jest zdefiniowanie wielu gniazd dla komponentu. Zmodyfikujmy nasz komponent alertu, aby umożliwić wstrzyknięcie "title". Nazwane gniazda mogą być wyświetlane po prostu "echo" zmiennej, która pasuje do ich nazwy:
+Czasami pomocne jest zdefiniowanie wielu gniazd dla komponentu. Zmodyfikujmy nasz komponent alertu, aby umożliwić wstrzyknięcie "title". Nazwane gniazda mogą być wyświetlane przez "echo" zmiennej odpowiadającej ich nazwie:
 
     <!-- /resources/views/alert.blade.php -->
 

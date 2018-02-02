@@ -24,7 +24,7 @@ Laravel zapewnia potężną abstrakcję systemu plików dzięki wspaniałemu pak
 <a name="configuration"></a>
 ## Configuration - Konfiguracja
 
-Plik konfiguracyjny systemu plików znajduje się w `config/filesystems.php`. W tym pliku możesz skonfigurować wszystkie swoje "dyski". Każdy dysk reprezentuje określony sterownik pamięci i miejsce przechowywania. Przykładowe konfiguracje dla każdego obsługiwanego sterownika są zawarte w pliku konfiguracyjnym. Po prostu zmodyfikuj konfigurację tak, aby odzwierciedlała preferencje i poświadczenia pamięci masowej.
+Plik konfiguracyjny systemu plików znajduje się w `config/filesystems.php`. W tym pliku możesz skonfigurować wszystkie swoje "dyski". Każdy dysk reprezentuje określony sterownik pamięci i miejsce przechowywania. Przykładowe konfiguracje dla każdego obsługiwanego sterownika są zawarte w pliku konfiguracyjnym. Zmodyfikuj konfigurację tak, aby odzwierciedlała preferencje i dane logowania do pamięci masowej.
 
 Oczywiście możesz skonfigurować dowolną liczbę dysków, a nawet kilka dysków z tym samym sterownikiem.
 
@@ -210,7 +210,7 @@ Metodę `copy` można użyć do skopiowania istniejącego pliku do nowej lokaliz
 <a name="file-uploads"></a>
 ### File Uploads - Przesyłanie plików
 
-W aplikacjach internetowych jednym z najczęściej używanych przypadków przechowywania plików jest przechowywanie przesłanych przez użytkownika plików, takich jak zdjęcia profilowe, zdjęcia i dokumenty. Laravel bardzo ułatwia przechowywanie przesłanych plików za pomocą metody `store` na przesłanej instancji pliku. Po prostu wywołaj metodę `store` ze ścieżką, w której chcesz zapisać przesłany plik:
+W aplikacjach internetowych jednym z najczęściej używanych przypadków przechowywania plików jest przechowywanie przesłanych przez użytkownika plików, takich jak zdjęcia profilowe, zdjęcia i dokumenty. Laravel bardzo ułatwia przechowywanie przesłanych plików za pomocą metody `store` na przesłanej instancji pliku. Wywołaj metodę `store` ze ścieżką, w której chcesz zapisać przesłany plik:
 
     <?php
 

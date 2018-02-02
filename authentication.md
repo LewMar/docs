@@ -67,7 +67,7 @@ Polecenie `make:auth` utworzy również katalog `resources/views/layouts` zawier
 <a name="included-authenticating"></a>
 ### Authenticating - Uwierzytelnianie
 
-Teraz, gdy masz skonfigurowane trasy i widoki dla dołączonych kontrolerów uwierzytelniania, jesteś gotowy do zarejestrowania i uwierzytelnienia nowych użytkowników dla twojej aplikacji! Możesz po prostu uzyskać dostęp do aplikacji w przeglądarce, ponieważ kontrolery uwierzytelniania zawierają już logikę (za pośrednictwem ich cech), aby uwierzytelnić istniejących użytkowników i przechowywać nowych użytkowników w bazie danych.
+Teraz, gdy masz skonfigurowane trasy i widoki dla dołączonych kontrolerów uwierzytelniania, jesteś gotowy do zarejestrowania i uwierzytelnienia nowych użytkowników dla twojej aplikacji! Możesz uzyskać dostęp do aplikacji w przeglądarce, ponieważ kontrolery uwierzytelniania zawierają już logikę (za pośrednictwem ich cech), aby uwierzytelnić istniejących użytkowników i przechowywać nowych użytkowników w bazie danych.
 
 #### Path Customization - Dostosowywanie ścieżki
 

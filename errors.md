@@ -78,7 +78,7 @@ Domyślnie Monolog tworzy instancję o nazwie pasującej do bieżącego środowi
 <a name="report-method"></a>
 ### The Report Method - Metoda raportu
 
-Wszystkie wyjątki są obsługiwane przez klasę `App\Exceptions\Handler`. Ta klasa zawiera dwie metody: `report` i `render`. Zbadamy każdą z tych metod w szczegółach. Metoda `report` służy do rejestrowania wyjątków lub wysyłania ich do zewnętrznej usługi, takiej jak [Bugsnag](https://bugsnag.com) lub [Sentry](https://github.com/getsentry/sentry-laravel). Domyślnie metoda `report` po prostu przekazuje wyjątek do klasy bazowej, w której rejestrowany jest wyjątek. Możesz jednak rejestrować wyjątki według własnego uznania.
+Wszystkie wyjątki są obsługiwane przez klasę `App\Exceptions\Handler`. Ta klasa zawiera dwie metody: `report` i `render`. Zbadamy każdą z tych metod w szczegółach. Metoda `report` służy do rejestrowania wyjątków lub wysyłania ich do zewnętrznej usługi, takiej jak [Bugsnag](https://bugsnag.com) lub [Sentry](https://github.com/getsentry/sentry-laravel). Domyślnie metoda `report` przekazuje wyjątek do klasy bazowej, w której rejestrowany jest wyjątek. Możesz jednak rejestrować wyjątki według własnego uznania.
 
 Na przykład, jeśli chcesz zgłosić różne typy wyjątków na różne sposoby, możesz użyć operatora porównania `instanceof` PHP:
 

@@ -417,7 +417,7 @@ To polecenie opublikuje komponenty poczty Markdown w katalogu `resources/views/v
 
 Po wyeksportowaniu komponentów katalog `resources/views/vendor/mail/html/themes` będzie zawierał plik `default.css`. Możesz dostosować CSS w tym pliku, a twoje style zostaną automatycznie umieszczone w reprezentacjach HTML Twoich wiadomości pocztowych Markdown.
 
-> {tip} Jeśli chcesz zbudować całkowicie nowy motyw komponentów Markdown, po prostu napisz nowy plik CSS w katalogu `html/themes` i zmień opcję `theme` w pliku konfiguracyjnym `mail`.
+> {tip} Jeśli chcesz zbudować całkowicie nowy motyw komponentów Markdown, napisz nowy plik CSS w katalogu `html/themes` i zmień opcję `theme` w pliku konfiguracyjnym `mail`.
 
 <a name="previewing-mailables-in-the-browser"></a>
 ## Previewing Mailables In The Browser - Wyświetlanie podglądu wiadomości w przeglądarce

@@ -13,6 +13,7 @@
     - [Namespaces - Przestrzenie nazw](#route-group-namespaces)
     - [Sub-Domain Routing - Ruting poddomeny](#route-group-sub-domain-routing)
     - [Route Prefixes - Prefiksy tras](#route-group-prefixes)
+    - [Route Name Prefixes - Prefiksy nazw tras](#route-group-name-prefixes)
 - [Route Model Binding - Wiązanie modelu trasy](#route-model-binding)
     - [Implicit Binding - Niejawne powiązania](#implicit-binding)
     - [Explicit Binding - Jawne powiązania](#explicit-binding)
@@ -22,8 +23,7 @@
 <a name="basic-routing"></a>
 ## Basic Routing - Podstawowy routing
 
-The most basic Laravel routes simply accept a URI and a `Closure`, providing a very simple and expressive method of defining routes:
-Najbardziej podstawowe trasy Laravel po prostu akceptują URI i `Closure`, zapewniając bardzo prostą i ekspresywną metodę definiowania tras:
+Najbardziej podstawowe trasy Laravel akceptują URI i `Closure`, zapewniając bardzo prostą i ekspresywną metodę definiowania tras:
 
     Route::get('foo', function () {
         return 'Hello World';
@@ -259,6 +259,17 @@ Metodę `prefix` można użyć do prefiksowania każdej trasy w grupie z danym U
     Route::prefix('admin')->group(function () {
         Route::get('users', function () {
             // Matches The "/admin/users" URL
+        });
+    });
+
+<a name="route-group-name-prefixes"></a>
+### Route Name Prefixes - Prefiksy nazw tras
+
+Metodę `name` można użyć do prefiksowania każdej nazwy trasy w grupie podanym łańcuchem. Na przykład możesz przedefiniować wszystkie nazwy zgrupowanych tras za pomocą `admin`. Podany ciąg jest poprzedzany nazwą trasy dokładnie tak, jak jest określona, więc na pewno będziemy dostarczać końcowy znak `.` w przedrostku:
+
+    Route::name('admin.')->group(function () {
+        Route::get('users', function () {
+            // Route assigned name "admin.users"...
         });
     });
 

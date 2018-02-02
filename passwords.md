@@ -42,7 +42,7 @@ Ponownie, Laravel wygeneruje wszystkie niezbędne widoki do zresetowania hasła 
 <a name="after-resetting-passwords"></a>
 ## After Resetting Passwords - Po zresetowaniu haseł
 
-Po zdefiniowaniu tras i widoków w celu zresetowania haseł użytkownika możesz po prostu uzyskać dostęp do trasy w przeglądarce w `/password/reset`. `ResetPasswordController` dołączony do struktury zawiera już logikę do wysyłania e-maili z linkami do resetowania hasła, a `ResetPasswordController` zawiera logikę do resetowania haseł użytkowników.
+Po zdefiniowaniu tras i widoków w celu zresetowania haseł użytkownika, możesz uzyskać dostęp do trasy w przeglądarce w `/password/reset`. `ForgotPasswordController` dołączony do struktury zawiera już logikę do wysyłania e-maili z linkami do resetowania hasła, a `ResetPasswordController` zawiera logikę do resetowania haseł użytkowników.
 
 Po zresetowaniu hasła użytkownik zostanie automatycznie zalogowany do aplikacji i przekierowany do `/home`. Możesz dostosować resetowanie hasła po skasowaniu, definiując właściwość `redirectTo` na` ResetPasswordController`:
 

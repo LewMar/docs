@@ -19,7 +19,7 @@
 
 Wydarzenia Laravel zapewniają prostą implementację obserwatora, umożliwiającą subskrybowanie i słuchanie różnych zdarzeń występujących w aplikacji. Klasy zdarzeń są zwykle przechowywane w katalogu `app/Events`, a ich detektory są przechowywane w `app/Listeners`. Nie martw się, jeśli nie widzisz tych katalogów w aplikacji, ponieważ zostaną one utworzone dla Ciebie podczas generowania zdarzeń i słuchaczy przy użyciu poleceń konsoli Artisan.
 
-Zdarzenia to świetny sposób na rozłączenie różnych aspektów aplikacji, ponieważ jedno wydarzenie może mieć wielu słuchaczy, którzy nie są od siebie zależni. Na przykład możesz wysłać do użytkownika powiadomienie o zaleganiu za każdym razem, gdy zamówienie zostanie wysłane. Zamiast łączenia kodu przetwarzania zamówienia z kodem powiadomień Slack możesz po prostu wywołać zdarzenie `OrderShipped`, które odbiorca może odebrać i przekształcić w powiadomienie Slack.
+Zdarzenia to świetny sposób na rozłączenie różnych aspektów aplikacji, ponieważ jedno wydarzenie może mieć wielu słuchaczy, którzy nie są od siebie zależni. Na przykład możesz wysłać do użytkownika powiadomienie o zaleganiu za każdym razem, gdy zamówienie zostanie wysłane. Zamiast łączenia kodu przetwarzania zamówienia z kodem powiadomień Slack, możesz wywołać zdarzenie `OrderShipped`, które odbiorca może otrzymać i przekształcić w powiadomienie Slack.
 
 <a name="registering-events-and-listeners"></a>
 ## Registering Events & Listeners - Rejestrowanie zdarzeń i słuchaczy
@@ -40,7 +40,7 @@ Zdarzenia to świetny sposób na rozłączenie różnych aspektów aplikacji, po
 <a name="generating-events-and-listeners"></a>
 ### Generating Events & Listeners - Generowanie zdarzeń i słuchaczy
 
-Oczywiście ręczne tworzenie plików dla każdego zdarzenia i słuchacza jest uciążliwe. Zamiast tego wystarczy dodać detektory i zdarzenia do `EventServiceProvider` i użyć komendy `event:generate`. To polecenie wygeneruje wszelkie zdarzenia lub detektory, które są wymienione w `EventServiceProvider`. Oczywiście wydarzenia i słuchacze, które już istnieją, pozostaną nietknięte:
+Oczywiście ręczne tworzenie plików dla każdego zdarzenia i słuchacza jest uciążliwe. Zamiast tego dodaj detektory i zdarzenia do `EventServiceProvider` i użyj polecenia `event:generate`. To polecenie wygeneruje wszelkie zdarzenia lub detektory, które są wymienione w `EventServiceProvider`. Oczywiście wydarzenia i słuchacze, które już istnieją, pozostaną nietknięte:
 
     php artisan event:generate
 
@@ -74,7 +74,7 @@ Możesz nawet zarejestrować słuchaczy, używając parametru `*` jako parametru
 <a name="defining-events"></a>
 ## Defining Events - Definiowanie zdarzeń
 
-Klasa zdarzenia to po prostu kontener danych, który przechowuje informacje związane ze zdarzeniem. Na przykład załóżmy, że nasze wygenerowane zdarzenie `OrderShipped` otrzymuje obiekt [Eloquent ORM](/docs/{{version}}/eloquent):
+Klasa zdarzenia jest kontenerem danych, który przechowuje informacje związane ze zdarzeniem. Na przykład załóżmy, że nasze wygenerowane zdarzenie `OrderShipped` otrzymuje obiekt [Eloquent ORM](/docs/{{version}}/eloquent):
 
     <?php
 
@@ -101,7 +101,7 @@ Klasa zdarzenia to po prostu kontener danych, który przechowuje informacje zwi�
         }
     }
 
-Jak widać, ta klasa zdarzeń nie zawiera żadnej logiki. Jest to po prostu kontener dla nabytej instancji `Order`. Cecha `SerializesModels` używana przez zdarzenie będzie z gracją serializować dowolne modele Eloquent, jeśli obiekt zdarzenia jest serializowany za pomocą funkcji PHP `serialize`.
+Jak widać, ta klasa zdarzeń nie zawiera żadnej logiki. Jest to kontener dla zakupionej instancji `Order`. Cecha `SerializesModels` używana przez zdarzenie będzie z gracją serializować dowolne modele Eloquent, jeśli obiekt zdarzenia jest serializowany za pomocą funkcji PHP  `serialize`.
 
 <a name="defining-listeners"></a>
 ## Defining Listeners - Definiowanie słuchaczy

@@ -104,7 +104,7 @@ Katalog `vendor` zawiera zależności użytkownika [Composer](https://getcompose
 
 Większość aplikacji znajduje się w katalogu `app`. Domyślnie katalog ten jest wyświetlany pod nazwą `App` i jest ładowany automatycznie przez Composer za pomocą [standardu automatycznego ładowania PSR-4](http://www.php-fig.org/psr/psr-4/).
 
-Katalog `app` zawiera wiele dodatkowych katalogów, takich jak `Console`, `Http` i `Providers`. Pomyśl o katalogach `Console` i `Http` jako o API w rdzeniu twojej aplikacji. Protokół HTTP i CLI są zarówno mechanizmami do interakcji z aplikacją, ale tak naprawdę nie zawierają logiki aplikacji. Innymi słowy, są to po prostu dwa sposoby wydawania poleceń do aplikacji. Katalog `Console` zawiera wszystkie twoje polecenia Artisan, podczas gdy katalog `Http` zawiera twoje kontrolery, middleware i żądania.
+Katalog `app` zawiera wiele dodatkowych katalogów, takich jak `Console`, `Http` i `Providers`. Pomyśl o katalogach `Console` i `Http` jako o API w rdzeniu twojej aplikacji. Protokół HTTP i CLI są zarówno mechanizmami do interakcji z aplikacją, ale tak naprawdę nie zawierają logiki aplikacji. Innymi słowy, są to dwa sposoby wydawania poleceń do aplikacji. Katalog `Console` zawiera wszystkie twoje polecenia Artisan, podczas gdy katalog `Http` zawiera twoje kontrolery, middleware i żądania.
 
 W katalogu `app` będzie generowanych wiele innych katalogów, ponieważ do generowania klas używane są polecenia `make` Artisan. Na przykład katalog `app/Jobs` nie będzie istnieć, dopóki nie wykonasz polecenia `make:job` Artisan, aby wygenerować klasę zadań.
 

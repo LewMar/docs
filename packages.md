@@ -19,7 +19,7 @@
 
 Pakiety są podstawowym sposobem dodawania funkcjonalności do Laravel. Pakiety mogą być wszystkim, od świetnego sposobu pracy z datami takimi jak [Carbon](https://github.com/briannesbitt/Carbon) lub całą strukturą testowania BDD, np. [Behat](https://github.com/Behat/Behat).
 
-Oczywiście istnieją różne rodzaje pakietów. Niektóre pakiety są niezależne, co oznacza, że działają z dowolnym środowiskiem PHP. Carbon i Behat są przykładami autonomicznych pakietów. Dowolny z tych pakietów może być używany z Laravel, po prostu żądając ich w pliku `composer.json`.
+Oczywiście istnieją różne rodzaje pakietów. Niektóre pakiety są niezależne, co oznacza, że działają z dowolnym środowiskiem PHP. Carbon i Behat są przykładami autonomicznych pakietów. Dowolny z tych pakietów może być używany z Laravel przez żądanie ich w pliku `composer.json`.
 
 Z drugiej strony, inne pakiety są specjalnie przeznaczone do użytku z Laravel. Pakiety te mogą zawierać trasy, kontrolery, widoki i konfigurację specjalnie zaprojektowaną w celu ulepszenia aplikacji Laravel. Ten przewodnik opisuje przede wszystkim rozwój tych pakietów, które są specyficzne dla Laravel.
 

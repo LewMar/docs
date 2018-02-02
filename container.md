@@ -6,6 +6,7 @@
     - [Binding Interfaces To Implementations - Powiązanie interfejsów z implementacjami](#binding-interfaces-to-implementations)
     - [Contextual Binding - Powiązanie kontekstowe](#contextual-binding)
     - [Tagging -  Tagowanie](#tagging)
+    - [Extending Bindings - Rozszerzanie powiązań](#extending-bindings)
 - [Resolving -  Rozwiązywanie](#resolving)
     - [The Make Method - Metoda Make](#the-make-method)
     - [Automatic Injection - Automatyczne wstrzykiwanie](#automatic-injection)
@@ -177,6 +178,15 @@ Po oznaczeniu usług możesz je łatwo rozwiązać za pomocą metody `tagged`:
         return new ReportAggregator($app->tagged('reports'));
     });
 
+<a name="extending-bindings"></a>
+### Extending Bindings - Rozszerzanie powiązań
+
+Metoda `extend` pozwala na modyfikację rozwiązanych usług. Na przykład, gdy usługa zostanie rozwiązana, możesz uruchomić dodatkowy kod do dekorowania lub konfiguracji usługi. Metoda `extend` akceptuje closure, które powinno zwrócić zmodyfikowaną usługę, jako jedyny argument:
+
+    $this->app->extend(Service::class, function($service) {
+        return new DecoratedService($service);
+    });
+
 <a name="resolving"></a>
 ## Resolving - Rozwiązywanie
 
@@ -197,9 +207,10 @@ Jeśli w swoim kodzie jesteś w miejscu, które nie ma dostępu do zmiennej `$ap
 
 <a name="automatic-injection"></a>
 #### Automatic Injection - Automatyczne wstrzykiwanie
-Alternatywnie, i co ważniejsze, możesz po prostu "wpisać-wskazówkę" zależności w konstruktorze klasy, która jest rozwiązana przez kontener, w tym [controllers (kontrolery)](/docs/{{version}}/controllers), [[event listeners (detektory zdarzeń)](/docs/{{version}}/events), [queue jobs (zadania kolejki)](/docs/{{version}}/queues),  [middleware (oprogramowanie pośrednie)](/docs/{{version}}/middleware) i inne. W praktyce w ten sposób większość obiektów powinna zostać rozwiązana przez kontener.
 
-Na przykład możesz wpisaćwskazówkę do repozytorium zdefiniowanego przez twoją aplikację w konstruktorze kontrolera. Repozytorium zostanie automatycznie rozpoznane i wstrzyknięte do klasy:
+Alternatywnie i co ważniejsze, możesz "wpisać wskazówkę" zależności w konstruktorze klasy, która jest rozwiązana przez kontener, w tym [kontrolery](/docs/{{version}}/controllers), [detektory zdarzeń](/docs/{{version}}/events), [zadania kolejki](/docs/{{version}}/queues), [oprogramowanie pośrednie](/docs/{{version}}/middleware) i inne. W praktyce w ten sposób większość obiektów powinna zostać rozwiązana przez kontener.
+
+Na przykład możesz wpisać wskazówkę do repozytorium zdefiniowanego przez twoją aplikację w konstruktorze kontrolera. Repozytorium zostanie automatycznie rozpoznane i wstrzyknięte do klasy:
 
     <?php
 

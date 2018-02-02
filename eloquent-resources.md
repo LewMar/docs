@@ -27,7 +27,7 @@ Aby wygenerować klasę zasobów, możesz użyć polecenia `make:resource` Artis
 
 Oprócz generowania zasobów, które przekształcają poszczególne modele, można generować zasoby odpowiedzialne za przekształcanie kolekcji modeli. Dzięki temu Twoja odpowiedź może zawierać linki i inne meta informacje, które są istotne dla całej kolekcji danego zasobu.
 
-Aby utworzyć kolekcję zasobów, podczas tworzenia zasobu powinieneś użyć flagi `--collection`. Lub po prostu wpisanie słowa `Collection` w nazwie zasobu wskaże Laravelowi, że powinien on utworzyć zasób kolekcji. Zasoby kolekcji rozszerzają klasę `Illuminate\Http\Resources\Json\ResourceCollection`:
+Aby utworzyć kolekcję zasobów, podczas tworzenia zasobu powinieneś użyć flagi `--collection`. Lub, w tym słowo `Collection` w nazwie zasobu, wskaże Laravelowi, że powinien on utworzyć zasób kolekcji. Zasoby kolekcji rozszerzają klasę `Illuminate\Http\Resources\Json\ResourceCollection`:
 
     php artisan make:resource Users --collection
 
@@ -170,7 +170,7 @@ Po zdefiniowaniu zasobu może on zostać zwrócony bezpośrednio z trasy lub kon
 
 #### Relationships - Relacje
 
-Jeśli chcesz uwzględnić powiązane zasoby w swojej odpowiedzi, możesz po prostu dodać je do tablicy zwróconej przez metodę `toArray`. W tym przykładzie użyjemy metody `collection` zasobów `Post`, aby dodać posty blogów użytkownika do odpowiedzi na zasoby:
+Jeśli chcesz uwzględnić powiązane zasoby w swojej odpowiedzi, możesz dodać je do tablicy zwróconej przez metodę `toArray`. W tym przykładzie użyjemy metody `collection` zasobów `Post`, aby dodać posty blogów użytkownika do odpowiedzi na zasoby:
 
     /**
      * Transform the resource into an array.
@@ -511,7 +511,7 @@ Oprócz warunkowego uwzględnienia informacji o relacjach w odpowiedziach na zas
 <a name="adding-meta-data"></a>
 ### Adding Meta Data - Dodawanie danych meta
 
-Niektóre standardy interfejsu JSON API wymagają dodania metadanych do odpowiedzi na zasoby i kolekcje zasobów. To często obejmuje rzeczy takie jak `links` do zasobu lub powiązanych zasobów lub metadane dotyczące samego zasobu. Jeśli chcesz zwrócić dodatkowe metadane dotyczące zasobu, po prostu umieść go w swojej metodzie `toArray`. Na przykład możesz dołączyć informacje "link" podczas transformowania kolekcji zasobów:
+Niektóre standardy interfejsu JSON API wymagają dodania metadanych do odpowiedzi na zasoby i kolekcje zasobów. To często obejmuje rzeczy takie jak `links` do zasobu lub powiązanych zasobów lub metadane dotyczące samego zasobu. Jeśli chcesz zwrócić dodatkowe metadane dotyczące zasobu, umieść go w swojej metodzie `toArray`. Na przykład możesz dołączyć informacje `link` podczas transformowania kolekcji zasobów:
 
     /**
      * Transform the resource into an array.
@@ -529,7 +529,7 @@ Niektóre standardy interfejsu JSON API wymagają dodania metadanych do odpowied
         ];
     }
 
-Zwracając dodatkowe metadane z zasobów, nigdy nie musisz się martwić o przypadkowe przesłonięcie kluczy `links` lub `meta`, które są automatycznie dodawane przez Laravel podczas zwracania odpowiedzi w postaci stronicowanej. Wszelkie dodatkowe `links`, które zdefiniujesz, zostaną po prostu scalone z linkami dostarczonymi przez paginator.
+Zwracając dodatkowe metadane z zasobów, nigdy nie musisz się martwić o przypadkowe przesłonięcie klawiszy `links` lub `meta`, które są automatycznie dodawane przez Laravel podczas zwracania odpowiedzi w postaci stronicowanej. Wszelkie dodatkowe `links`, które zdefiniujesz, zostaną scalone z linkami dostarczonymi przez paginator.
 
 #### Top Level Meta Data - Najwyższy poziom danych meta
 

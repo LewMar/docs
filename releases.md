@@ -221,7 +221,7 @@ Obiekt reguły ma tylko dwie metody: `passses` i `message`. Metoda `pass` przyjm
         }
     }
 
-Po zdefiniowaniu reguły możesz jej użyć, po prostu przekazując instancję obiektu reguły wraz z innymi regułami sprawdzania poprawności:
+Po zdefiniowaniu reguły możesz jej użyć, przekazując instancję obiektu reguły wraz z innymi regułami sprawdzania poprawności:
 
     use App\Rules\ValidName;
 

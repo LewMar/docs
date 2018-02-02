@@ -20,6 +20,7 @@
     - [Ports - Porty](#ports)
     - [Sharing Your Environment - Dzielenie się środowiskiem](#sharing-your-environment)
     - [Multiple PHP Versions - Wiele wersji PHP](#multiple-php-versions)
+    - [Web Servers - Serwery WWW](#web-servers)
 - [Network Interfaces - Interfejsy sieciowe](#network-interfaces)
 - [Updating Homestead - Aktualizacja Homestead](#updating-homestead)
 - [Provider Specific Settings - Ustawienia określone przez dostawcę](#provider-specific-settings)
@@ -47,8 +48,9 @@ Homestead działa na dowolnym systemie Windows, Mac lub Linux i zawiera serwer W
 - PHP 7.0
 - PHP 5.6
 - Nginx
+- Apache (Optional)
 - MySQL
-- MariaDB
+- MariaDB (Optional)
 - Sqlite3
 - PostgreSQL
 - Composer
@@ -57,6 +59,7 @@ Homestead działa na dowolnym systemie Windows, Mac lub Linux i zawiera serwer W
 - Memcached
 - Beanstalkd
 - Mailhog
+- Elasticsearch (Optional)
 - ngrok
 </div>
 
@@ -84,7 +87,7 @@ Jeśli to polecenie się nie powiedzie, upewnij się, że instalacja Vagrant jes
 
 #### Installing Homestead - Instalowanie Homestead
 
-Możesz zainstalować Homestead po prostu klonując repozytorium. Rozważ sklonowanie repozytorium do folderu `Homestead` w twoim katalogu domowym, ponieważ pole Homestead będzie służyć jako host dla wszystkich twoich projektów Laravel:
+Możesz zainstalować Homestead, klonując repozytorium. Rozważ sklonowanie repozytorium do folderu `Homestead` w katalogu domowym "home", ponieważ pole Homestead będzie hostem dla wszystkich twoich projektów Laravel:
 
     git clone https://github.com/laravel/homestead.git ~/Homestead
 
@@ -179,7 +182,7 @@ Aby zniszczyć maszynę, możesz użyć polecenia `vagrant destroy --force`.
 <a name="per-project-installation"></a>
 ### Per Project Installation - Instalacja do poszczegulnego Projektu (Spersonalizowane)
 
-Zamiast instalować Homestead na całym świecie i udostępniać to samo pole Homestead we wszystkich swoich projektach, możesz zamiast tego skonfigurować instancję Homestead dla każdego zarządzanego projektu. Instalacja Homestead na projekt może być korzystna, jeśli chcesz przesłać `Vagrantfile` z projektem, umożliwiając innym osobom pracującym nad projektem po prostu `vagrant up`.
+Zamiast instalować Homestead na całym świecie i udostępniać to samo pole Homestead we wszystkich swoich projektach, możesz zamiast tego skonfigurować instancję Homestead dla każdego zarządzanego projektu. Instalacja Homestead na projekt może być korzystna, jeśli chcesz wysłać `Vagrantfile` do projektu, umożliwiając innym osobom pracującym nad projektem `vagrant up`.
 
 Aby zainstalować Homestead bezpośrednio w projekcie, wymagane jest użycie Composer:
 
@@ -286,7 +289,7 @@ Aby połączyć się z bazą danych MySQL lub PostgreSQL z poziomu klienta bazy 
 <a name="adding-additional-sites"></a>
 ### Adding Additional Sites - Dodawanie dodatkowych stron
 
-Gdy Twoje środowisko Homestead zostanie skonfigurowane i uruchomione, możesz chcieć dodać dodatkowe witryny Nginx do swoich aplikacji Laravel. Możesz uruchomić dowolną liczbę instalacji Laravel w jednym środowisku Homestead. Aby dodać dodatkową witrynę, po prostu dodaj witrynę do pliku `Homestead.yaml`:
+Gdy Twoje środowisko Homestead zostanie skonfigurowane i uruchomione, możesz chcieć dodać dodatkowe witryny Nginx do swoich aplikacji Laravel. Możesz uruchomić dowolną liczbę instalacji Laravel w jednym środowisku Homestead. Aby dodać dodatkową witrynę, dodaj witrynę do pliku `Homestead.yaml`:
 
     sites:
         - map: homestead.test
@@ -422,6 +425,12 @@ Ponadto możesz używać dowolnej obsługiwanej wersji PHP za pośrednictwem int
     php7.1 artisan list
     php7.2 artisan list
 
+<a name="web-servers"></a>
+### Web Servers
+
+Homestead domyślnie korzysta z serwera WWW Nginx. Jednak może zainstalować Apache, jeśli `apache` jest określony jako typ witryny. Chociaż oba serwery internetowe mogą być instalowane w tym samym czasie, nie mogą jednocześnie *działać*. Polecenie powłoki `flip` jest dostępne, aby ułatwić proces przełączania między serwerami WWW. Polecenie `flip` automatycznie określa, który serwer WWW działa, wyłącza go, a następnie uruchamia drugi serwer. Aby użyć tego polecenia, SSH do komputera Homestead i uruchom polecenie w swoim terminalu:
+    flip
+
 <a name="network-interfaces"></a>
 ## Network Interfaces - Interfejsy sieciowe
 
@@ -451,7 +460,7 @@ Możesz zaktualizować Homestead w dwóch prostych krokach. Po pierwsze, należy
 
     vagrant box update
 
-Następnie musisz zaktualizować kod źródłowy Homestead. Jeśli sklonowałeś repozytorium, możesz po prostu `git pull origin master` w miejscu, w którym pierwotnie sklonowałeś repozytorium.
+Następnie musisz zaktualizować kod źródłowy Homestead. Jeśli sklonowałeś repozytorium, możesz wywołać polecenie `git pull origin master` w miejscu, w którym pierwotnie sklonowałeś repozytorium.
 
 Jeśli zainstalowałeś Homestead poprzez plik `composer.json` twojego projektu, powinieneś upewnić się, że twój plik `composer.json` zawiera `"laravel/homestead": "^7"` i zaktualizować twoje zależności:
 

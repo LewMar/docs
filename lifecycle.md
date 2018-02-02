@@ -16,7 +16,7 @@ Celem tego dokumentu jest zapewnienie dobrego, wysokiego poziomu przeglądu dzia
 
 ### First Things - Początkowe działania
 
-Punktem wejścia dla wszystkich żądań do aplikacji Laravel jest plik `public/index.php`. Wszystkie żądania są kierowane do tego pliku przez plik konfiguracji serwera WWW (Apache / Nginx). Plik `index.php` nie zawiera dużo kodu. Raczej jest to po prostu punkt startowy do ładowania reszty frameworka.
+Punktem wyjścia dla wszystkich żądań do aplikacji Laravel jest plik `public/index.php`. Wszystkie żądania są kierowane do tego pliku przez plik konfiguracji serwera WWW (Apache / Nginx). Plik `index.php` nie zawiera dużo kodu. Jest to raczej punkt wyjścia do ładowania pozostałej części struktury.
 
 Plik `index.php` ładuje definicję automatycznego generatora programu Composer, a następnie pobiera instancję aplikacji Laravel ze skryptu `bootstrap/app.php`. Pierwszą czynnością podjętą przez samego Laravel jest utworzenie instancji kontenera aplikacji / [service container - kontener usług](/docs/{{version}}/container).
 

@@ -180,6 +180,10 @@ Domyślnie zaplanowane zadania będą uruchamiane, nawet jeśli poprzednia insta
 
 W tym przykładzie `emails:send` [polecenie Artisana](/docs/{{version}}/artisan) będą uruchamiane co minutę, jeśli jeszcze nie jest uruchomiona. Metoda `withoutOverlapping` jest szczególnie użyteczna, jeśli masz zadania drastycznie różniące się czasem wykonania, co uniemożliwia dokładne przewidzenie czasu wykonania danego zadania.
 
+W razie potrzeby możesz określić, ile minut musi upłynąć, zanim wygaśnie blokada "bez nakładania się". Domyślnie blokada wygaśnie po 24 godzinach:
+
+    $schedule->command('emails:send')->withoutOverlapping(10);
+
 <a name="maintenance-mode"></a>
 ### Maintenance Mode - Tryb konserwacji
 

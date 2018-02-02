@@ -292,7 +292,7 @@ Oprócz dostosowania nazwy tabeli łączenia można również dostosować nazwy 
 
 #### Defining The Inverse Of The Relationship - Definiowanie odwrotności relacji
 
-Aby zdefiniować odwrotność relacji wiele do wielu, wystarczy po prostu umieścić inne połączenie na `belongsToMany` w swoim pokrewnym modelu. Aby kontynuować przykład naszych ról użytkowników, zdefiniujmy metodę `users` w modelu `Role`:
+Aby zdefiniować odwrotność relacji wiele do wielu, należy umieścić inne połączenie z `belongsToMany` na powiązanym modelu. Aby kontynuować przykład naszych ról użytkowników, zdefiniujmy metodę `users` w modelu` Role`:
 
     <?php
 
@@ -523,7 +523,7 @@ Następnie przejrzyjmy definicje modeli potrzebne do zbudowania tej relacji:
 
 #### Retrieving Polymorphic Relations - Odzyskiwanie relacji polimorficznych
 
-Po zdefiniowaniu tabeli i modeli bazy danych można uzyskać dostęp do relacji za pośrednictwem modeli. Na przykład, aby uzyskać dostęp do wszystkich komentarzy do wpisu, możemy po prostu użyć właściwości dynamicznej `comments`:
+Po zdefiniowaniu tabeli i modeli bazy danych można uzyskać dostęp do relacji za pośrednictwem modeli. Na przykład, aby uzyskać dostęp do wszystkich komentarzy do wpisu, możemy skorzystać z właściwości dynamicznej `comments`:
 
     $post = App\Post::find(1);
 
@@ -628,7 +628,7 @@ Następnie w modelu `Tag` należy zdefiniować metodę dla każdego z powiązany
 
 #### Retrieving The Relationship - Odzyskiwanie relacji
 
-Po zdefiniowaniu tabeli i modeli bazy danych można uzyskać dostęp do relacji za pośrednictwem modeli. Na przykład, aby uzyskać dostęp do wszystkich tagów dla postu, możesz po prostu użyć właściwości dynamicznej `tags`:
+Po zdefiniowaniu tabeli i modeli bazy danych można uzyskać dostęp do relacji za pośrednictwem modeli. Na przykład, aby uzyskać dostęp do wszystkich tagów dla postu, możesz użyć właściwości dynamicznej `tags`:
 
     $post = App\Post::find(1);
 
@@ -679,7 +679,7 @@ Możesz użyć dowolnej z metod [query builder](/docs/{{version}}/queries) w rel
 <a name="relationship-methods-vs-dynamic-properties"></a>
 ### Relationship Methods Vs. Dynamic Properties - Metody relacji kontra Właściwości dynamiczne
 
-Jeśli nie trzeba dodawać dodatkowych ograniczeń do kwerendy Eloquent relacji, można po prostu uzyskać dostęp do relacji tak, jakby była właściwość. Na przykład, kontynuując korzystanie z naszych przykładowych modeli `User` and `Post`, możemy uzyskać dostęp do wszystkich postów użytkownika, takich jak:
+Jeśli nie trzeba dodawać dodatkowych ograniczeń do kwerendy Eloquent relacji, można uzyskać dostęp do relacji tak, jakby była właściwość. Na przykład, kontynuując korzystanie z naszych przykładowych modeli `User` i `Post`, możemy uzyskać dostęp do wszystkich postów użytkownika, takich jak:
 
     $user = App\User::find(1);
 
@@ -700,17 +700,17 @@ Uzyskując dostęp do rekordów modelu, można ograniczyć wyniki w oparciu o is
 Możesz także określić operatora i policzyć, aby jeszcze bardziej dostosować zapytanie:
 
     // Retrieve all posts that have three or more comments...
-    $posts = Post::has('comments', '>=', 3)->get();
+    $posts = App\Post::has('comments', '>=', 3)->get();
 
 Zagnieżdżone instrukcje `has` mogą być również tworzone przy użyciu notacji "kropki". Możesz na przykład pobrać wszystkie posty z co najmniej jednym komentarzem i głosować:
 
     // Retrieve all posts that have at least one comment with votes...
-    $posts = Post::has('comments.votes')->get();
+    $posts = App\Post::has('comments.votes')->get();
 
 Jeśli potrzebujesz jeszcze więcej mocy, możesz użyć metod `whereHas` i` orWhereHas`, aby umieścić warunki "where" na swoich zapytaniach `has`. Te metody umożliwiają dodawanie dostosowanych wiązań do więzów relacji, takich jak sprawdzanie treści komentarza:
 
     // Retrieve all posts with at least one comment containing words like foo%
-    $posts = Post::whereHas('comments', function ($query) {
+    $posts = App\Post::whereHas('comments', function ($query) {
         $query->where('content', 'like', 'foo%');
     })->get();
 
@@ -723,7 +723,7 @@ Uzyskując dostęp do rekordów modelu, możesz ograniczyć wyniki w oparciu o b
 
 Jeśli potrzebujesz jeszcze więcej mocy, możesz użyć metod `whereDoesntHave` i `orWhereDoesntHave`, aby umieścić warunki "where" na swoich zapytaniach `doesnthave`. Te metody umożliwiają dodawanie dostosowanych ograniczeń do więzów relacji, takich jak sprawdzanie treści komentarza:
 
-    $posts = Post::whereDoesntHave('comments', function ($query) {
+    $posts = App\Post::whereDoesntHave('comments', function ($query) {
         $query->where('content', 'like', 'foo%');
     })->get();
 
@@ -740,7 +740,7 @@ Jeśli chcesz policzyć liczbę wyników z relacji bez faktycznego ich ładowani
 
 Możesz dodać "liczniki" dla wielu relacji, a także dodać ograniczenia do zapytań:
 
-    $posts = Post::withCount(['votes', 'comments' => function ($query) {
+    $posts = App\Post::withCount(['votes', 'comments' => function ($query) {
         $query->where('content', 'like', 'foo%');
     }])->get();
 
@@ -749,7 +749,7 @@ Możesz dodać "liczniki" dla wielu relacji, a także dodać ograniczenia do zap
 
 Możesz także dać alias wyniku liczenia relacji, zezwalając na wiele zliczeń na tej samej relacji:
 
-    $posts = Post::withCount([
+    $posts = App\Post::withCount([
         'comments',
         'comments as pending_comments_count' => function ($query) {
             $query->where('approved', false);

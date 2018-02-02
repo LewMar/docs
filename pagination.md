@@ -121,7 +121,7 @@ Jeśli chcesz dodać "fragment skrótu" do adresów URL paginatora, możesz uży
 <a name="converting-results-to-json"></a>
 ### Converting Results To JSON - Konwertowanie wyników na JSON
 
-Klasy wyników Laravel paginator implementują umowę `Illuminate\Contracts\Support\Jsonable` i eksponują metodę `toJson`, więc bardzo łatwo jest przekonwertować wyniki paginacji na JSON. Możesz również przekonwertować instancję paginatora na JSON, zwracając ją z trasy lub kontrolera:
+Klasy wyników Laravel paginator implementują umowę `Illuminate\Contracts\Support\Jsonable` i eksponują metodę `toJson`, więc bardzo łatwo jest przekonwertować wyniki paginacji na JSON. Możesz również przekonwertować instancję paginatora na JSON, zwracając ją z trasy lub akcji kontrolera:
 
     Route::get('users', function () {
         return App\User::paginate();
@@ -165,7 +165,7 @@ Najłatwiejszym sposobem dostosowania widoków paginacji jest wyeksportowanie ic
 
     php artisan vendor:publish --tag=laravel-pagination
 
-To polecenie umieści widoki w katalogu `resources/views/vendor/pagination`. Plik `default.blade.php` w tym katalogu odpowiada domyślnemu widokowi paginacji. Po prostu edytuj ten plik, aby zmodyfikować HTML strony.
+To polecenie umieści widoki w katalogu `resources/views/vendor/pagination`. Plik `default.blade.php` w tym katalogu odpowiada domyślnemu widokowi paginacji. Edytuj ten plik, aby zmodyfikować HTML strony.
 
 <a name="paginator-instance-methods"></a>
 ## Paginator Instance Methods - Metody instancji Paginatora

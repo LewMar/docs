@@ -191,7 +191,7 @@ Możesz także użyć metody `searchable` w zapytaniu Eloquent, aby zaktualizowa
 <a name="removing-records"></a>
 ### Removing Records - Usuwanie rekordów
 
-Aby usunąć rekord z indeksu, po prostu `delete` model z bazy danych. Ta forma usuwania jest nawet zgodna z modelami [miękkiego usunięcia](/docs/{{version}}/eloquent#soft-deleting):
+Aby usunąć rekord z indeksu, `delete` model z bazy danych. Ta forma usuwania jest nawet zgodna z modelami [miękkiego usunięcia](/docs/{{version}}/eloquent#soft-deleting):
 
     $order = App\Order::find(1);
 

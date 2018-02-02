@@ -79,7 +79,7 @@ Domyślnie klastry będą wykonywać odseparowanie po stronie klienta między w�
 <a name="predis"></a>
 ### Predis
 
-Oprócz domyślnych opcji konfiguracyjnych `host`, `port`, `database` i `password`, Predis obsługuje dodatkowe [parametry połączenia](https://github.com/nrk/predis/wiki/Connection-Parameters), które można zdefiniować dla każdego z serwerów Redis. Aby wykorzystać te dodatkowe opcje konfiguracji, po prostu dodaj je do konfiguracji serwera Redis w pliku konfiguracyjnym `config/database.php`:
+Oprócz domyślnych opcji konfiguracyjnych `host`, `port`, `database` i `password`, Predis obsługuje dodatkowe [parametry połączenia](https://github.com/nrk/predis/wiki/Connection-Parameters ), które można zdefiniować dla każdego z serwerów Redis. Aby wykorzystać te dodatkowe opcje konfiguracji, dodaj je do konfiguracji serwera Redis w pliku konfiguracyjnym `config/database.php`:
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
@@ -141,7 +141,7 @@ Możesz wchodzić w interakcje z Redis, wywołując różne metody na `Redis` [e
         }
     }
 
-Oczywiście, jak wspomniano powyżej, możesz wywołać dowolne z poleceń Redis na fasadzie `Redis`. Laravel używa magicznych metod do przekazywania poleceń do serwera Redis, więc po prostu przekazuj argumenty, których oczekuje polecenie Redis:
+Oczywiście, jak wspomniano powyżej, możesz wywołać dowolne z poleceń Redis na fasadzie `Redis`. Laravel używa magicznych metod do przekazywania poleceń do serwera Redis, więc przekazuj argumenty, których oczekuje polecenie Redis:
 
     Redis::set('name', 'Taylor');
 

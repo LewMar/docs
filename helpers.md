@@ -705,7 +705,7 @@ Funkcja `__` tłumaczy dany łańcuch translacji lub klucz tłumaczenia za pomoc
 
     echo __('messages.welcome');
 
-Jeśli podany łańcuch lub klucz translacji nie istnieje, funkcja `__` po prostu zwróci podaną wartość. Tak więc, używając powyższego przykładu, funkcja `__` zwróci komunikat `messages.welcome`, jeśli klucz ten nie istnieje.
+Jeśli podany łańcuch lub klucz translacji nie istnieje, funkcja `__` zwróci podaną wartość. Tak więc, używając powyższego przykładu, funkcja `__` zwróci komunikat `messages.welcome`, jeśli klucz ten nie istnieje.
 
 <a name="method-camel-case"></a>
 #### `camel_case()` {#collection-method}
@@ -975,7 +975,7 @@ Funkcja `trans` tłumaczy dany klucz tłumaczenia za pomocą twoich [plików lok
 
     echo trans('messages.welcome');
 
-Jeśli podany klucz translacji nie istnieje, funkcja `trans` po prostu zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans` zwróci komunikat `messages.welcome`, jeśli klucz translacyjny nie istnieje.
+Jeśli podany klucz translacji nie istnieje, funkcja `trans` zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans` zwróci komunikat `messages.welcome`, jeśli klucz translacyjny nie istnieje.
 
 <a name="method-trans-choice"></a>
 #### `trans_choice()` - tłumaczy na fleksyjn y{#collection-method}
@@ -984,7 +984,7 @@ Funkcja `trans_choice` tłumaczy dany klucz tłumaczenia na fleksyjny:
 
     echo trans_choice('messages.notifications', $unreadCount);
 
-Jeśli podany klucz translacji nie istnieje, funkcja `trans_choice` po prostu zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans_choice` zwróci komunikat` messages.notifications`, jeśli klucz translacyjny nie istnieje.
+Jeśli podany klucz translacji nie istnieje, funkcja `trans_choice` zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans_choice` zwróci komunikat `messages.notifications`, jeśli klucz translacyjny nie istnieje.
 
 <a name="urls"></a>
 ## URLs - Adresy Url
@@ -1366,7 +1366,7 @@ Funkcja `old` [pobiera](/docs/{{version}}/requests#retrieving-input) wartość [
 <a name="method-optional"></a>
 #### `optional()` - opcjonalnie {#collection-method}
 
-Funkcja `optional` akceptuje dowolny argument i umożliwia dostęp do właściwości lub metod wywoływania tego obiektu. Jeśli podany obiekt ma wartość `null`, właściwości i metody po prostu zwrócą `null` zamiast powodować błąd:
+Funkcja `optional` akceptuje dowolny argument i umożliwia dostęp do właściwości lub metod wywoływania tego obiektu. Jeśli podany obiekt ma wartość `null`, właściwości i metody zwrócą `null` zamiast powodować błąd:
 
     return optional($user->address)->street;
 
@@ -1405,7 +1405,7 @@ Funkcja `request` zwraca bieżącą instancję [żądania](/docs/{{version}}/req
 
     $request = request();
 
-    $value = request('key', $default = null);
+    $value = request('key', $default);
 
 <a name="method-rescue"></a>
 #### `rescue()` - przechwytuje wyjatki {#collection-method}
@@ -1579,7 +1579,7 @@ Funkcja `view` pobiera instancję [widok](/docs/{{version}}/views):
 <a name="method-with"></a>
 #### `with()` - z {#collection-method}
 
-Funkcja `with` zwraca podaną wartość. Jeśli `Closure` zostanie przekazany jako drugi argument funkcji,`Closure` zostanie wykonane, jego wynik zostanie zwrócony:
+Funkcja `with` zwraca podaną wartość. Jeśli `Closure` zostanie przekazany jako drugi argument funkcji,`Closure` zostanie wykonane i jego wynik zostanie zwrócony:
 
     $callback = function ($value) {
         return (is_numeric($value)) ? $value * 2 : 0;

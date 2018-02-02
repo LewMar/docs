@@ -21,7 +21,7 @@ Funkcje lokalizacji Laravel zapewniają wygodny sposób pobierania ciągów znak
             /es
                 messages.php
 
-Wszystkie pliki językowe po prostu zwracają tablicę ciągów z kluczami. Na przykład:
+Wszystkie pliki językowe zwracają tablicę łańcuchów z kluczami. Na przykład:
 
     <?php
 
@@ -68,7 +68,7 @@ Zazwyczaj ciągi tłumaczenia są przechowywane w plikach w katalogu `resources/
             /es
                 messages.php
 
-Wszystkie pliki językowe po prostu zwracają tablicę ciągów z kluczami. Na przykład:
+Wszystkie pliki językowe zwracają tablicę ciągów z kluczami. Na przykład:
 
     <?php
 
@@ -104,7 +104,7 @@ Oczywiście, jeśli używasz [silnika szablonów Blade](/docs/{{version}}/blade)
 
     @lang('messages.welcome')
 
-Jeśli podany łańcuch translacji nie istnieje, funkcja `__` po prostu zwróci klucz łańcucha tłumaczenia. Tak więc, używając powyższego przykładu, funkcja `__` zwróci komunikat `messages.welcome`, jeśli ciąg tłumaczenia nie istnieje.
+Jeśli podany łańcuch translacji nie istnieje, funkcja `__` zwróci klucz łańcucha tłumaczenia. Tak więc, używając powyższego przykładu, funkcja `__` zwróci komunikat `messages.welcome`, jeśli ciąg tłumaczenia nie istnieje.
 
 <a name="replacing-parameters-in-translation-strings"></a>
 ### Replacing Parameters In Translation Strings - Zastępowanie parametrów w łańcuchach translacji
@@ -136,6 +136,12 @@ Możesz nawet utworzyć bardziej złożone reguły plurowania, które określaj�
 Po zdefiniowaniu ciągu translacji, który ma opcje liczby mnogiej, możesz użyć funkcji `trans_choice` do pobrania linii dla danego "licznika". W tym przykładzie, ponieważ liczba jest większa niż jeden, zwracana jest liczba mnoga ciągu tłumaczenia:
 
     echo trans_choice('messages.apples', 10);
+
+You may also define place-holder attributes in pluralization strings. These place-holders may be replaced by passing an array as the third argument to the `trans_choice` function:
+
+    'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
+
+    echo trans_choice('time.minutes_ago', 5, ['value' => 5]);
 
 <a name="overriding-package-language-files"></a>
 ## Overriding Package Language Files - Nadpisywanie plików językowych pakietów

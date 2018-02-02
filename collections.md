@@ -758,6 +758,47 @@ Oprócz przekazywania `key` ciągu, możesz również przekazać wywołanie zwro
         ]
     */
 
+Multiple grouping criteria may be passed as an array. Each array element will applied for the corresponding level within a multi-dimensional array:
+
+    $data = new Collection([
+        10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+        20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+        30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
+        40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
+    ]);
+
+    $result = $data->groupBy([
+        'skill',
+        function ($item) {
+            return $item['roles'];
+        },
+    ], $preserveKeys = true);
+
+    /*
+    [
+        1 => [
+            'Role_1' => [
+                10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+                20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+            ],
+            'Role_2' => [
+                20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+            ],
+            'Role_3' => [
+                10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+            ],
+        ],
+        2 => [
+            'Role_1' => [
+                30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
+            ],
+            'Role_2' => [
+                40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
+            ],
+        ],
+    ];
+    */
+
 <a name="method-has"></a>
 #### `has()` - czy jest? {#collection-method}
 
@@ -783,7 +824,7 @@ Metoda `implode` łączy elementy w kolekcji. Jego argumenty zależą od rodzaju
 
     // Desk, Chair
 
-Jeśli kolekcja zawiera proste ciągi lub wartości liczbowe, po prostu podaj "klej" jako jedyny argument metody:
+Jeśli kolekcja zawiera proste ciągi lub wartości liczbowe, podaj "klej" jako jedyny argument metody:
 
     collect([1, 2, 3, 4, 5])->implode('-');
 
@@ -2006,7 +2047,7 @@ Metoda `zip` łączy wartości danej tablicy z wartościami kolekcji oryginalnej
 <a name="higher-order-messages"></a>
 ## Higher Order Messages - Komunikaty wyższego rzędu
 
-Kolekcje zapewniają również obsługę "komunikatów wyższego rzędu", które stanowią skróty do wykonywania wspólnych działań w kolekcjach. Metody gromadzenia wiadomości o wyższym poziomie to: `average`, `avg`, `contains`, `each`, `every`, `filter`, `first`, `flatMap`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc`, i `sum`.
+Kolekcje zapewniają również obsługę "komunikatów wyższego rzędu", które stanowią skróty do wykonywania wspólnych działań w kolekcjach. Metody gromadzenia wiadomości o wyższym poziomie to: `average`, `avg`, `contains`, `each`, `every`, `filter`, `first`, `flatMap`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc`, `sum` i `unique`.
 
 Każda wiadomość wyższego rzędu może być dostępna jako właściwość dynamiczna w instancji kolekcji. Na przykład, użyjmy `each` wyższego rzędu, aby wywołać metodę na każdym obiekcie w kolekcji:
 

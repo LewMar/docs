@@ -79,7 +79,7 @@ Zwykle należy uruchomić polecenie `php artisan config: cache` jako część pr
 
 Gdy aplikacja jest w trybie konserwacji, niestandardowy widok będzie wyświetlany dla wszystkich żądań do aplikacji. Ułatwia to "wyłączenie" aplikacji podczas jej aktualizacji lub podczas wykonywania konserwacji. Sprawdzanie trybu konserwacji znajduje się w domyślnym stosie oprogramowania pośredniego dla aplikacji. Jeśli aplikacja jest w trybie konserwacji, zostanie zgłoszony wyjątek `MaintenanceModeException` z kodem statusu 503.
 
-Aby włączyć tryb konserwacji, po prostu wykonaj polecenie `down` Artisan:
+Aby włączyć tryb konserwacji, wykonaj polecenie `down` Artisan:
 
     php artisan down
 

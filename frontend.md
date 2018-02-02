@@ -28,7 +28,7 @@ Jeśli chcesz usunąć rusztowanie frontendowe z aplikacji, możesz użyć polec
 <a name="writing-css"></a>
 ## Writing CSS  - Pisanie CSS
 
-Plik `pakiet.json` Laravel-a zawiera pakiet `bootstrap-sass`, który ułatwia rozpoczęcie prototypowania interfejsu aplikacji za pomocą Bootstrap. Można jednak dodawać lub usuwać pakiety z pliku `pakiet.json` zgodnie z potrzebami aplikacji. Nie musisz używać struktury Bootstrap do budowania aplikacji Laravel - jest to po prostu dobry punkt wyjścia dla tych, którzy z niej korzystają.
+Plik `package.json` firmy Laravel zawiera pakiet `bootstrap-sass`, który ułatwia rozpoczęcie prototypowania interfejsu aplikacji za pomocą Bootstrap. Jednak możesz dowolnie dodawać lub usuwać pakiety z pliku `package.json` zgodnie z potrzebami swojej aplikacji. Nie musisz używać struktury Bootstrap do budowania aplikacji Laravel - jest to dobry punkt wyjścia dla tych, którzy z niej korzystają.
 
 Przed skompilowaniem swojego CSS, zainstaluj zależności frontendu projektu za pomocą [menedżera pakietów Node (NPM)](https://www.npmjs.org):
 
@@ -67,7 +67,7 @@ Domyślnie nowe aplikacje Laravel zawierają komponent Vue `ExampleComponent.vue
         require('./components/ExampleComponent.vue')
     );
 
-Aby użyć komponentu w swojej aplikacji, możesz po prostu umieścić go w jednym z szablonów HTML. Na przykład, po uruchomieniu polecenia `make:auth` Artisan, aby zarchiwizować ekrany uwierzytelniania i rejestracji twojej aplikacji, możesz upuścić komponent do szablonu Blade` home.blade.php`:
+Aby użyć komponentu w aplikacji, możesz umieścić go w jednym z szablonów HTML. Na przykład, po uruchomieniu polecenia `make:auth` Artisan, aby zarchiwizować ekrany uwierzytelniania i rejestracji twojej aplikacji, możesz umieścić komponent w szablonie Blade `home.blade.php`:
 
     @extends('layouts.app')
 

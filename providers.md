@@ -104,7 +104,7 @@ Możesz wpisać wskazówkę zależności dla metody `boot` service provider (dos
 
 Wszyscy dostawcy usług są zarejestrowani w pliku konfiguracyjnym `config/app.php`. Plik ten zawiera tablicę `providers` , w której można wyświetlić nazwy klas service providers (dostawców usług). Domyślnie zestaw podstawowych dostawców usług Laravel jest wymienionych w tej tablicy. Dostawcy ci uruchamiają podstawowe składniki Laravel, takie jak mailer (program pocztowy), queue (kolejka), cache (pamięć podręczna) i inne.
 
-Aby zarejestrować dostawcę, po prostu dodaj go do tablicy:
+Aby zarejestrować dostawcę, dodaj go do tablicy:
 
     'providers' => [
         // Other Service Providers

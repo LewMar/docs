@@ -172,7 +172,7 @@ Korzystając z fasad w czasie rzeczywistym, możesz traktować dowolną klasę w
         }
     }
 
-Wstrzyknięcie implementacji wydawcy do metody pozwala nam z łatwością przetestować metodę w izolacji, ponieważ możemy upozorować wstrzykniętego wydawcę. Wymaga to jednak zawsze przekazywania instancji wydawcy za każdym razem, gdy wywołujemy metodę `publish`. Korzystając z fasad działających w czasie rzeczywistym, możemy zachować tę samą testowalność, a jednocześnie nie jest wymagane jawne przekazywanie instancji `Publisher`. Aby wygenerować fasadę w czasie rzeczywistym, po prostu umieść przestrzeń nazw importowanej klasy za pomocą `Facades`:
+Wstrzyknięcie implementacji wydawcy do metody pozwala nam z łatwością przetestować metodę w izolacji, ponieważ możemy upozorować wstrzykniętego wydawcę. Wymaga to jednak zawsze przesyłania instancji wydawcy za każdym razem, gdy wywołujemy metodę `publish`. Korzystając z fasad działających w czasie rzeczywistym, możemy zachować tę samą testowalność, a jednocześnie nie jest wymagane jawne przekazywanie instancji `Publisher`. Aby wygenerować fasadę w czasie rzeczywistym, należy umieścić przestrzeń nazw importowanej klasy za pomocą `Fasady`:
 
     <?php
 

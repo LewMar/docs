@@ -374,7 +374,7 @@ To polecenie opublikuje komponenty poczty Markdown w katalogu `resources/views/v
 
 Po wyeksportowaniu komponentów katalog `resources/views/vendor/mail/html/themes` będzie zawierał plik `default.css`. Możesz dostosować CSS w tym pliku, a twoje style zostaną automatycznie umieszczone w reprezentacjach HTML Twoich wiadomości pocztowych Markdown.
 
-> {tip} Jeśli chcesz zbudować całkowicie nowy motyw komponentów Markdown, po prostu napisz nowy plik CSS w katalogu `html/themes` i zmień opcję `theme` w pliku konfiguracyjnym `mail`.
+> {tip} Jeśli chcesz zbudować całkowicie nowy motyw komponentów Markdown, napisz nowy plik CSS w katalogu `html/themes` i zmień opcję `theme` w pliku konfiguracyjnym `mail`.
 
 <a name="database-notifications"></a>
 ## Database Notifications - Powiadomienia bazy danych
@@ -867,7 +867,7 @@ Laravel jest dostarczany z kilkoma kanałami powiadomień, ale możesz napisać 
         }
     }
 
-Po zdefiniowaniu klasy kanałów powiadomień możesz po prostu zwrócić nazwę klasy z metody `via` dowolnego z powiadomień:
+Po zdefiniowaniu klasy kanałów powiadomień możesz zwrócić nazwę klasy za pomocą metody `via` dowolnego z powiadomień:
 
     <?php
 

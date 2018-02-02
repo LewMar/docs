@@ -52,7 +52,7 @@ To polecenie umieści nową klasę `CheckAge` w twoim katalogu  `app/Http/Middle
         }
     }
 
-Jak widać, jeśli podany `age` jest mniejszy lub równy `200`, oprogramowanie pośredniczące zwróci przekierowanie HTTP do klienta; w przeciwnym razie wniosek zostanie przekazany dalej do aplikacji. Aby przekazać żądanie głębiej do aplikacji (pozwalając oprogramowaniu pośredniczącemu "zaliczyć"), po prostu wywołaj funkcję zwrotną `$next` z parametrem ` $request`.
+Jak widać, jeśli podany `age` jest mniejszy lub równy `200`, oprogramowanie pośredniczące zwróci przekierowanie HTTP do klienta; w przeciwnym razie wniosek zostanie przekazany dalej do aplikacji. Aby przekazać żądanie głębiej do aplikacji (pozwalając oprogramowaniu pośredniczącemu "przejść"), wywołaj funkcję zwrotną `$next` za pomocą `$request`.
 
 Najlepiej wyobrazić sobie oprogramowanie pośredniczące, ponieważ serie "warstw" żądań HTTP muszą zaliczyć, zanim trafią do aplikacji. Każda warstwa może sprawdzić żądanie, a nawet całkowicie go odrzucić.
 
@@ -102,12 +102,12 @@ Jednak to oprogramowanie pośrednie wykona swoje zadanie **po (after)** żądani
 <a name="global-middleware"></a>
 ### Global Middleware - Globalne oprogramowanie pośredniczące
 
-Jeśli chcesz, aby oprogramowanie pośrednie działało podczas każdego żądania HTTP do twojej aplikacji, po prostu wpisz klasę middleware we właściwości `$middleware` twojej klasy `app/Http/Kernel.php`.
+Jeśli chcesz, aby oprogramowanie pośrednie działało podczas każdego żądania HTTP do twojej aplikacji, wyświetl klasę oprogramowania pośredniego we właściwości `$middleware` twojej klasy `app/Http/Kernel.php`.
 
 <a name="assigning-middleware-to-routes"></a>
 ### Assigning Middleware To Routes - Przypisywanie oprogramowania pośredniego do routingu (trasowania)
 
-Aby przypisać oprogramowanie pośrednie do określonych tras, należy najpierw przypisać oprogramowanie pośrednie do klucza w pliku `app/Http/Kernel.php`. Domyślnie właściwość `$routeMiddleware` tej klasy zawiera wpisy dla oprogramowania pośredniego dołączonego do Laravel. Aby dodać własny, wystarczy dołączyć go do tej listy i przypisać mu klucz do wyboru. Na przykład:
+Aby przypisać oprogramowanie pośrednie do określonych tras, należy najpierw przypisać oprogramowanie pośrednie do klucza w pliku `app/Http/Kernel.php`. Domyślnie właściwość `$routeMiddleware` tej klasy zawiera wpisy dla oprogramowania pośredniego dołączonego do Laravel. Aby dodać własny, dodaj go do tej listy i przypisz mu klucz do wyboru. Na przykład:
 
     // Within App\Http\Kernel Class...
 
@@ -168,7 +168,7 @@ Po wyjęciu z pudełka, Laravel oferuje grupy oprogramowania pośredniczącego `
         ],
     ];
 
-Grupy oprogramowania pośredniego mogą być przypisane do tras i działań kontrolerów przy użyciu tej samej składni, co indywidualne oprogramowanie pośrednie. Ponownie, grupy oprogramowania pośredniego po prostu ułatwiają przypisywanie wielu programów pośredniczących do trasy naraz:
+Grupy oprogramowania pośredniego mogą być przypisane do tras i działań kontrolerów przy użyciu tej samej składni, co indywidualne oprogramowanie pośrednie. Ponownie, grupy oprogramowania pośredniego ułatwiają przypisanie wielu programów pośredniczących do trasy naraz:
 
     Route::get('/', function () {
         //

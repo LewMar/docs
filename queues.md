@@ -31,7 +31,7 @@
 
 Kolejki Laravel zapewniają ujednolicony interfejs API w wielu różnych mechanizmach kolejkowania, takich jak Beanstalk, Amazon SQS, Redis lub nawet relacyjna baza danych. Kolejki pozwalają odłożyć przetwarzanie czasochłonnego zadania, takiego jak wysłanie e-maila, do późniejszego czasu. Odroczenie tych czasochłonnych zadań radykalnie przyspiesza żądania internetowe do aplikacji.
 
-Plik konfiguracyjny kolejki jest przechowywany w `config/queue.php`. W tym pliku znajdziesz konfiguracje połączeń dla każdego sterownika kolejki dołączonego do frameworka, który zawiera bazę danych [Beanstalkd](https://kr.github.io/beanstalkd/), [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io) i sterownik synchroniczny, który natychmiast wykona zadania (do użytku lokalnego). Dołączony jest także sterownik kolejki `null`, który po prostu odrzuca kolejkowane zadania.
+Plik konfiguracyjny kolejki jest przechowywany w `config/queue.php`. W tym pliku znajdziesz konfiguracje połączeń dla każdego sterownika kolejki dołączonego do frameworku, który zawiera bazę danych [Beanstalkd](https://kr.github.io/beanstalkd/), [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io) i sterownik synchroniczny, który natychmiast wykona zadania (do użytku lokalnego). Dołączony jest także sterownik kolejki `null`, który powoduje odrzucenie zadań oczekujących w kolejce.
 
 <a name="connections-vs-queues"></a>
 ### Connections Vs. Queues - Połączenia kontra kolejki

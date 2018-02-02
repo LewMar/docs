@@ -189,7 +189,7 @@ Dla metod Eloquent, takich jak `all` i` get`, które pobierają wiele wyników, 
         return $flight->cancelled;
     });
 
-Oczywiście możesz po prostu zapętlić kolekcję jak tablicę:
+Oczywiście możesz także zapętlić kolekcję jak tablicę:
 
     foreach ($flights as $flight) {
         echo $flight->name;
@@ -260,7 +260,7 @@ Możesz także użyć `count`,` sum`, `max` i innych [metod agregacji](/docs/{{v
 <a name="inserts"></a>
 ### Inserts - Wstawki
 
-Aby utworzyć nowy rekord w bazie danych, wystarczy utworzyć nową instancję modelu, ustawić atrybuty w modelu, a następnie wywołać metodę `save`:
+Aby utworzyć nowy rekord w bazie danych, utwórz nową instancję modelu, ustaw atrybuty w modelu, a następnie wywołaj metodę `save`:
 
     <?php
 
@@ -290,7 +290,7 @@ Aby utworzyć nowy rekord w bazie danych, wystarczy utworzyć nową instancję m
         }
     }
 
-In this example, we simply assign the `name` parameter from the incoming HTTP request to the `name` attribute of the `App\Flight` model instance. When we call the `save` method, a record will be inserted into the database. The `created_at` and `updated_at` timestamps will automatically be set when the `save` method is called, so there is no need to set them manually.
+In this example, we assign the `name` parameter from the incoming HTTP request to the `name` attribute of the `App\Flight` model instance. When we call the `save` method, a record will be inserted into the database. The `created_at` and `updated_at` timestamps will automatically be set when the `save` method is called, so there is no need to set them manually.
 
 <a name="updates"></a>
 ### Updates - Aaktualizacje
@@ -643,7 +643,7 @@ Jeśli chcesz usunąć kilka lub nawet wszystkie globalne zakresy, możesz uży�
 <a name="local-scopes"></a>
 ### Local Scopes - Lokalne zakresy
 
-Lokalne zakresy umożliwiają definiowanie wspólnych zestawów ograniczeń, które można łatwo ponownie wykorzystać w aplikacji. Na przykład może być konieczne częste pobieranie wszystkich użytkowników, którzy są "popular". Aby zdefiniować zakres, po prostu prefiksuj metodę modelu wymownego z `scope`.
+Lokalne zakresy umożliwiają definiowanie wspólnych zestawów ograniczeń, które można łatwo ponownie wykorzystać w aplikacji. Na przykład może być konieczne częste pobieranie wszystkich użytkowników, którzy są "popularni". Aby zdefiniować zakres, należy prefiksować metodę modelu wymownego z `scope`.
 
 Scopes should always return a query builder instance:
 

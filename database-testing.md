@@ -45,7 +45,7 @@ Opcja `--model` może być użyta do wskazania nazwy modelu stworzonego przez fa
 <a name="resetting-the-database-after-each-test"></a>
 ## Resetting The Database After Each Test - Resetowanie bazy danych po każdym teście
 
-Często przydaje się resetowanie bazy danych po każdym teście, aby dane z poprzedniego testu nie kolidowały z kolejnymi testami. Właściwość `RefreshDatabase` przyjmuje najbardziej optymalne podejście do migracji bazy testowej w zależności od tego, czy korzystasz z bazy danych w pamięci czy z tradycyjnej bazy danych. Po prostu użyj cechy na swojej klasie testowej i wszystko będzie dla ciebie obsługiwane:
+Często przydaje się resetowanie bazy danych po każdym teście, aby dane z poprzedniego testu nie kolidowały z kolejnymi testami. Właściwość `RefreshDatabase` przyjmuje najbardziej optymalne podejście do migracji bazy testowej w zależności od tego, czy korzystasz z bazy danych w pamięci czy z tradycyjnej bazy danych. Użyj cechy na swojej klasie testowej i wszystko będzie dla ciebie obsługiwane:
 
     <?php
 

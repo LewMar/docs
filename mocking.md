@@ -298,4 +298,4 @@ Możemy kpić z połączenia z elewacją `Cache` za pomocą metody `shouldReceiv
         }
     }
 
-> {note} Nie powinieneś kpić z fasady `Request`. Zamiast tego przekazuj dane wejściowe, które chcesz, do metod pomocnika HTTP, takich jak `get` i `post` podczas uruchamiania testu. Podobnie, zamiast kpić z fasady `Config`, po prostu wywołaj w testach metodę` Config::set`.
+> {note} Nie powinieneś kpić z fasady `Request`. Zamiast tego przekazuj dane wejściowe, które chcesz, do metod pomocnika HTTP, takich jak `get` i `post` podczas uruchamiania testu. Podobnie, zamiast kpić z fasady `Config`, wywołaj w testach metodę `Config::set`.

@@ -47,6 +47,8 @@ Zazwyczaj takie trasy należy umieszczać poza grupą oprogramowania pośrednicz
          */
         protected $except = [
             'stripe/*',
+            'http://example.com/foo/bar',
+            'http://example.com/foo/*',
         ];
     }
 

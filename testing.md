@@ -11,7 +11,7 @@ Laravel jest zbudowany z myślą o testowaniu. W rzeczywistości wsparcie testow
 
 Domyślnie katalog `tests` aplikacji zawiera dwa katalogi:` Feature` i `Unit`. Testy jednostkowe (Unit) to testy koncentrujące się na bardzo małej, odizolowanej części kodu. W rzeczywistości większość testów jednostkowych prawdopodobnie koncentruje się na pojedynczej metodzie. Testy cech (Feature) mogą testować większą część twojego kodu, w tym, jak wiele obiektów współdziała ze sobą, a nawet pełne żądanie HTTP do punktu końcowego JSON.
 
-Plik `ExampleTest.php` znajduje się w katalogach testowych `Feature` i `Unit`. Po zainstalowaniu nowej aplikacji Laravel po prostu uruchom `phpunit` w linii poleceń, aby uruchomić testy.
+Plik `ExampleTest.php` znajduje się w katalogach testowych `Feature` i `Unit`. Po zainstalowaniu nowej aplikacji Laravel uruchom `phpunit` w linii poleceń, aby uruchomić testy.
 
 <a name="environment"></a>
 ## Environment - Środowisko
@@ -31,7 +31,7 @@ Aby utworzyć nowy przypadek testowy, użyj polecenia `make:test` Artisan:
     // Create a test in the Unit directory... - Utwórz test w katalogu jednostek ...
     php artisan make:test UserTest --unit
 
-Po wygenerowaniu testu możesz zdefiniować metody testowania, tak jak zwykle używasz PHPUnit. Aby uruchomić testy, wystarczy wykonać polecenie `phpunit` z terminala:
+Po wygenerowaniu testu możesz zdefiniować metody testowania, tak jak zwykle używasz PHPUnit. Aby uruchomić testy, wykonaj polecenie `phpunit` z terminala:
 
     <?php
 

@@ -221,10 +221,10 @@ Twój niestandardowy sterownik sesji powinien implementować `SessionHandlerInte
 Ponieważ cel tych metod nie jest łatwy do zrozumienia, szybko omówmy, co każda z metod robi:
 
 <div class="content-list" markdown="1">
-- Metoda `open` byłaby zazwyczaj używana w systemach plików sesji opartych na plikach. Ponieważ Laravel jest dostarczany ze sterownikiem sesji `file`, prawie nigdy nie będziesz musiał umieszczać czegokolwiek w tej metodzie. Możesz zostawić go jako pusty wycinek. Jest to po prostu fakt złego projektowania interfejsu (który omówimy później), gdyż PHP wymaga od nas wdrożenia tej metody.
+- Metoda `open` byłaby zazwyczaj używana w systemach plików sesji opartych na plikach. Ponieważ Laravel jest dostarczany ze sterownikiem sesji `file`, prawie nigdy nie będziesz musiał umieszczać czegokolwiek w tej metodzie. Możesz zostawić go jako pusty stub. Fakt, że PHP wymaga od nas wdrożenia tej metody, jest kiepskim projektem interfejsu (który omówimy później).
 - Metodę `close`, podobnie jak metodę `open`, można również zignorować. Dla większości sterowników nie jest to konieczne.
-- Metoda `read` powinna zwrócić wersję string danych sesji związanych z daną `$sessionId`. Podczas pobierania lub przechowywania danych sesji w sterowniku nie trzeba wykonywać żadnych serializacji ani innych kodowań, ponieważ Laravel wykona dla ciebie serializację.
-- Metoda `write` powinna zapisać podany ciąg` $data` powiązany z `$sessionId` z jakimś trwałym systemem pamięci masowej, takim jak MongoDB, Dynamo, itp. Ponownie, nie powinieneś wykonywać żadnej serializacji - Laravel będzie już obsługiwał to za ciebie.
+- Metoda `read` powinna zwrócić wersję string danych sesji związanych z danym `$sessionId`. Podczas pobierania lub przechowywania danych sesji w sterowniku nie trzeba wykonywać żadnych serializacji ani kodowania, ponieważ Laravel wykona dla ciebie serializację.
+- Metoda `write` powinna zapisać podany ciąg `$data` powiązany z `$sessionId` z jakimś trwałym systemem pamięci masowej, takim jak MongoDB, Dynamo, itp. Ponownie, nie powinieneś wykonywać żadnej serializacji - Laravel będzie już obsługiwać to za ciebie.
 - Metoda `destroy` powinna usunąć dane związane z `$sessionId` z trwałej pamięci.
 - Metoda `gc` powinna zniszczyć wszystkie dane sesji, które są starsze niż podane `$lifetime`, które jest znacznikiem UNIX. W przypadku systemów, które wygasają, takich jak Memcached i Redis, ta metoda może pozostać pusta.
 </div>

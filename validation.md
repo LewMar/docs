@@ -104,7 +104,7 @@ Aby lepiej zrozumieć metodę `validate`, wróćmy do metody `store`:
         // The blog post is valid...
     }
 
-Jak widać, po prostu przekazujemy pożądane reguły sprawdzania poprawności do metody `validate`. Ponownie, jeśli walidacja nie powiedzie się, automatycznie zostanie wygenerowana odpowiednia odpowiedź. Jeśli sprawdzanie poprawności przejdzie, nasz kontroler będzie kontynuował normalne wykonywanie.
+Jak widać, przekazujemy pożądane reguły sprawdzania poprawności do metody `validate`. Ponownie, jeśli walidacja nie powiedzie się, automatycznie zostanie wygenerowana odpowiednia odpowiedź. Jeśli sprawdzanie poprawności przejdzie, nasz kontroler będzie kontynuował normalne wykonywanie.
 
 #### Stopping On First Validation Failure - Zatrzymywanie w przypadku błędu pierwszej walidacji
 
@@ -254,7 +254,7 @@ Ponieważ wszystkie żądania formularzy rozszerzają podstawową klasę żądan
 
 Jeśli metoda `authorize` zwróci `false`, odpowiedź HTTP z kodem statusu 403 zostanie automatycznie zwrócona, a metoda kontrolera nie zostanie wykonana.
 
-Jeśli planujesz mieć logikę autoryzacji w innej części aplikacji, po prostu zwróć `true` z metody` authorize`:
+Jeśli planujesz mieć logikę autoryzacji w innej części aplikacji, zwróć `true` z metody `authorize`:
 
     /**
      * Determine if the user is authorized to make this request.
@@ -339,7 +339,7 @@ Jeśli chcesz utworzyć instancję sprawdzania poprawności ręcznie, ale nadal 
 <a name="named-error-bags"></a>
 ### Named Error Bags - Nazwane pojemniki błedów
 
-Jeśli masz wiele formularzy na jednej stronie, możesz nazwać `MessageBag` błędów, pozwalając ci pobrać komunikaty o błędach dla konkretnego formularza. Po prostu podaj nazwę jako drugi argument do `withErrors`:
+Jeśli masz wiele formularzy na jednej stronie, możesz nazwać `MessageBag` błędów, pozwalając ci pobrać komunikaty o błędach dla konkretnego formularza. Przekaż nazwę jako drugi argument do `withErrors`:
 
     return redirect('register')
                 ->withErrors($validator, 'login');

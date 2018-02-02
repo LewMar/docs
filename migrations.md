@@ -34,7 +34,7 @@ Aby utworzyć migrację, użyj polecenia `make:migration` [polecenie Artisan](/d
 
 Nowa migracja zostanie umieszczona w katalogu `database/migrations`. Każda nazwa pliku migracji zawiera znacznik czasu, który pozwala Laravel-owi ustalić kolejność migracji.
 
-Opcje `--table` i` --create` mogą również służyć do wskazywania nazwy tabeli i tego, czy migracja spowoduje utworzenie nowej tabeli. Te opcje po prostu wstępnie wypełniają wygenerowany plik pośredniczący migracji określoną tabelą:
+Opcje `--table` i `--create` mogą również służyć do wskazywania nazwy tabeli i tego, czy migracja spowoduje utworzenie nowej tabeli. Te opcje wstępnie wypełniają wygenerowany plik pośredniczący migracji określoną tabelą:
 
     php artisan make:migration create_users_table --create=users
 
@@ -45,7 +45,7 @@ Jeśli chcesz określić niestandardową ścieżkę wyjściową dla wygenerowane
 <a name="migration-structure"></a>
 ## Migration Structure - Struktura migracji
 
-Klasa migracji zawiera dwie metody: `up` i `down`. Metoda `up` służy do dodawania nowych tabel, kolumn lub indeksów do bazy danych, natomiast metoda `down` powinna po prostu odwrócić operacje wykonywane za pomocą metody `up`.
+Klasa migracji zawiera dwie metody: `up` i `down`. Metoda `up` służy do dodawania nowych tabel, kolumn lub indeksów do bazy danych, natomiast metoda `down` powinna odwracać operacje wykonywane metodą `up`.
 
 W obu tych metodach można użyć kreatora schematów Laravel do ekspresywnego tworzenia i modyfikowania tabel. Aby zapoznać się ze wszystkimi metodami dostępnymi w programie budującym `Schema`, [sprawdź jego dokumentację](#creating-tables). Na przykład ten przykład migracji tworzy tabelę "loty"(flights):
 
@@ -363,7 +363,7 @@ Komenda  |  Opis
 <a name="creating-indexes"></a>
 ### Creating Indexes - Tworzenie Indeksów
 
-Kreator schematów obsługuje kilka typów indeksów. Najpierw spójrzmy na przykład, który określa wartości kolumn, które powinny być unikalne. Aby utworzyć indeks, możemy po prostu połączyć metodę `unique` z definicją kolumny:
+Kreator schematów obsługuje kilka typów indeksów. Najpierw spójrzmy na przykład, który określa wartości kolumn, które powinny być unikalne. Aby utworzyć indeks, możemy powiązać metodę `unique` z definicją kolumny:
 
     $table->string('email')->unique();
 
@@ -410,7 +410,7 @@ Alternatywnie możesz włączyć opcję `innodb_large_prefix` dla swojej bazy da
 <a name="dropping-indexes"></a>
 ### Dropping Indexes - Usuń Indeksy
 
-Aby usunąć indeks, musisz podać jego nazwę. Domyślnie Laravel automatycznie przypisuje do indeksów sensowną nazwę. Po prostu połącz nazwę tabeli, nazwę indeksowanej kolumny i typ indeksu. Oto kilka przykładów:
+Aby usunąć indeks, musisz podać jego nazwę. Domyślnie Laravel automatycznie przypisuje do indeksów sensowną nazwę. Połącz nazwę tabeli, nazwę indeksowanej kolumny i typ indeksu. Oto kilka przykładów:
 
 Komendy  |  Opis
 -------  |  -----------

@@ -197,7 +197,6 @@ Chociaż domyślnie wyłączone, mapy źródłowe można aktywować, wywołując
 
 Mix udostępnia kilka funkcji ułatwiających pracę z plikami JavaScript, takich jak kompilowanie ECMAScript 2015, łączenie modułów, minimalizowanie i łączenie zwykłych plików JavaScript. Co więcej, wszystko działa bezproblemowo, nie wymagając ani odrobiny niestandardowej konfiguracji:
 
-
     mix.js('resources/assets/js/app.js', 'public/js');
 
 Dzięki tej jednej linii kodu możesz teraz skorzystać z:

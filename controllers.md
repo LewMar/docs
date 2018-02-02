@@ -62,7 +62,7 @@ Teraz, gdy żądanie pasuje do określonego identyfikatora URI trasy, zostanie u
 
 Bardzo ważne jest, aby pamiętać, że nie trzeba było określać pełnej przestrzeni nazw kontrolera podczas definiowania trasy kontrolera. Ponieważ `RouteServiceProvider` ładuje twoje pliki trasy w grupie tras, która zawiera przestrzeń nazw, my tylko określiliśmy część nazwy klasy, która pochodzi po części aplikacji `App\Http\Controllers`.
 
-Jeśli zdecydujesz się zagnieździć kontrolery głębiej w katalogu `App\Http\Controllers`, po prostu użyj konkretnej nazwy klasy względem obszaru nazw root `App\Http\Controllers`. Tak więc, jeśli twoją pełną klasą kontrolerów jest `App\Http\Controllers\Photos\AdminController`, powinieneś zarejestrować trasy do kontrolera tak:
+Jeśli zdecydujesz się zagnieździć kontrolery głębiej w katalogu `App\Http\Controllers`, użyj konkretnej nazwy klasy względem obszaru nazw root `App\Http\Controllers`. Tak więc, jeśli twoją pełną klasą kontrolerów jest `App\Http\Controllers\Photos\AdminController`, powinieneś zarejestrować trasy do kontrolera tak:
 
     Route::get('foo', 'Photos\AdminController@method');
 
@@ -323,7 +323,7 @@ Oprócz iniekcji konstruktora można również wpisywać zależności do swoich 
         }
     }
 
-Jeśli twoja metoda kontrolera oczekuje również wprowadzenia z parametru trasy, po prostu wypisz argumenty trasy po innych zależnościach. Na przykład, jeśli twoja trasa jest zdefiniowana w następujący sposób:
+Jeśli twoja metoda kontrolera oczekuje również danych wejściowych od parametru trasy, wyświetl argumenty trasy po innych zależnościach. Na przykład, jeśli twoja trasa jest zdefiniowana w następujący sposób:
 
     Route::put('user/{id}', 'UserController@update');
 

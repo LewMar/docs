@@ -68,7 +68,7 @@ Na przykład utwórzmy 50 użytkowników i dołącz do każdego użytkownika rel
 <a name="calling-additional-seeders"></a>
 ### Calling Additional Seeders - Wywoływanie dodatkowych siewników
 
-W klasie `DatabaseSeeder` możesz użyć metody `call`, aby wykonać dodatkowe klasy seed. Użycie metody `call` umożliwia rozbicie bazy danych na wiele plików, dzięki czemu żadna pojedyncza klasa siewnika nie stanie się zbyt duża. Po prostu podaj nazwę klasy siewnika, którą chcesz uruchomić:
+W klasie `DatabaseSeeder` możesz użyć metody `call`, aby wykonać dodatkowe klasy seed. Użycie metody `call` umożliwia rozbicie bazy danych na wiele plików, dzięki czemu żadna pojedyncza klasa siewnika nie stanie się zbyt duża. Podaj nazwę klasy siewnika, którą chcesz uruchomić:
 
     /**
      * Run the database seeds.

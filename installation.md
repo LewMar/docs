@@ -43,7 +43,7 @@ Upewnij się, że umieszczasz ogólnoukładowy katalog bin dostawcy w katalogu `
 
 <div class="content-list" markdown="1">
 - macOS: `$HOME/.composer/vendor/bin`
-- GNU / Linux Distributions: `$HOME/.composer/vendor/bin`
+- GNU / Linux Distributions: `$HOME/.config/composer/vendor/bin`
 </div>
 
 Po zainstalowaniu, komenda `laravel new` utworzy świeżą instalację Laravel w określonym katalogu. Na przykład `laravel new blog` utworzy katalog o nazwie `blog` zawierający świeżą instalację Laravel z zainstalowanymi już wszystkimi zależnościami Laravel:

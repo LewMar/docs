@@ -274,7 +274,7 @@ Na przykład tutaj jest zapytanie, które weryfikuje wartość kolumny "głosy" 
 
     $users = DB::table('users')->where('votes', '=', 100)->get();
 
-Dla wygody, jeśli chcesz po prostu sprawdzić, czy kolumna jest równa danej wartości, możesz przekazać wartość bezpośrednio jako drugi argument do metody `where`:
+Dla wygody, jeśli chcesz sprawdzić, czy kolumna jest równa danej wartości, możesz przekazać wartość bezpośrednio jako drugi argument do metody `where`:
 
     $users = DB::table('users')->where('votes', 100)->get();
 
@@ -589,7 +589,7 @@ Podczas aktualizowania kolumny JSON należy użyć składni `->`, aby uzyskać d
 <a name="increment-and-decrement"></a>
 ### Increment & Decrement - Inkrementacja i Dekrementacja
 
-Kreator zapytań zapewnia również wygodne metody zwiększania lub zmniejszania wartości danej kolumny. Jest to po prostu skrót, zapewniający bardziej wyrazisty i zwięzły interfejs w porównaniu do ręcznego pisania instrukcji `update`.
+Kreator zapytań zapewnia również wygodne metody zwiększania lub zmniejszania wartości danej kolumny. Jest to skrót, zapewniający bardziej wyrazisty i zwięzły interfejs w porównaniu do ręcznego pisania instrukcji `update`.
 
 Obie te metody akceptują co najmniej jeden argument: kolumnę do modyfikacji. Drugi argument może być opcjonalnie przekazany w celu kontrolowania ilości, o jaką kolumna powinna być zwiększana lub zmniejszana:
 

@@ -25,7 +25,7 @@ Artisan to interfejs wiersza poleceń dołączony do Laravel. Udostępnia szereg
 
     php artisan list
 
-Każde polecenie zawiera również ekran "pomocy", który wyświetla i opisuje dostępne argumenty i opcje polecenia. Aby wyświetlić ekran pomocy, po prostu poprzedzaj nazwę polecenia za pomocą `help`:
+Każde polecenie zawiera również ekran "pomocy", który wyświetla i opisuje dostępne argumenty i opcje polecenia. Aby wyświetlić ekran pomocy, poprzedź nazwę polecenia za pomocą `help`:
 
     php artisan help migrate
 
@@ -431,7 +431,7 @@ Możesz również określić połączenie lub kolejkę, do której polecenie Art
 
 #### Passing Array Values - Przekazywanie tablicy wartości
 
-Jeśli twoje polecenie definiuje opcję akceptującą tablicę, możesz po prostu przekazać tablicę wartości do tej opcji:
+Jeśli twoje polecenie definiuje opcję, która akceptuje tablicę, możesz przekazać tablicę wartości do tej opcji:
 
     Route::get('/foo', function () {
         $exitCode = Artisan::call('email:send', [

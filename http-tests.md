@@ -210,37 +210,263 @@ Oprócz tworzenia obrazów możesz tworzyć pliki dowolnego innego typu za pomoc
 
 Laravel oferuje wiele niestandardowych metod asercji dla testów [PHPUnit](https://phpunit.de/). Dostęp do tych asercji można uzyskać na podstawie odpowiedzi zwracanej przez metody testowe `json`, `get`, `post`, `put`, i `delete`:
 
-Metoda  | Opis
-------------- | -------------
-`$response->assertSuccessful();`  |  Twierdzimy, że odpowiedź zawiera udany kod statusu.
-`$response->assertStatus($code);`  |  Twierdzimy, że odpowiedź ma podany kod.
-`$response->assertRedirect($uri);`  |  Twierdzimy, że odpowiedź jest przekierowaniem do danego URI.
-`$response->assertHeader($headerName, $value = null);`  |  Twierdzimy, że dany nagłówek jest obecny w odpowiedzi.
-`$response->assertCookie($cookieName, $value = null);`  |  Twierdzimy, że odpowiedź zawiera dany plik cookie.
-`$response->assertPlainCookie($cookieName, $value = null);`  |  Twierdzimy, że odpowiedź zawiera dany plik cookie (niezaszyfrowany).
-`$response->assertCookieExpired($cookieName);`  |  Twierdzimy, że odpowiedź zawiera dany plik cookie i wygasła.
-`$response->assertCookieMissing($cookieName);`  |  Twierdzimy, że odpowiedź nie zawiera podanego pliku cookie.
-`$response->assertSessionHas($key, $value = null);`  |  Twierdzimy, że sesja zawiera część danych.
-`$response->assertSessionHasAll($key, $value = null);`  |  Twierdzimy, że sesja ma podaną listę wartości.
-`$response->assertSessionHasErrors(array $keys, $format = null, $errorBag = 'default');`  |  Twierdzimy, że sesja zawiera błąd dla danego pola.
-`$response->assertSessionHasErrorsIn($errorBag, $keys = [], $format = null);`  |  Twierdzimy, że sesja ma podane błędy.
-`$response->assertSessionMissing($key);`  |  Twierdzimy, że sesja nie zawiera podanego klucza.
-`$response->assertJson(array $data);`  |  Twierdzimy, że odpowiedź zawiera dane JSON.
-`$response->assertJsonCount(int $count, $key = null);`  |  Twierdzimy, że odpowiedź JSON ma oczekiwaną liczbę pozycji na danym kluczu.
-`$response->assertJsonFragment(array $data);`  |  Twierdzimy, że odpowiedź zawiera dany fragment JSON.
-`$response->assertJsonMissing(array $data);`  |  Twierdzimy, że odpowiedź nie zawiera danego fragmentu JSON.
-`$response->assertJsonMissingExact(array $data);`  |  Twierdzimy, że odpowiedź nie zawiera dokładnego fragmentu JSON.
-`$response->assertExactJson(array $data);`  |  Twierdzimy, że odpowiedź zawiera dokładne dopasowanie danych JSON.
-`$response->assertJsonStructure(array $structure);`  |  Twierdzimy, że odpowiedź ma określoną strukturę JSON.
-`$response->assertJsonValidationErrors($keys);`  |  Twierdzimy, że odpowiedź ma podane błędy sprawdzania poprawności JSON dla podanych kluczy.
-`$response->assertViewIs($value);`  |  Twierdzimy, że dany widok został zwrócony przez trasę.
-`$response->assertViewHas($key, $value = null);`  |  Twierdzimy, że widok odpowiedzi otrzymał pewną ilość danych.
-`$response->assertViewHasAll(array $data);`  |  Twierdzimy, że widok odpowiedzi zawiera podaną listę danych.
-`$response->assertViewMissing($key);`  |  Twierdzimy, że w widoku odpowiedzi brakuje części powiązanych danych.
-`$response->assertSee($value);`  |  Twierdzimy, że dany ciąg jest zawarty w odpowiedzi.
-`$response->assertDontSee($value);`  |  Twierdzimy, że dany ciąg nie jest zawarty w odpowiedzi.
-`$response->assertSeeText($value);`  |  Twierdzimy, że podany ciąg jest zawarty w tekście odpowiedzi.
-`$response->assertDontSeeText($value);`  |  Twierdzimy, że dany ciąg nie jest zawarty w tekście odpowiedzi.
+<style>
+    .collection-method-list > p {
+        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
+        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
+    }
+
+    .collection-method-list a {
+        display: block;
+    }
+</style>
+
+<div class="collection-method-list" markdown="1">
+
+[assertCookie](#assert-cookie)
+[assertCookieExpired](#assert-cookie-expired)
+[assertCookieMissing](#assert-cookie-missing)
+[assertDontSee](#assert-dont-see)
+[assertDontSeeText](#assert-dont-see-text)
+[assertExactJson](#assert-exact-json)
+[assertHeader](#assert-header)
+[assertHeaderMissing](#assert-header-missing)
+[assertJson](#assert-json)
+[assertJsonFragment](#assert-json-fragment)
+[assertJsonMissing](#assert-json-missing)
+[assertJsonMissingExact](#assert-json-missing-exact)
+[assertJsonStructure](#assert-json-structure)
+[assertJsonValidationErrors](#assert-json-validation-errors)
+[assertPlainCookie](#assert-plain-cookie)
+[assertRedirect](#assert-redirect)
+[assertSee](#assert-see)
+[assertSeeText](#assert-see-text)
+[assertSessionHas](#assert-session-has)
+[assertSessionHasAll](#assert-session-has-all)
+[assertSessionHasErrors](#assert-session-has-errors)
+[assertSessionHasErrorsIn](#assert-session-has-errors-in)
+[assertSessionMissing](#assert-session-missing)
+[assertStatus](#assert-status)
+[assertSuccessful](#assert-successful)
+[assertViewHas](#assert-view-has)
+[assertViewHasAll](#assert-view-has-all)
+[assertViewIs](#assert-view-is)
+[assertViewMissing](#assert-view-missing)
+[assertJsonCount](#assert-json-count)
+
+</div>
+
+<a name="assert-cookie"></a>
+#### assertCookie
+
+Twierdzimy, że odpowiedź zawiera dany plik cookie:
+
+    $response->assertCookie($cookieName, $value = null);
+
+<a name="assert-cookie-expired"></a>
+#### assertCookieExpired
+
+Twierdzimy, że odpowiedź zawiera dany plik cookie i wygasła:
+
+    $response->assertCookieExpired($cookieName);
+
+<a name="assert-cookie-missing"></a>
+#### assertCookieMissing
+
+Twierdzimy, że odpowiedź nie zawiera podanego pliku cookie:
+
+    $response->assertCookieMissing($cookieName);
+
+<a name="assert-dont-see"></a>
+#### assertDontSee
+
+Twierdzimy, że dany ciąg nie jest zawarty w odpowiedzi:
+
+    $response->assertDontSee($value);
+
+<a name="assert-dont-see-text"></a>
+#### assertDontSeeText
+
+Twierdzimy, że dany ciąg nie jest zawarty w tekście odpowiedzi:
+
+    $response->assertDontSeeText($value);
+
+<a name="assert-exact-json"></a>
+#### assertExactJson
+
+Twierdzimy, że odpowiedź zawiera dokładne dopasowanie danych JSON:
+
+    $response->assertExactJson(array $data);
+
+<a name="assert-header"></a>
+#### assertHeader
+
+Twierdzimy, że dany nagłówek jest obecny w odpowiedzi:
+
+    $response->assertHeader($headerName, $value = null);
+
+<a name="assert-header-missing"></a>
+#### assertHeaderMissing
+
+Twierdzimy, że dany nagłówek nie jest obecny w odpowiedzi:
+
+    $response->assertHeaderMissing($headerName);
+
+<a name="assert-json"></a>
+#### assertJson
+
+Twierdzimy, że odpowiedź zawiera dane JSON:
+
+    $response->assertJson(array $data);
+
+<a name="assert-json-fragment"></a>
+#### assertJsonFragment
+
+wierdzimy, że odpowiedź zawiera dany fragment JSON:
+
+    $response->assertJsonFragment(array $data);
+
+<a name="assert-json-missing"></a>
+#### assertJsonMissing
+
+Twierdzimy, że odpowiedź nie zawiera danego fragmentu JSON:
+
+    $response->assertJsonMissing(array $data);
+
+<a name="assert-json-missing-exact"></a>
+#### assertJsonMissingExact
+
+Twierdzimy, że odpowiedź nie zawiera dokładnego fragmentu JSON:
+
+    $response->assertJsonMissingExact(array $data);
+
+<a name="assert-json-structure"></a>
+#### assertJsonStructure
+
+Twierdzimy, że odpowiedź ma określoną strukturę JSON:
+
+    $response->assertJsonStructure(array $structure);
+
+<a name="assert-json-validation-errors"></a>
+#### assertJsonValidationErrors
+
+Twierdzimy, że odpowiedź ma podane błędy sprawdzania poprawności JSON dla podanych kluczy:
+
+    $response->assertJsonValidationErrors($keys);
+
+<a name="assert-plain-cookie"></a>
+#### assertPlainCookie
+
+Twierdzimy, że odpowiedź zawiera dany plik cookie (niezaszyfrowany):
+
+    $response->assertPlainCookie($cookieName, $value = null);
+
+<a name="assert-redirect"></a>
+#### assertRedirect
+
+Twierdzimy, że odpowiedź jest przekierowaniem do danego URI:
+
+    $response->assertRedirect($uri);
+
+<a name="assert-see"></a>
+#### assertSee
+
+Twierdzimy, że dany ciąg jest zawarty w odpowiedzi:
+
+    $response->assertSee($value);
+
+<a name="assert-see-text"></a>
+#### assertSeeText
+
+Twierdzimy, że podany ciąg jest zawarty w tekście odpowiedzi:
+
+    $response->assertSeeText($value);
+
+<a name="assert-session-has"></a>
+#### assertSessionHas
+
+Twierdzimy, że sesja zawiera część danych:
+
+    $response->assertSessionHas($key, $value = null);
+
+<a name="assert-session-has-all"></a>
+#### assertSessionHasAll
+
+Twierdzimy, że sesja ma podaną listę wartości:
+
+    $response->assertSessionHasAll($key, $value = null);
+
+<a name="assert-session-has-errors"></a>
+#### assertSessionHasErrors
+
+Twierdzimy, że sesja zawiera błąd dla danego pola:
+
+    $response->assertSessionHasErrors(array $keys, $format = null, $errorBag = 'default');
+
+<a name="assert-session-has-errors-in"></a>
+#### assertSessionHasErrorsIn
+
+Twierdzimy, że sesja ma podane błędy:
+
+    $response->assertSessionHasErrorsIn($errorBag, $keys = [], $format = null);
+
+<a name="assert-session-missing"></a>
+#### assertSessionMissing
+
+Twierdzimy, że sesja nie zawiera podanego klucza:
+
+    $response->assertSessionMissing($key);
+
+<a name="assert-status"></a>
+#### assertStatus
+
+Twierdzimy, że odpowiedź ma podany kod:
+
+    $response->assertStatus($code);
+
+<a name="assert-successful"></a>
+#### assertSuccessful
+
+Twierdzimy, że odpowiedź zawiera udany kod statusu:
+
+    $response->assertSuccessful();
+
+<a name="assert-view-has"></a>
+#### assertViewHas
+
+Twierdzimy, że widok odpowiedzi otrzymał pewną ilość danych:
+
+    $response->assertViewHas($key, $value = null);
+
+<a name="assert-view-has-all"></a>
+#### assertViewHasAll
+
+Twierdzimy, że widok odpowiedzi zawiera podaną listę danych:
+
+    $response->assertViewHasAll(array $data);
+
+<a name="assert-view-is"></a>
+#### assertViewIs
+
+Twierdzimy, że dany widok został zwrócony przez trasę:
+
+    $response->assertViewIs($value);
+
+<a name="assert-view-missing"></a>
+#### assertViewMissing
+
+Twierdzimy, że w widoku odpowiedzi brakuje części powiązanych danych:
+
+    $response->assertViewMissing($key);
+
+<a name="assert-json-count"></a>
+#### assertJsonCount
+
+Twierdzimy, że odpowiedź JSON ma oczekiwaną liczbę pozycji na danym kluczu:
+
+    $response->assertJsonCount(int $count, $key = null);
+
+
 
 <a name="authentication-assertions"></a>
 ### Authentication Assertions - Twierdzenia uwierzytelniania

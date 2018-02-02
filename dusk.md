@@ -80,7 +80,7 @@ Aby rozpocząć, otwórz plik `tests/DuskTestCase.php`, który jest podstawowym 
         // static::startChromeDriver();
     }
 
-Następnie możesz po prostu zmodyfikować metodę `driver`, aby połączyć się z wybranym adresem URL i portem. Ponadto można zmodyfikować "pożądane możliwości", które należy przekazać do WebDriver:
+Następnie możesz zmodyfikować metodę `driver`, aby połączyć się z wybranym adresem URL i portem. Ponadto można zmodyfikować "pożądane możliwości", które należy przekazać do WebDriver:
 
     /**
      * Create the RemoteWebDriver instance.
@@ -196,8 +196,7 @@ Jak widać w powyższym przykładzie, metoda `browse` akceptuje wywołanie zwrot
 
 #### Creating Multiple Browsers - Tworzenie wielu przeglądarek
 
-Czasami możesz potrzebować wielu przeglądarek, aby prawidłowo przeprowadzić test. Na przykład do testowania ekranu czatu, który współdziała z sieciami internetowymi, może być potrzebnych wiele przeglądarek. Aby utworzyć wiele przeglądarek, po prostu "zapytaj" o więcej niż jedną przeglądarkę w oznaczeniu wywołania zwrotnego podanego do metody `browse`:
-
+Czasami możesz potrzebować wielu przeglądarek, aby prawidłowo przeprowadzić test. Na przykład do testowania ekranu czatu, który współdziała z sieciami internetowymi, może być potrzebnych wiele przeglądarek. Aby utworzyć wiele przeglądarek, "zapytaj" o więcej niż jedną przeglądarkę w oznaczeniu wywołania zwrotnego podanego do metody `browse`:
 
     $this->browse(function ($first, $second) {
         $first->loginAs(User::find(1))
@@ -554,6 +553,7 @@ Twierdzenia  | Opis
 ------------- | -------------
 `$browser->assertTitle($title)`  |  Twierdzimy, że tytuł strony pasuje do podanego tekstu.
 `$browser->assertTitleContains($title)`  |  Twierdzimy, że tytuł strony zawiera podany tekst.
+`$browser->assertUrlIs($url)`  |  Twierdzimy, że bieżący URL (bez ciągu zapytania) pasuje do podanego ciągu.
 `$browser->assertPathBeginsWith($path)`  |  Twierdzimy się, że bieżąca ścieżka URL zaczyna się od podanej ścieżki.
 `$browser->assertPathIs('/home')`  |  Twierdzimy, że obecna ścieżka pasuje do podanej ścieżki.
 `$browser->assertPathIsNot('/home')`  |  Twierdzimy, że obecna ścieżka nie pasuje do podanej ścieżki.
@@ -922,7 +922,7 @@ Jeśli używasz CircleCI 2.0 do uruchamiania testów Dusk, możesz dodać te kro
 <a name="running-tests-on-codeship"></a>
 ### Codeship
 
-Aby uruchomić testy Dusk w [Codeship](https://codeship.com), dodaj następujące polecenia do swojego projektu Codeship. Oczywiście te polecenia są po prostu punktem wyjścia i możesz dodać dodatkowe polecenia w razie potrzeby:
+Aby uruchomić testy Dusk w [Codeship](https://codeship.com), dodaj następujące polecenia do swojego projektu Codeship. Oczywiście te polecenia są punktem wyjścia i możesz dodać dodatkowe polecenia w razie potrzeby:
 
     phpenv local 7.1
     cp .env.testing .env

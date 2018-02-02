@@ -43,7 +43,7 @@ Aby zdefiniować akcesora, utwórz w swoim modelu metodę `getFooAttribute`, w k
         }
     }
 
-Jak widać, oryginalna wartość kolumny jest przekazywana do akcesora, umożliwiając manipulowanie i zwracanie wartości. Aby uzyskać dostęp do wartości akcesora, możesz po prostu uzyskać dostęp do atrybutu `first_name` w instancji modelu:
+Jak widać, oryginalna wartość kolumny jest przekazywana do akcesora, umożliwiając manipulowanie i zwracanie wartości. Aby uzyskać dostęp do wartości akcesora, możesz uzyskać dostęp do atrybutu `first_name` w instancji modelu:
 
     $user = App\User::find(1);
 

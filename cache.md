@@ -326,7 +326,7 @@ Aby zarejestrować niestandardowy sterownik pamięci podręcznej za pomocą Lara
 
 Pierwszym argumentem przekazanym do metody `extend` jest nazwa sterownika. Odpowiada to opcji `driver` w pliku konfiguracyjnym `config/cache.php`. Drugi argument to Closure, które powinno zwrócić instancję  `Illuminate\Cache\Repository`. Closure zostanie przekazane instancji `$app`, która jest instancją [kontenera usług](/docs/{{version}}/container).
 
-Po zarejestrowaniu rozszerzenia wystarczy zaktualizować opcję sterownika `config/cache.php` do nazwy swojego rozszerzenia.
+Po zarejestrowaniu rozszerzenia zaktualizuj opcję sterownika `config/cache.php` do nazwy swojego rozszerzenia.
 
 <a name="events"></a>
 ## Events - Zdarzenia

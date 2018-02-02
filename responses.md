@@ -21,7 +21,7 @@
 
 #### Strings & Arrays - Ciągi i tablice
 
-Wszystkie trasy i kontrolery powinny zwrócić odpowiedź, która zostanie odesłana do przeglądarki użytkownika. Laravel oferuje kilka różnych sposobów zwracania odpowiedzi. Najbardziej podstawową odpowiedzią jest po prostu zwrócenie ciągu znaków z trasy lub kontrolera. Struktura automatycznie przekształci ciąg znaków w pełną odpowiedź HTTP:
+Wszystkie trasy i kontrolery powinny zwrócić odpowiedź, która zostanie odesłana do przeglądarki użytkownika. Laravel oferuje kilka różnych sposobów zwracania odpowiedzi. Najbardziej podstawową odpowiedzią jest zwrócenie ciągu znaków z trasy lub kontrolera. Struktura automatycznie przekształci ciąg znaków w pełną odpowiedź HTTP:
 
     Route::get('/', function () {
         return 'Hello World';
@@ -130,7 +130,7 @@ Jeśli twoja trasa ma parametry, możesz przekazać je jako drugi argument metod
 
 #### Populating Parameters Via Eloquent Models - Wypełnianie parametrów przez modele wymowne
 
-Jeśli przekierowujesz do trasy z parametrem "ID", który jest zapełniany z modelu Eloquent, możesz po prostu przekazać sam model. Identyfikator zostanie wyodrębniony automatycznie:
+Jeśli przekierowujesz do trasy z parametrem "ID", który jest zapełniany z modelu Eloquent, możesz przekazać sam model. Identyfikator zostanie wyodrębniony automatycznie:
 
     // For a route with the following URI: profile/{id}
 
