@@ -27,7 +27,7 @@ W przypadku wydań LTS, takich jak Laravel 5.5, poprawki są dostarczane przez 2
 <a name="laravel-5.6"></a>
 ## Laravel 5.6
 
-Laravel 5.6 kontynuuje ulepszenia wprowadzone w Laravel 5.5, dodając ulepszony system logowania, planowanie zadań na jednym serwerze, ulepszenia serializacji modeli, dynamiczne ograniczanie szybkości, klasy kanałów rozgłaszania, wsparcie hashowania Argon2, włączenie pakietu Collision i inne. Ponadto wszystkie rusztowania frontowe zostały zaktualizowane do Bootstrap 4.
+Laravel 5.6 kontynuuje ulepszenia wprowadzone w Laravel 5.5 poprzez dodanie ulepszonego systemu rejestrowania, planowania zadań na pojedynczym serwerze, ulepszeń serializacji modeli, dynamicznego ograniczania szybkości, klas kanałów rozgłaszania, generowania kontrolera zasobów API, ulepszonych ulepszeń formatowania dat, wsparcia hashowania Argon2, włączenie pakietu Collision i więcej. Ponadto wszystkie rusztowania frontowe zostały zaktualizowane do Bootstrap 4.
 
 Wszystkie podstawowe składniki Symfony używane przez Laravel zostały uaktualnione do serii wydań Symfony `~ 4.0`.
 
@@ -125,13 +125,38 @@ Na koniec możesz umieścić logikę autoryzacji dla swojego kanału w metodzie 
         }
     }
 
+### API Controller Generation - Generowanie kontrolera API
+
+Podczas deklarowania tras zasobów, które będą używane przez interfejsy API, zwykle chcesz wykluczyć trasy, które przedstawiają szablony HTML, takie jak `create` i `edit`. Aby wygenerować kontroler zasobów, który nie zawiera tych metod, możesz teraz użyć przełącznika `--api` podczas wykonywania polecenia `make:controller`:
+
+    php artisan make:controller API/PhotoController --api
+
 ### Model Serialization Improvements - Ulepszenie seriaizowanego modelu
 
 W poprzednich wersjach Laravel, kolejkowane modele nie byłyby przywracane z nienaruszonymi obciążonymi relacjami. W Laravel 5.6 relacje, które zostały załadowane do modelu podczas jego kolejkowania, są automatycznie ponownie ładowane, gdy zadanie jest przetwarzane przez kolejkę.
 
+### Eloquent Date Casting - Wymowne odlewanie daty
+
+Możesz teraz indywidualnie dostosować format kolumn Eroquent Date Cast. Aby rozpocząć, określ żądany format daty w deklaracji dotyczącej przesyłania. Po określeniu ten format będzie używany podczas serializacji modelu do tablicy / JSON:
+
+    protected $casts = [
+        'birthday' => 'date:Y-m-d',
+        'joined_at' => 'datetime:Y-m-d H:00',
+    ];
+
 ### Argon2 Password Hashing - Haszowanie haseł Argon2
 
 Jeśli budujesz aplikację na PHP 7.2.0 lub nowszym, Laravel obsługuje teraz haszowanie hasła za pomocą algorytmu Argon2. Domyślny sterownik skrótu dla twojej aplikacji jest kontrolowany przez nowy plik konfiguracyjny `config/hashing.php`.
+
+### UUID Methods - Metody UUID
+
+Laravel 5.6 wprowadza dwie nowe metody generowania UUID: `Str::uuid` i `Str::orderedUuid`. Metoda `orderedUuid` wygeneruje pierwszy znacznik czasu UUID, który jest łatwiej i wydajniej indeksowany przez bazy danych, takie jak MySQL. Każda z tych metod zwraca obiekt `Ramsey\Uuid`:
+
+    use Illuminate\Support\Str;
+
+    return (string) Str::uuid();
+
+    return (string) Str::orderedUuid();
 
 ### Collision - Kolizja
 

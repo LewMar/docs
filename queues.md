@@ -90,6 +90,8 @@ Dostosowanie tej wartości w oparciu o obciążenie kolejki może być bardziej 
         'block_for' => 5,
     ],
 
+> {note} Blokowanie popu to eksperymentalna funkcja. Istnieje niewielka szansa, że zadanie oczekujące w kolejce może zostać utracone, jeśli serwer Redis lub pracownik ulegnie awarii w tym samym czasie, gdy zadanie zostanie pobrane.
+
 #### Other Driver Prerequisites - Inne wymagania wstępne sterownika
 
 Dla wymienionych sterowników kolejki potrzebne są następujące zależności:

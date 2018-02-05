@@ -158,6 +158,17 @@ Możesz polecić pojedynczą instancję modelu dołączanie atrybutów za pomoc�
 <a name="date-serialization"></a>
 ## Date Serialization - Serializacja daty
 
+#### Customizing The Date Format Per Attribute - Dostosowywanie formatu daty na atrybut
+
+Możesz dostosować format serializacji poszczególnych atrybutów Eloquent daty, określając format daty w [rzutowaniu deklaracji](/docs/{{version}}/eloquent-mutators#attribute-casting):
+
+    protected $casts = [
+        'birthday' => 'date:Y-m-d',
+        'joined_at' => 'datetime:Y-m-d H:00',
+    ];
+
+#### Global Customization Via Carbon - Globalna personalizacja za pomocą Carbon
+
 Laravel rozszerza bibliotekę dat [Carbon](https://github.com/briannesbitt/Carbon), aby zapewnić wygodne dostosowywanie formatu serializacyjnego JSON firmy Carbon. Aby zindywidualizować sposób, w jaki wszystkie daty emisji Carbon w twojej aplikacji są serializowane, użyj metody `Carbon::serializeUsing`. Metoda `serializeUsing` akceptuje Closure, które zwraca ciąg znaków reprezentujący datę serializacji JSON:
 
     <?php
