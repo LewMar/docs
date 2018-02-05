@@ -206,6 +206,10 @@ Możesz zarejestrować wiele kontrolerów zasobów API jednocześnie, przekazuj�
         'posts' => 'PostController'
     ]);
 
+Aby szybko wygenerować kontroler zasobów API, który nie zawiera metod `create` lub `edit`, użyj przełącznika `--api` podczas wykonywania komendy` make:controller`:
+
+    php artisan make:controller API/PhotoController --api
+
 <a name="restful-naming-resource-routes"></a>
 ### Naming Resource Routes - Nazewnictwo tras zasobów
 

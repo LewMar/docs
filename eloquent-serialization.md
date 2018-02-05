@@ -147,6 +147,14 @@ Po utworzeniu akcesora dodaj nazwę atrybutu do właściwości `appends` w model
 
 Po dodaniu atrybutu do listy `appends`, zostanie on włączony zarówno do tablicy modelu, jak i do reprezentacji JSON. Atrybuty w tablicy `appends` będą również respektować ustawienia `visible` i `hidden` skonfigurowane w modelu.
 
+#### Appending At Run Time - Dołączanie w czasie wykonywania
+
+Możesz polecić pojedynczą instancję modelu dołączanie atrybutów za pomocą metody `append`. Lub możesz użyć metody `setAppends` do przesłonięcia całej tablicy dołączonych właściwości dla danej instancji modelu:
+
+    return $user->append('is_admin')->toArray();
+
+    return $user->setAppends(['is_admin'])->toArray();
+
 <a name="date-serialization"></a>
 ## Date Serialization - Serializacja daty
 

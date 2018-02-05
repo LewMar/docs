@@ -116,6 +116,11 @@ W katalogu `app` będzie generowanych wiele innych katalogów, ponieważ do gene
 
 Katalog `Broadcasting` zawiera wszystkie klasy kanałów transmisji dla twojej aplikacji. Te klasy są generowane za pomocą polecenia `make:channel`. Ten katalog nie istnieje domyślnie, ale zostanie utworzony dla ciebie podczas tworzenia pierwszego kanału. Aby dowiedzieć się więcej o kanałach, zapoznaj się z dokumentacją [transmisja zdarzeń](/docs/{{version}}/broadcasting).
 
+<a name="the-broadcasting-directory"></a>
+#### The Broadcasting Directory - Katalog transmisyjny
+
+Katalog `Broadcasting` zawiera wszystkie klasy kanałów transmisji dla twojej aplikacji. Te klasy są generowane za pomocą polecenia `make:channel`. Ten katalog nie istnieje domyślnie, ale zostanie utworzony dla ciebie podczas tworzenia pierwszego kanału. Aby dowiedzieć się więcej o kanałach, zapoznaj się z dokumentacją [transmisja wydarzeń](/docs/{{version}}/broadcasting).
+
 <a name="the-console-directory"></a>
 #### The Console Directory - Katalog konsoli
 

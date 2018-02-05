@@ -1,4 +1,4 @@
-# Errors & Logging
+# Error Handling
 
 - [Introduction - Worowadzenie](#introduction)
 - [Configuration - Konfiguracja](#configuration)

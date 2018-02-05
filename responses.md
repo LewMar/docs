@@ -242,6 +242,16 @@ Czasami możesz zamienić odpowiedź łańcuchową danej operacji na odpowiedź 
                     ->readme('laravel', 'laravel')['contents']
     }, 'laravel-readme.md');
 
+#### Streamed Downloads - Pobieranie strumieniowe
+
+Czasami możesz zamienić odpowiedź łańcuchową danej operacji na odpowiedź do pobrania bez konieczności zapisywania zawartości operacji na dysk. W tym scenariuszu możesz użyć metody `streamDownload`. Ta metoda akceptuje wywołanie zwrotne, nazwę pliku i opcjonalną tablicę nagłówków jako argumenty:
+
+    return response()->streamDownload(function () {
+        echo GitHub::api('repo')
+                    ->contents()
+                    ->readme('laravel', 'laravel')['contents']
+    }, 'laravel-readme.md');
+
 <a name="file-responses"></a>
 ### File Responses - Odpowiedzi plików
 

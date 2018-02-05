@@ -93,6 +93,41 @@ Jeśli twój dostawca usług rejestruje wiele prostych powiązań, możesz chcie
         ];
     }
 
+#### The `bindings` And `singletons` Properties - Właściwości `bindings` i `singletons`
+
+Jeśli Twój dostawca usług rejestruje wiele prostych powiązań, możesz chcieć użyć właściwości `bindings` i `singletons` zamiast ręcznie rejestrować każde powiązanie kontenera. Gdy dostawca usług zostanie załadowany przez strukturę, automatycznie sprawdzi te właściwości i zarejestruje ich powiązania:
+
+    <?php
+
+    namespace App\Providers;
+
+    use App\Contracts\ServerProvider;
+    use App\Contracts\DowntimeNotifier;
+    use Illuminate\Support\ServiceProvider;
+    use App\Services\PingdomDowntimeNotifier;
+    use App\Services\DigitalOceanServerProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * All of the container bindings that should be registered.
+         *
+         * @var array
+         */
+        public $bindings = [
+            ServerProvider::class => DigitalOceanServerProvider::class,
+        ];
+
+        /**
+         * All of the container singletons that should be registered.
+         *
+         * @var array
+         */
+        public $singletons = [
+            DowntimeNotifier::class => PingdomDowntimeNotifier,
+        ];
+    }
+
 <a name="the-boot-method"></a>
 ### The Boot Method - Metoda rozruchu
 

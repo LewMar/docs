@@ -88,6 +88,7 @@ Laravel zawiera wiele globalnych "pomocniczych" funkcji PHP. Wiele z tych funkcj
 [str_finish](#method-str-finish)
 [str_is](#method-str-is)
 [str_limit](#method-str-limit)
+[Str::orderedUuid](#method-str-ordered-uuid)
 [str_plural](#method-str-plural)
 [str_random](#method-str-random)
 [str_replace_array](#method-str-replace-array)
@@ -100,6 +101,7 @@ Laravel zawiera wiele globalnych "pomocniczych" funkcji PHP. Wiele z tych funkcj
 [title_case](#method-title-case)
 [trans](#method-trans)
 [trans_choice](#method-trans-choice)
+[Str::uuid](#method-str-uuid)
 
 </div>
 
@@ -856,6 +858,15 @@ Możesz również przekazać trzeci argument, aby zmienić ciąg, który zostani
 
     // The quick brown fox (...)
 
+<a name="method-str-ordered-uuid"></a>
+#### `Str::orderedUuid()` {#collection-method}
+
+Metoda `Str::orderedUuid` generuje najpierw identyfikator UUID "datownika", który może być skutecznie przechowywany w kolumnie indeksowanej bazy danych:
+
+    use Illuminate\Support\Str;
+
+    return (string) Str::orderedUuid();
+
 <a name="method-str-plural"></a>
 #### `str_plural()` - liczba mnoga {#collection-method}
 
@@ -978,13 +989,22 @@ Funkcja `trans` tłumaczy dany klucz tłumaczenia za pomocą twoich [plików lok
 Jeśli podany klucz translacji nie istnieje, funkcja `trans` zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans` zwróci komunikat `messages.welcome`, jeśli klucz translacyjny nie istnieje.
 
 <a name="method-trans-choice"></a>
-#### `trans_choice()` - tłumaczy na fleksyjn y{#collection-method}
+#### `trans_choice() - tłumaczy na fleksyjny` {#collection-method}
 
 Funkcja `trans_choice` tłumaczy dany klucz tłumaczenia na fleksyjny:
 
     echo trans_choice('messages.notifications', $unreadCount);
 
 Jeśli podany klucz translacji nie istnieje, funkcja `trans_choice` zwróci dany klucz. Tak więc, używając powyższego przykładu, funkcja `trans_choice` zwróci komunikat `messages.notifications`, jeśli klucz translacyjny nie istnieje.
+
+<a name="method-str-uuid"></a>
+#### `Str::uuid() - identyfikator UUID` {#collection-method}
+
+Metoda `Str::uuid` generuje identyfikator UUID (wersja 4):
+
+    use Illuminate\Support\Str;
+
+    return (string) Str::uuid();
 
 <a name="urls"></a>
 ## URLs - Adresy Url
