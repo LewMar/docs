@@ -145,7 +145,7 @@ Podczas przypisywania oprogramowania pośredniego można również przekazać pe
 
 Czasami możesz zgrupować kilka programów pośredniczących pod jednym kluczem, aby ułatwić ich przypisywanie do tras. Możesz to zrobić za pomocą właściwości `$middlewareGroups` swojego jądra HTTP.
 
-Po wyjęciu z pudełka, Laravel oferuje grupy oprogramowania pośredniczącego `web` i` api` zawierające wspólne oprogramowanie pośrednie, które możesz zastosować do tras interfejsu użytkownika i interfejsu API:
+Po wyjęciu z pudełka, Laravel jest dostarczany z grupami oprogramowania pośredniczącego `web` i `api`, które zawierają typowe oprogramowanie pośrednie, które możesz zastosować do tras interfejsu użytkownika i interfejsu API:
 
     /**
      * The application's route middleware groups.

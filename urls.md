@@ -19,7 +19,7 @@ Laravel oferuje pomocników pomagających w generowaniu adresów URL dla aplikac
 <a name="generating-basic-urls"></a>
 ### Generating Basic URLs - Generowanie podstawowych URL-ów
 
-Pomocnik `url` może być używany do dowolnych adresów URL dla twojej aplikacji. Wygenerowany adres URL automatycznie użyje schematu (HTTP lub HTTPS) i hosta z bieżącego żądania:
+Pomocnik `url` może być używany do generowania dowolnych adresów URL dla twojej aplikacji. Wygenerowany adres URL automatycznie użyje schematu (HTTP lub HTTPS) i hosta z bieżącego żądania:
 
     $post = App\Post::find(1);
 

@@ -482,6 +482,7 @@ Domyślnie Homestead konfiguruje ustawienie `natdnshostresolver` na `on`. Dzięk
 #### Symbolic Links On Windows - Linki symboliczne w systemie Windows
 
 Jeśli linki symboliczne nie działają poprawnie na komputerze z systemem Windows, może być konieczne dodanie następującego bloku do pliku `Vagrantfile`:
+
     config.vm.provider "virtualbox" do |v|
         v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end

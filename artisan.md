@@ -321,9 +321,9 @@ Metodę `anticipate` można zastosować do automatycznego uzupełniania dla moż
 
 #### Multiple Choice Questions - Pytania wielokrotnego wyboru
 
-Jeśli chcesz dać użytkownikowi predefiniowany zestaw opcji, możesz użyć metody `choice`. Możesz ustawić wartość domyślną do zwrócenia, jeśli nie wybrano żadnej opcji:
+Jeśli chcesz dać użytkownikowi predefiniowany zestaw opcji, możesz użyć metody `choice`. Możesz ustawić indeks tablicy wartości domyślnej, która ma zostać zwrócona, jeśli nie wybrano żadnej opcji:
 
-    $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $default);
+    $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 
 <a name="writing-output"></a>
 ### Writing Output - Pisanie wyjścia
