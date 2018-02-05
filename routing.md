@@ -17,6 +17,7 @@
 - [Route Model Binding - Wiązanie modelu trasy](#route-model-binding)
     - [Implicit Binding - Niejawne powiązania](#implicit-binding)
     - [Explicit Binding - Jawne powiązania](#explicit-binding)
+- [Rate Limiting - Ograniczenie tempa](#rate-limiting)
 - [Form Method Spoofing - Podszywanie się pod Metody Form-a](#form-method-spoofing)
 - [Accessing The Current Route - Dostęp do aktualnej trasy](#accessing-the-current-route)
 
@@ -65,7 +66,7 @@ Czasami może zajść potrzeba zarejestrowania trasy, która odpowiada na wiele 
 Wszelkie formularze HTML wskazujące na trasy `POST`, `PUT`, lub `DELETE` zdefiniowane w pliku tras `web` powinny zawierać pole tokenu CSRF. W przeciwnym razie prośba zostanie odrzucona. Więcej informacji na temat ochrony CSRF można znaleźć w [dokumentacji CSRF](/docs/{{version}}/csrf):
 
     <form method="POST" action="/profile">
-        {{ csrf_field() }}
+        @csrf
         ...
     </form>
 
@@ -338,6 +339,27 @@ Jeśli chcesz użyć własnej logiki decyzyjnej, możesz użyć metody `Route::b
         });
     }
 
+<a name="rate-limiting"></a>
+## Rate Limiting - Ograniczenie tempa
+
+Laravel zawiera [oprogramowanie pośrednie](/docs/{{version}}/middleware), aby ocenić limit dostępu do tras w aplikacji. Aby rozpocząć, przypisz oprogramowanie pośredniczące `throttle` do trasy lub grupy tras. Program pośredniczący `throttle` akceptuje dwa parametry określające maksymalną liczbę żądań, które można wykonać w danej liczbie minut. Na przykład, określmy, że uwierzytelniony użytkownik może uzyskać dostęp do następującej grupy tras 60 razy na minutę:
+
+    Route::middleware('auth:api', 'throttle:60,1')->group(function () {
+        Route::get('/user', function () {
+            //
+        });
+    });
+
+#### Dynamic Rate Limiting - Dynamiczne ograniczenie tempa
+
+Możesz określić maksymalną wartość żądania dynamicznego na podstawie atrybutu uwierzytelnionego modelu `User`. Na przykład, jeśli twój model `User` zawiera atrybut `rate_limit`, możesz przekazać nazwę tego atrybutu do oprogramowania pośredniczącego `throttle`, aby użyć go do obliczenia maksymalnej liczby zapytań:
+
+    Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
+        Route::get('/user', function () {
+            //
+        });
+    });
+
 <a name="form-method-spoofing"></a>
 ## Form Method Spoofing - Podszywanie się pod Metody Form-a
 
@@ -348,9 +370,11 @@ Formularze HTML nie obsługują akcji `PUT`, ` PATCH` lub `DELETE`. Tak więc, d
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     </form>
 
-Możesz użyć helpera `method_field` do wygenerowania wejścia` _method`:
+Możesz użyć dyrektywy Blade `@method` do wygenerowania wejścia `_method`:
 
-    {{ method_field('PUT') }}
+    <form action="/foo/bar" method="POST">
+        @method('PUT')
+    </form>
 
 <a name="accessing-the-current-route"></a>
 ## Accessing The Current Route - Dostęp do aktualnej trasy

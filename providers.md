@@ -10,7 +10,6 @@
 <a name="introduction"></a>
 ## Introduction - Wprowadzenie
 
-
 Dostawcy usług są centralnym miejscem wszystkich uruchomień aplikacji Laravel. Twoja własna aplikacja, a także wszystkie podstawowe usługi Laravel są "bootstrapped" (samo załadowywane) za pośrednictwem dostawców usług.
 
 Ale co mamy na myśli przez "bootstrapped"? Ogólnie rzecz biorąc, mamy na myśli **registering (rejestrowanie)** rzeczy, w tym rejestrowanie powiązań service container bindings (kontenerów usług), event listeners (detektorów zdarzeń), middleware (oprogramowania pośredniego), a nawet routes (tras). Service providers (Dostawcy usług) są głównym miejscem do konfiguracji aplikacji.
@@ -59,6 +58,41 @@ Rzućmy okiem na podstawowego dostawcę usług. W ramach każdej z metod dostawc
 
 Ten dostawca usług definiuje tylko metodę `register`,  i używa tej metody do zdefiniowania implementacji `Riak\Connection` w kontenerze usług. Jeśli nie wiesz, jak działa kontener usługi, sprawdź [jego dokumentację](/docs/{{version}}/container).
 
+#### The `bindings` And `singletons` Properties - Właściwości `bindings` i `singletons`
+
+Jeśli twój dostawca usług rejestruje wiele prostych powiązań, możesz chcieć użyć właściwości `bindings` i `singletons` zamiast ręcznie rejestrować każde powiązanie kontenera. Gdy dostawca usług zostanie załadowany przez strukturę, automatycznie sprawdzi te właściwości i zarejestruje ich powiązania:
+
+    <?php
+
+    namespace App\Providers;
+
+    use App\Contracts\ServerProvider;
+    use App\Contracts\DowntimeNotifier;
+    use Illuminate\Support\ServiceProvider;
+    use App\Services\PingdomDowntimeNotifier;
+    use App\Services\DigitalOceanServerProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * All of the container bindings that should be registered.
+         *
+         * @var array
+         */
+        public $bindings = [
+            ServerProvider::class => DigitalOceanServerProvider::class,
+        ];
+
+        /**
+         * All of the container singletons that should be registered.
+         *
+         * @var array
+         */
+        public $singletons = [
+            DowntimeNotifier::class => PingdomDowntimeNotifier,
+        ];
+    }
+
 <a name="the-boot-method"></a>
 ### The Boot Method - Metoda rozruchu
 
@@ -87,7 +121,6 @@ A więc, jeśli musimy zarejestrować view composer (kompozytora widoku) w naszy
 
 #### Boot Method Dependency Injection - Metoda rozruch wstrzykniętych zależności
 
-You may type-hint dependencies for your service provider's `boot` method. The [service container (Kontener usług)](/docs/{{version}}/container) will automatically inject any dependencies you need:
 Możesz wpisać wskazówkę zależności dla metody `boot` service provider (dostawcy usług). [service container (Kontener usług)](/docs/{{version}}/container) automatycznie wstrzyknie wszelkie wymagane zależności:
 
     use Illuminate\Contracts\Routing\ResponseFactory;

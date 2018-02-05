@@ -28,7 +28,7 @@ Jeśli chcesz usunąć rusztowanie frontendowe z aplikacji, możesz użyć polec
 <a name="writing-css"></a>
 ## Writing CSS  - Pisanie CSS
 
-Plik `package.json` firmy Laravel zawiera pakiet `bootstrap-sass`, który ułatwia rozpoczęcie prototypowania interfejsu aplikacji za pomocą Bootstrap. Jednak możesz dowolnie dodawać lub usuwać pakiety z pliku `package.json` zgodnie z potrzebami swojej aplikacji. Nie musisz używać struktury Bootstrap do budowania aplikacji Laravel - jest to dobry punkt wyjścia dla tych, którzy z niej korzystają.
+Plik `package.json` firmy Laravel zawiera pakiet `bootstrap`, który ułatwia rozpoczęcie prototypowania interfejsu aplikacji za pomocą Bootstrap. Jednak możesz dowolnie dodawać lub usuwać pakiety z pliku `package.json` zgodnie z potrzebami swojej aplikacji. Nie musisz używać struktury Bootstrap do budowania aplikacji Laravel - jest to dobry punkt wyjścia dla tych, którzy z niej korzystają.
 
 Przed skompilowaniem swojego CSS, zainstaluj zależności frontendu projektu za pomocą [menedżera pakietów Node (NPM)](https://www.npmjs.org):
 

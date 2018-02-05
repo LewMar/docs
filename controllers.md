@@ -174,9 +174,11 @@ Jeśli używasz wiązania modelu trasy i chcesz, aby metody kontrolera zasobów 
 
 #### Spoofing Form Methods - Okroić metody Form
 
-Ponieważ formularze HTML nie mogą tworzyć żądań typu `PUT`, `PATCH`, or `DELETE`, konieczne będzie dodanie ukrytego pola `_method` w celu sfałszowania tych czasowników HTTP. Pomocnik `method_field` może utworzyć to pole dla ciebie:
+Ponieważ formularze HTML nie mogą tworzyć żądań typu `PUT`, `PATCH`, or `DELETE`, konieczne będzie dodanie ukrytego pola `_method` w celu sfałszowania tych akcji HTTP. Dyrektywa Blade `@method` może utworzyć dla ciebie to pole:
 
-    {{ method_field('PUT') }}
+    <form action="/foo/bar" method="POST">
+        @method('PUT')
+    </form>
 
 <a name="restful-partial-resource-routes"></a>
 ### Partial Resource Routes - Trasy częściowych zasobów

@@ -32,7 +32,6 @@ Blade to prosty, ale potężny silnik szablonowy dostarczany z Laravel. W przeci
 <a name="defining-a-layout"></a>
 ### Defining A Layout - Definiowanie układu
 
-Two of the primary benefits of using Blade are _template inheritance_ and _sections_. To get started, let's take a look at a simple example. First, we will examine a "master" page layout. Since most web applications maintain the same general layout across various pages, it's convenient to define this layout as a single Blade view:
 Dwie główne korzyści z używania Blade to _szablon dziedziczenia_ i _sekcji_. Na początek rzućmy okiem na prosty przykład. Najpierw sprawdzimy układ strony "master". Ponieważ większość aplikacji internetowych zachowuje ten sam ogólny układ na różnych stronach, wygodnie jest zdefiniować ten układ jako pojedynczy widok Blade:
 
     <!-- Stored in resources/views/layouts/app.blade.php -->
@@ -77,7 +76,6 @@ Podczas definiowania widoku podrzędnego użyj dyrektywy Blade `@extends`, aby o
         <p>This is my body content.</p>
     @endsection
 
-In this example, the `sidebar` section is utilizing the `@@parent` directive to append (rather than overwriting) content to the layout's sidebar. The `@@parent` directive will be replaced by the content of the layout when the view is rendered.
 W tym przykładzie sekcja `sidebar` używa dyrektywy `@@parent` do dołączania (zamiast nadpisywania) zawartości do paska bocznego układu. Dyrektywa `@@parent` zostanie zastąpiona zawartością układu podczas renderowania widoku.
 
 > {tip} W przeciwieństwie do poprzedniego przykładu sekcja `sidebar` kończy się `@endsection` zamiast `@show`. Dyrektywa `@endsection` definiuje tylko sekcję, podczas gdy `@show` definiuje i **natychmiast ustepuje** sekcji.
@@ -173,6 +171,30 @@ Jednak zamiast ręcznie wywoływać `json_encode`, możesz użyć dyrektywy `@js
     <script>
         var app = @json($array);
     </script>
+
+#### HTML Entity Encoding
+
+Domyślnie Blade (i Laravel `e` Helper) dwukrotnie kodują encje HTML. Jeśli chcesz wyłączyć podwójne kodowanie, wywołaj metodę `Blade::withoutDoubleEncoding` z metody` boot` twojego `AppServiceProvider`:
+
+    <?php
+
+    namespace App\Providers;
+
+    use Illuminate\Support\Facades\Blade;
+    use Illuminate\Support\ServiceProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            Blade::withoutDoubleEncoding();
+        }
+    }
 
 <a name="blade-and-javascript-frameworks"></a>
 ### Blade & JavaScript Frameworks - Blade i fremework-ki JavaScript-owe

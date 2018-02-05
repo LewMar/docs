@@ -7,6 +7,7 @@
     - [Driver Prerequisites - Wymagania wstępne sterownika](#driver-prerequisites)
 - [Obtaining Disk Instances - Uzyskiwanie wystąpień dyskowych](#obtaining-disk-instances)
 - [Retrieving Files - Pobieranie plików](#retrieving-files)
+    - [Downloading Files](#downloading-files)
     - [File URLs - Adresy URL plików](#file-urls)
     - [File Metadata - Adresy URL plików](#file-metadata)
 - [Storing Files - Przechowywanie plików](#storing-files)
@@ -118,6 +119,15 @@ Do określenia, czy plik istnieje na dysku, można użyć metody `exists`:
 
     $exists = Storage::disk('s3')->exists('file.jpg');
 
+<a name="downloading-files"></a>
+### Downloading Files - Pobieranie plików
+
+Metodę `download` można wykorzystać do wygenerowania odpowiedzi, która zmusza przeglądarkę użytkownika do pobrania pliku w podanej ścieżce. Metoda `download` akceptuje nazwę pliku jako drugi argument metody, który określi nazwę pliku widoczną dla użytkownika pobierającego plik. Na koniec możesz przekazać tablicę nagłówków HTTP jako trzeci argument metody:
+
+    return Storage::download('file.jpg');
+
+    return Storage::download('file.jpg', $name, $headers);
+
 <a name="file-urls"></a>
 ### File URLs - Adresy URL plików
 
@@ -125,7 +135,7 @@ Możesz użyć metody `url`, aby uzyskać adres URL dla danego pliku. Jeśli uż
 
     use Illuminate\Support\Facades\Storage;
 
-    $url = Storage::url('file1.jpg');
+    $url = Storage::url('file.jpg');
 
 > {note} Pamiętaj, że jeśli używasz sterownika `local`, wszystkie pliki, które powinny być publicznie dostępne, powinny być umieszczone w katalogu  `storage/app/public`. Ponadto powinieneś [stworzyć dowiązanie symboliczne](#the-public-disk) w `public/storage`, które wskazuje na katalog `storage/app/public`.
 
@@ -134,7 +144,7 @@ Możesz użyć metody `url`, aby uzyskać adres URL dla danego pliku. Jeśli uż
 W przypadku plików przechowywanych za pomocą sterownika `s3` lub `rackspace` można utworzyć tymczasowy adres URL dla danego pliku, używając metody `temporaryUrl`. Ta metoda akceptuje ścieżkę i instancję `DateTime` określającą datę wygaśnięcia adresu URL:
 
     $url = Storage::temporaryUrl(
-        'file1.jpg', now()->addMinutes(5)
+        'file.jpg', now()->addMinutes(5)
     );
 
 #### Local URL Host Customization - Dostosowanie lokalnych adresów URL do potrzeb
@@ -155,11 +165,11 @@ Oprócz czytania i zapisywania plików, Laravel może również udostępniać in
 
     use Illuminate\Support\Facades\Storage;
 
-    $size = Storage::size('file1.jpg');
+    $size = Storage::size('file.jpg');
 
 Metoda `lastModified` zwraca znacznik czasu UNIX po ostatniej modyfikacji pliku:
 
-    $time = Storage::lastModified('file1.jpg');
+    $time = Storage::lastModified('file.jpg');
 
 <a name="storing-files"></a>
 ## Storing Files - Przechowywanie plików
@@ -203,9 +213,9 @@ Metody `prepend` i `append` umożliwiają zapisanie na początku lub końcu plik
 
 Metodę `copy` można użyć do skopiowania istniejącego pliku do nowej lokalizacji na dysku, natomiast metoda `move` może posłużyć do zmiany nazwy lub przeniesienia istniejącego pliku do nowej lokalizacji:
 
-    Storage::copy('old/file1.jpg', 'new/file1.jpg');
+    Storage::copy('old/file.jpg', 'new/file.jpg');
 
-    Storage::move('old/file1.jpg', 'new/file1.jpg');
+    Storage::move('old/file.jpg', 'new/file.jpg');
 
 <a name="file-uploads"></a>
 ### File Uploads - Przesyłanie plików
@@ -289,7 +299,7 @@ Metoda `delete` akceptuje pojedynczą nazwę pliku lub tablicę plików do usuni
 
     Storage::delete('file.jpg');
 
-    Storage::delete(['file1.jpg', 'file2.jpg']);
+    Storage::delete(['file.jpg', 'file2.jpg']);
 
 W razie potrzeby możesz określić dysk, z którego plik ma zostać usunięty:
 

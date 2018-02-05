@@ -127,6 +127,14 @@ Oczywiście możesz łączyć te metody z innymi klauzulami:
                     ->where('finalized', 1)
                     ->avg('price');
 
+#### Determining If Records Exist - Określanie, czy istnieją rekordy
+
+Zamiast używać metody `count` do określenia, czy istnieją jakiekolwiek rekordy pasujące do ograniczeń twojego zapytania, możesz użyć metod `exist` i `doesntExist`:
+
+    return DB::table('orders')->where('finalized', 1)->exists();
+
+    return DB::table('orders')->where('finalized', 1)->doesntExist();
+
 <a name="selects"></a>
 ## Selects - Selekty
 

@@ -240,7 +240,9 @@ Laravel oferuje wiele niestandardowych metod asercji dla testów [PHPUnit](https
 [assertPlainCookie](#assert-plain-cookie)
 [assertRedirect](#assert-redirect)
 [assertSee](#assert-see)
+[assertSeeInOrder](#assert-see-in-order)
 [assertSeeText](#assert-see-text)
+[assertSeeTextInOrder](#assert-see-text-in-order)
 [assertSessionHas](#assert-session-has)
 [assertSessionHasAll](#assert-session-has-all)
 [assertSessionHasErrors](#assert-session-has-errors)
@@ -375,12 +377,26 @@ Twierdzimy, że dany ciąg jest zawarty w odpowiedzi:
 
     $response->assertSee($value);
 
+<a name="assert-see-in-order"></a>
+#### assertSeeInOrder
+
+Upewnij się, że podane ciągi znaków są zawarte w kolejności odpowiedzi:
+
+    $response->assertSeeInOrder(array $values);
+
 <a name="assert-see-text"></a>
 #### assertSeeText
 
 Twierdzimy, że podany ciąg jest zawarty w tekście odpowiedzi:
 
     $response->assertSeeText($value);
+
+<a name="assert-see-text-in-order"></a>
+#### assertSeeTextInOrder
+
+Upewnij się, że podane ciągi znaków są zawarte w kolejności w tekście odpowiedzi:
+
+    $response->assertSeeTextInOrder(array $values);
 
 <a name="assert-session-has"></a>
 #### assertSessionHas

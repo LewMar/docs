@@ -2,7 +2,7 @@
 
 - [Introduction - Wprowadzenie](#introduction)
     - [Connections Vs. Queues - Połączenia kontra kolejki](#connections-vs-queues)
-    - [Driver Prerequisites - Wymagania wstępne sterownika](#driver-prerequisites)
+    - [Driver Notes & Prerequisites - Listy i wymagania wstępne sterownika](#driver-prerequisites)
 - [Creating Jobs - Tworzenie zadań](#creating-jobs)
     - [Generating Job Classes - Generowanie klas zadań](#generating-job-classes)
     - [Class Structure - Struktura klasy](#class-structure)
@@ -51,7 +51,7 @@ Niektóre aplikacje mogą nie potrzebować nigdy przenosić zadań do wielu kole
     php artisan queue:work --queue=high,default
 
 <a name="driver-prerequisites"></a>
-### Driver Prerequisites - Wymagania wstępne sterownika
+### Driver Notes & Prerequisites - Listy i wymagania wstępne sterownika
 
 #### Database - Bazadanych
 
@@ -65,6 +65,8 @@ Aby użyć sterownika kolejki `database`, będziesz potrzebował tabeli bazy dan
 
 Aby użyć sterownika kolejki `redis`, powinieneś skonfigurować połączenie z bazą danych Redis w pliku konfiguracyjnym `config/database.php`.
 
+**Redis Cluster**
+
 Jeśli połączenie kolejki Redis używa klastra Redis, nazwy kolejek muszą zawierać [etykietę klucza hash](https://redis.io/topics/cluster-spec#keys-hash-tags). Jest to wymagane, aby wszystkie klucze Redis dla danej kolejki zostały umieszczone w tym samym polu skrótu:
 
     'redis' => [
@@ -72,6 +74,20 @@ Jeśli połączenie kolejki Redis używa klastra Redis, nazwy kolejek muszą zaw
         'connection' => 'default',
         'queue' => '{default}',
         'retry_after' => 90,
+    ],
+
+**Blocking - Blokowanie**
+
+Podczas korzystania z kolejki Redis można użyć opcji konfiguracyjnej `block_for`, aby określić, jak długo sterownik ma czekać na udostępnienie zadania przed wykonaniem iteracji w pętli roboczej i ponownym odpytaniem bazy danych Redis.
+
+Dostosowanie tej wartości w oparciu o obciążenie kolejki może być bardziej skuteczne niż ciągłe odpytywanie bazy danych Redis dla nowych zadań. Na przykład możesz ustawić wartość na `5`, aby wskazać, że sterownik powinien blokować przez pięć sekund podczas oczekiwania na udostępnienie zadania:
+
+    'redis' => [
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => 'default',
+        'retry_after' => 90,
+        'block_for' => 5,
     ],
 
 #### Other Driver Prerequisites - Inne wymagania wstępne sterownika
@@ -218,6 +234,15 @@ Jeśli chcesz opóźnić wykonanie zlecenia w kolejce, możesz użyć metody `de
         new OptimizePodcast,
         new ReleasePodcast
     ])->dispatch();
+
+#### Chain Connection & Queue - Łancuch połaczenia i kolejki
+
+Jeśli chcesz określić domyślne połączenie i kolejkę, które powinny być używane dla połączonych zadań, możesz użyć metod `allOnConnection` i `allOnQueue`. Te metody określają połączenie kolejki i nazwę kolejki, które powinny być używane, chyba że kolejkowemu zadaniu jawnie przypisano inne połączenie / kolejkę:
+
+    ProcessPodcast::withChain([
+        new OptimizePodcast,
+        new ReleasePodcast
+    ])->dispatch()->allOnConnection('redis')->allOnQueue('podcasts');
 
 <a name="customizing-the-queue-and-connection"></a>
 ### Customizing The Queue & Connection - Dostosowywanie kolejki i połączenia

@@ -217,7 +217,6 @@ Powinieneś użyć metody `has`, aby określić, czy wartość jest obecna w ż�
 
 Gdy podana zostanie tablica, metoda `has` określi, czy wszystkie podane wartości są obecne:
 
-
     if ($request->has(['name', 'email'])) {
         //
     }
@@ -247,7 +246,6 @@ Możesz także użyć metod `flashOnly` i `flashExcept` do flashowania podzbioru
 
 #### Flashing Input Then Redirecting - igawka danych wejściowych, a póżniej przekierowanie
 
-Since you often will want to flash input to the session and then redirect to the previous page, you may easily chain input flashing onto a redirect using the `withInput` method:
 Ponieważ często będziesz chciał wczytać dane wejściowe do sesji, a następnie przekierować na poprzednią stronę, możesz łatwo włączyć flashowanie wejścia na przekierowanie za pomocą metody `withInput`:
 
     return redirect('form')->withInput();
@@ -354,7 +352,6 @@ Metoda `store` akceptuje ścieżkę, w której plik powinien być przechowywany 
 
 Metoda `store` przyjmuje również opcjonalny drugi argument dla nazwy dysku, który powinien zostać użyty do przechowywania pliku. Metoda zwróci ścieżkę pliku względem katalogu głównego dysku:
 
-
     $path = $request->photo->store('images');
 
     $path = $request->photo->store('images', 's3');
@@ -370,7 +367,7 @@ Jeśli nie chcesz, aby nazwa pliku była generowana automatycznie, możesz uży�
 
 Podczas uruchamiania aplikacji za modułem równoważenia obciążenia, który nadaje certyfikaty TLS / SSL, możesz zauważyć, że aplikacja czasami nie generuje linków HTTPS. Zazwyczaj dzieje się tak dlatego, że Twoja aplikacja jest przekierowywana z systemu równoważenia obciążenia na porcie 80 i nie wie, że powinna generować bezpieczne linki.
 
-Aby rozwiązać ten problem, można użyć oprogramowania pośredniego `App\Http\Middleware\TrustProxies`, które jest zawarte w aplikacji Laravel, co pozwala szybko dostosować ustawienia równoważenia obciążenia lub serwery proxy, które powinny być zaufane przez aplikację. Twój zaufany serwer proxy powinien być wymieniony jako tablica we właściwości `$proxies` tego oprogramowania pośredniego. Oprócz konfiguracji zaufanych serwerów proxy możesz skonfigurować nagłówki wysyłane przez serwer proxy z informacjami o pierwotnym żądaniu:
+Aby rozwiązać ten problem, można użyć oprogramowania pośredniego `App\Http\Middleware\TrustProxies`, które jest zawarte w aplikacji Laravel, co pozwala szybko dostosować ustawienia równoważenia obciążenia lub serwery proxy, które powinny być zaufane przez aplikację. Twój zaufany serwer proxy powinien być wymieniony jako tablica we właściwości  `$proxies` tego oprogramowania pośredniego. Oprócz konfiguracji zaufanych serwerów proxy możesz skonfigurować `$headers`, które powinno być zaufane:
 
     <?php
 
@@ -392,22 +389,17 @@ Aby rozwiązać ten problem, można użyć oprogramowania pośredniego `App\Http
         ];
 
         /**
-         * The current proxy header mappings.
+         * The headers that should be used to detect proxies.
          *
-         * @var array
+         * @var string
          */
-        protected $headers = [
-            Request::HEADER_FORWARDED => 'FORWARDED',
-            Request::HEADER_X_FORWARDED_FOR => 'X_FORWARDED_FOR',
-            Request::HEADER_X_FORWARDED_HOST => 'X_FORWARDED_HOST',
-            Request::HEADER_X_FORWARDED_PORT => 'X_FORWARDED_PORT',
-            Request::HEADER_X_FORWARDED_PROTO => 'X_FORWARDED_PROTO',
-        ];
+        protected $headers = Request::HEADER_X_FORWARDED_ALL;
     }
+
+> {tip} Jeśli korzystasz z elastycznego równoważenia obciążenia AWS, wartość `$headers` powinna wynosić `Request::HEADER_X_FORWARDED_AWS_ELB`. Aby uzyskać więcej informacji na temat stałych, które mogą być używane w własności `$headers`, sprawdź dokumentację Symfony na temat [trusting proxy](http://symfony.com/doc/current/deployment/proxies.html).
 
 #### Trusting All Proxies - Ufając wszystkim serwerom proxy
 
-If you are using Amazon AWS or another "cloud" load balancer provider, you may not know the IP addresses of your actual balancers. In this case, you may use `**` to trust all proxies:
 Jeśli korzystasz z usługi Amazon AWS lub innego dostawcy usług równoważenia obciążenia "w chmurze", możesz nie znać adresów IP rzeczywistych równoważników. W takim przypadku możesz użyć `**` do zaufania wszystkim proxy:
 
     /**

@@ -197,7 +197,6 @@ Pomocnik `response` może być używany do generowania innych typów instancji o
 
 Jeśli potrzebujesz kontroli nad stanem odpowiedzi i nagłówkami, ale także musisz zwrócić [widok](/docs/{{version}}/views) jako treść odpowiedzi, powinieneś użyć metody `view`:
 
-
     return response()
                 ->view('hello', $data, 200)
                 ->header('Content-Type', $type);
@@ -232,6 +231,16 @@ Metodę `download` można wykorzystać do wygenerowania odpowiedzi, która zmusz
     return response()->download($pathToFile)->deleteFileAfterSend(true);
 
 > {note} Symfony HttpFoundation, która zarządza pobieraniem plików, wymaga, aby pobrany plik miał nazwę pliku ASCII.
+
+#### Streamed Downloads - Pobieranie strumieniowe
+
+Czasami możesz zamienić odpowiedź łańcuchową danej operacji na odpowiedź do pobrania bez konieczności zapisywania zawartości operacji na dysk. W tym scenariuszu możesz użyć metody `streamDownload`. Ta metoda akceptuje wywołanie zwrotne, nazwę pliku i opcjonalną tablicę nagłówków jako argumenty:
+
+    return response()->streamDownload(function () {
+        echo GitHub::api('repo')
+                    ->contents()
+                    ->readme('laravel', 'laravel')['contents']
+    }, 'laravel-readme.md');
 
 <a name="file-responses"></a>
 ### File Responses - Odpowiedzi plików

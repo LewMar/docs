@@ -20,7 +20,7 @@ Framework Laravel ma kilka wymagań systemowych. Oczywiście wszystkie te wymaga
 Jeśli jednak nie korzystasz z Homestead, musisz upewnić się, że serwer spełnia następujące wymagania:
 
 <div class="content-list" markdown="1">
-- PHP >= 7.0.0
+- PHP >= 7.1.3
 - OpenSSL PHP Extension
 - PDO PHP Extension
 - Mbstring PHP Extension

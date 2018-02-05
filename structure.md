@@ -13,6 +13,7 @@
     - [The `tests` Directory  - Katalog testów](#the-tests-directory)
     - [The `vendor` Directory - Katalog dostawców](#the-vendor-directory)
 - [The App Directory - Katalog aplikacji](#the-app-directory)
+    - [The `Broadcasting` Directory - Katalog transmisyjny](#the-broadcasting-directory)
     - [The `Console` Directory - Katalog konsoli](#the-console-directory)
     - [The `Events` Directory - Katalog zdarzeń](#the-events-directory)
     - [The `Exceptions` Directory - Katalog wyjątków](#the-exceptions-directory)
@@ -109,6 +110,11 @@ Katalog `app` zawiera wiele dodatkowych katalogów, takich jak `Console`, `Http`
 W katalogu `app` będzie generowanych wiele innych katalogów, ponieważ do generowania klas używane są polecenia `make` Artisan. Na przykład katalog `app/Jobs` nie będzie istnieć, dopóki nie wykonasz polecenia `make:job` Artisan, aby wygenerować klasę zadań.
 
 > {tip} Wiele klas w katalogu `app` może być generowanych przez Artisan za pomocą poleceń. Aby przejrzeć dostępne polecenia, uruchom polecenie `php artisan list make` w twoim terminalu.
+
+<a name="the-broadcasting-directory"></a>
+#### The Broadcasting Directory - Katalog transmisyjny
+
+Katalog `Broadcasting` zawiera wszystkie klasy kanałów transmisji dla twojej aplikacji. Te klasy są generowane za pomocą polecenia `make:channel`. Ten katalog nie istnieje domyślnie, ale zostanie utworzony dla ciebie podczas tworzenia pierwszego kanału. Aby dowiedzieć się więcej o kanałach, zapoznaj się z dokumentacją [transmisja zdarzeń](/docs/{{version}}/broadcasting).
 
 <a name="the-console-directory"></a>
 #### The Console Directory - Katalog konsoli

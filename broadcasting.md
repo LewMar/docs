@@ -13,6 +13,7 @@
 - [Authorizing Channels - Autoryzacja kanałów](#authorizing-channels)
     - [Defining Authorization Routes - Definiowanie tras autoryzacji](#defining-authorization-routes)
     - [Defining Authorization Callbacks - Definiowanie wywołań autoryzacji](#defining-authorization-callbacks)
+    - [Defining Channel Classes - Definiowanie klas kanałów](#defining-channel-classes)
 - [Broadcasting Events - Rozgłaszanie zdarzeń](#broadcasting-events)
     - [Only To Others - Tylko dla innych](#only-to-others)
 - [Receiving Broadcasts - Odbierane rozgłoszenia](#receiving-broadcasts)
@@ -255,7 +256,6 @@ Jeśli dostosujesz nazwę rozgłoszeniową za pomocą metody `broadcastAs`, powi
 <a name="broadcast-data"></a>
 ### Broadcast Data - Dane transmisji
 
-When an event is broadcast, all of its `public` properties are automatically serialized and broadcast as the event's payload, allowing you to access any of its public data from your JavaScript application. So, for example, if your event has a single public `$user` property that contains an Eloquent model, the event's broadcast payload would be:
 Gdy zdarzenie jest transmitowane, wszystkie jego właściwości "publiczne" są automatycznie szeregowane i emitowane jako ładunek zdarzenia, co pozwala na dostęp do dowolnych jego publicznych danych z aplikacji JavaScript. Na przykład, jeśli zdarzenie ma jedną publiczną właściwość `$user` zawierającą model Eloquent, ładunek emisji wydarzenia będzie następujący:
 
     {
@@ -353,6 +353,55 @@ Podobnie jak trasy HTTP, trasy kanałów mogą również wykorzystywać niejawne
     Broadcast::channel('order.{order}', function ($user, Order $order) {
         return $user->id === $order->user_id;
     });
+
+<a name="defining-channel-classes"></a>
+### Defining Channel Classes - Definiowanie klas kanałów
+
+Jeśli twoja aplikacja zużywa wiele różnych kanałów, twój plik `routes/channels.php` może stać się nieporęczny. Zamiast korzystać z opcji Closure, aby autoryzować kanały, możesz korzystać z klas kanałów. Aby wygenerować klasę kanału, użyj polecenia `make:channel` Artisan. To polecenie umieści nową klasę kanałów w katalogu `App/Broadcasting`.
+
+    php artisan make:channel OrderChannel
+
+Następnie zarejestruj swój kanał w pliku `routes/channels.php`:
+
+    use App\Broadcasting\OrderChannel;
+
+    Broadcast::channel('order.{order}', OrderChannel::class);
+
+Na koniec możesz umieścić logikę autoryzacji dla swojego kanału w metodzie kanału `join`. Ta metoda `join` będzie zawierała tę samą logikę, którą zwykle umieszczasz w swoim closure autoryzacji kanału. Oczywiście możesz również skorzystać z wiązania modelu kanału:
+
+    <?php
+
+    namespace App\Broadcasting;
+
+    use App\User;
+    use App\Order;
+
+    class OrderChannel
+    {
+        /**
+         * Create a new channel instance.
+         *
+         * @return void
+         */
+        public function __construct()
+        {
+            //
+        }
+
+        /**
+         * Authenticate the user's access to the channel.
+         *
+         * @param  \App\User  $user
+         * @param  \App\Order  $order
+         * @return array|bool
+         */
+        public function join(User $user, Order $order)
+        {
+            return $user->id === $order->user_id;
+        }
+    }
+
+> {tip} Podobnie jak wiele innych klas w Laravel, klasy kanałów będą automatycznie rozwiązywane przez [kontener usługi](/docs/{{version}}/container). Możesz więc wpisać wskazówki dla wszystkich zależności wymaganych przez twój kanał w jego konstruktorze.
 
 <a name="broadcasting-events"></a>
 ## Broadcasting Events - Rozgłaszanie zdarzeń

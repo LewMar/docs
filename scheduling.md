@@ -7,6 +7,7 @@
     - [Scheduling Shell Commands - Planowanie poleceń powłoki](#scheduling-shell-commands)
     - [Schedule Frequency Options - Zaplanuj opcje częstotliwości](#schedule-frequency-options)
     - [Preventing Task Overlaps - Zapobieganie nakładaniu się zadań](#preventing-task-overlaps)
+    - [Running Tasks On One Server](#running-tasks-on-one-server)
     - [Maintenance Mode - Tryb konserwacji](#maintenance-mode)
 - [Task Output - Zadanie wyjściowe](#task-output)
 - [Task Hooks - Haczyki zadań](#task-hooks)
@@ -183,6 +184,20 @@ W tym przykładzie `emails:send` [polecenie Artisana](/docs/{{version}}/artisan)
 W razie potrzeby możesz określić, ile minut musi upłynąć, zanim wygaśnie blokada "bez nakładania się". Domyślnie blokada wygaśnie po 24 godzinach:
 
     $schedule->command('emails:send')->withoutOverlapping(10);
+
+<a name="running-tasks-on-one-server"></a>
+### Running Tasks On One Server - Uruchamianie zadań na jednym serwerze
+
+> {note} Aby móc korzystać z tej funkcji, aplikacja musi używać sterownika pamięci podręcznej `memcached` lub `redis` jako domyślnego sterownika pamięci podręcznej aplikacji. Ponadto wszystkie serwery muszą komunikować się z tym samym centralnym serwerem pamięci podręcznej.
+
+Jeśli twoja aplikacja działa na wielu serwerach, możesz teraz ograniczyć zaplanowane zadanie do wykonania tylko na jednym serwerze. Załóżmy na przykład, że masz zaplanowane zadanie, które generuje nowy raport w każdy piątek wieczorem. Jeśli program do planowania zadań działa na trzech serwerach roboczych, zaplanowane zadanie zostanie uruchomione na wszystkich trzech serwerach i wygeneruje raport trzy razy. Niedobrze!
+
+Aby wskazać, że zadanie powinno działać tylko na jednym serwerze, podczas definiowania zaplanowanego zadania można użyć metody `onOneServer`. Pierwszy serwer, który uzyska zadanie, zabezpieczy blokadę atomową przed zadaniem, aby uniemożliwić innym serwerom wykonywanie tego samego zadania w tym samym czasie:
+
+    $schedule->command('report:generate')
+                    ->fridays()
+                    ->at('17:00')
+                    ->onOneServer();
 
 <a name="maintenance-mode"></a>
 ### Maintenance Mode - Tryb konserwacji

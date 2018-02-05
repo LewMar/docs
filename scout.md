@@ -13,6 +13,7 @@
     - [Updating Records - Aktualizowanie rekordów](#updating-records)
     - [Removing Records - Usuwanie rekordów](#removing-records)
     - [Pausing Indexing - Wstrzymywanie indeksowania](#pausing-indexing)
+    - [Conditionally Searchable Model Instances - Instancja modelu warunkowego wyszukiwania](#conditionally-searchable-model-instances)
 - [Searching - Wyszukiwanie](#searching)
     - [Where Clauses - Klauzura Gdzie](#where-clauses)
     - [Pagination - Paginacja](#pagination)
@@ -55,7 +56,6 @@ Na koniec dodaj cechę `Laravel\Scout\Searchable` do modelu, który chcesz przes
 
 Chociaż nie jest to bezwzględnie wymagane do korzystania z Scout, powinieneś zdecydowanie rozważyć skonfigurowanie [sterownika kolejki](/docs/{{version}}/queues) przed użyciem biblioteki. Uruchomienie modułu kolejki pozwoli Scoutowi na umieszczenie w kolejce wszystkich operacji synchronizujących informacje o twoim modelu z indeksami wyszukiwania, zapewniając znacznie lepsze czasy odpowiedzi dla interfejsu WWW aplikacji.
 
-Once you have configured a queue driver, set the value of the `queue` option in your `config/scout.php` configuration file to `true`:
 Po skonfigurowaniu sterownika kolejki ustaw wartość opcji `queue` w pliku konfiguracyjnym `config/scout.php` na `true`:
 
     'queue' => true,
@@ -216,6 +216,16 @@ Czasami może zajść potrzeba wykonania partii Wymownych operacji na modelu bez
     App\Order::withoutSyncingToSearch(function () {
         // Perform model actions...
     });
+
+<a name="conditionally-searchable-model-instances"></a>
+### Conditionally Searchable Model Instances - Instancja modelu warunkowego wyszukiwania
+
+Czasami może zajść potrzeba tylko przeszukiwania modelu pod pewnymi warunkami. Na przykład wyobraź sobie, że masz model `App\Post`, który może znajdować się w jednym z dwóch stanów: "draft" i "published". Możesz chcieć wyszukiwać tylko "opublikowane" posty. Aby to osiągnąć, możesz zdefiniować metodę `shouldBeSearchable` na swoim modelu:
+
+    public function shouldBeSearchable()
+    {
+        return $this->isPublished();
+    }
 
 <a name="searching"></a>
 ## Searching - Wyszukiwanie
