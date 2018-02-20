@@ -96,7 +96,7 @@ Powinieneś sprawdzić oznaczoną wersję Homestead, ponieważ gałąź `master`
     cd ~/Homestead
 
     // Clone the desired release...
-    git checkout v7.0.1
+    git checkout v7.1.2
 
 Po sklonowaniu repozytorium Homestead, uruchom komendę `bash init.sh` z katalogu Homestead, aby utworzyć plik konfiguracyjny `Homestead.yaml`. Plik `Homestead.yaml` zostanie umieszczony w katalogu Homestead:
 

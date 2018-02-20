@@ -802,8 +802,7 @@ Funkcja `str_before` zwraca wszystko przed podaną wartością w ciągu znaków:
 <a name="method-str-contains"></a>
 #### `str_contains()` - pasujący ciąg {#collection-method}
 
-The `str_contains` function determines if the given string contains the given value:
-Funkcja `str_contains` określa, czy podany łańcuch zawiera daną wartość:
+Funkcja `str_contains` określa, czy podany łańcuch zawiera podaną wartość (wielkość liter ma znaczenie):
 
     $contains = str_contains('This is my name', 'my');
 

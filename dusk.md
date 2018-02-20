@@ -46,7 +46,7 @@ Laravel Dusk zapewnia ekspresyjny, łatwy w użyciu interfejs API do automatyzac
 
 Aby rozpocząć, powinieneś dodać zależność `laravel/dusk` Composer do swojego projektu:
 
-    composer require --dev laravel/dusk
+    composer require --dev laravel/dusk:^2.0
 
 Po zainstalowaniu Dusk należy zarejestrować dostawcę usług `Laravel\Dusk\DuskServiceProvider`. Zazwyczaj odbywa się to automatycznie poprzez rejestrację automatycznego dostawcy usługi Laravel.
 

@@ -62,9 +62,11 @@ Dzięki ostatnim ulepszeniom w buforowaniu kodu op-code PHP, polecenie `optimize
 
 ### Authorization - Upoważnienie
 
+> {note} Podczas aktualizacji z Laravel 5.4 do 5.5 wszystkie pliki cookie `remember_me` zostaną uznane za nieważne, a użytkownicy zostaną wylogowani.
+
 #### The `authorizeResource` Controller Method - Metoda kontrolera `authorizeResource`
 
-Podczas przekazywania nazwy słowa składającego się z wielu wyrazów do metody `authorizeResource` wynikowy segment trasy będzie teraz wyglądał jak "wąż ", dopasowując zachowanie kontrolerów zasobów.
+Podczas przekazywania nazwy słowa składającego się z wielu wyrazów do metody `authorizeResource` wynikowy segment trasy będzie teraz wyglądał jak "wąż", dopasowując zachowanie kontrolerów zasobów.
 
 #### The `before` Policy Method
 
@@ -364,4 +366,4 @@ Dyrektywa blade `@php` nie przyjmuje już tagów wbudowanych. Zamiast tego użyj
 
 ### Miscellaneous - Różne
 
-Zachęcamy również do przeglądania zmian w `laravel/laravel` [repozytorium GitHub](https://github.com/laravel/laravel). Chociaż wiele z tych zmian nie jest wymaganych, możesz chcieć synchronizować te pliki z aplikacją. Niektóre z tych zmian zostaną omówione w tym przewodniku aktualizacji, ale inne, takie jak zmiany w plikach konfiguracyjnych lub komentarzach, nie będą. Możesz łatwo przeglądać zmiany za pomocą [narzędzia porównywania GitHub](https://github.com/laravel/laravel/compare/5.4...master) i wybrać, które aktualizacje są dla Ciebie ważne.
+Zachęcamy również do przeglądania zmian w `laravel/laravel` [repozytorium GitHub](https://github.com/laravel/laravel). Chociaż wiele z tych zmian nie jest wymaganych, możesz chcieć synchronizować te pliki z aplikacją. Niektóre z tych zmian zostaną omówione w tym przewodniku aktualizacji, ale inne, takie jak zmiany w plikach konfiguracyjnych lub komentarzach, nie będą. Możesz łatwo przeglądać zmiany za pomocą [narzędzia porównywania GitHub](https://github.com/laravel/laravel/compare/5.4...5.5) i wybrać, które aktualizacje są dla ciebie ważne.
