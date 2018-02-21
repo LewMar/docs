@@ -601,7 +601,7 @@ Możesz zdefiniować metodę `failed` bezpośrednio na swojej klasie zadań, umo
 <a name="failed-job-events"></a>
 ### Failed Job Events - Nieudane zdarzenia zadań
 
-Jeśli chcesz zarejestrować zdarzenie, które zostanie wywołane, gdy zadanie się nie powiedzie, możesz użyć metody `Queue::failing`. Zdarzenie to jest doskonałą okazją do powiadomienia swojego zespołu przez e-mail lub [HipChat](https://www.hipchat.com). Na przykład możemy dołączyć wywołanie zwrotne do tego zdarzenia z `AppServiceProvider`, który jest dołączony do Laravel:
+Jeśli chcesz zarejestrować zdarzenie, które zostanie wywołane, gdy zadanie się nie powiedzie, możesz użyć metody `Queue::failing`. Wydarzenie to jest doskonałą okazją do powiadomienia swojego zespołu przez e-mail lub [Stride](https://www.stride.com). Na przykład możemy dołączyć wywołanie zwrotne do tego zdarzenia z `AppServiceProvider`, który jest dołączony do Laravel:
 
     <?php
 

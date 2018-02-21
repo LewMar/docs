@@ -146,7 +146,7 @@ Aby rozpocząć, zdefiniuj tablicę `tap` w konfiguracji kanału. Tablica `tap` 
         'level' => 'debug',
     ],
 
-Po skonfigurowaniu opcji `tap` na kanale, możesz zdefiniować klasę, która dostosuje twoją instancję Monolog. Ta klasa wymaga tylko jednej metody: `__invoke`, która odbiera instancję Monolog:
+Po skonfigurowaniu opcji `tap` na kanale, możesz zdefiniować klasę, która dostosuje twoją instancję Monolog. Ta klasa wymaga tylko jednej metody: `__invoke`, która otrzymuje instancję `Illuminate\Log\Logger`. Instancja `Illuminate\Log\Logger` służy do wywoływania wszystkich wywołań metod do podstawowej instancji Monolog:
 
     <?php
 
@@ -155,14 +155,14 @@ Po skonfigurowaniu opcji `tap` na kanale, możesz zdefiniować klasę, która do
     class CustomizeFormatter
     {
         /**
-         * Customize the given Monolog instance.
+         * Customize the given logger instance.
          *
-         * @param  \Monolog\Logger
+         * @param  \Illuminate\Log\Logger  $logger
          * @return void
          */
-        public function __invoke($monolog)
+        public function __invoke($logger)
         {
-            foreach ($monolog->getHandlers() as $handler) {
+            foreach ($logger->getHandlers() as $handler) {
                 $handler->setFormatter(...);
             }
         }
@@ -195,9 +195,10 @@ Po skonfigurowaniu kanału `custom` możesz przystąpić do zdefiniowania klasy,
         /**
          * Create a custom Monolog instance.
          *
+         * @param  array  $config
          * @return \Monolog\Logger
          */
-        public function __invoke()
+        public function __invoke(array $config)
         {
             return new Logger(...);
         }

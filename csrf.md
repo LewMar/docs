@@ -52,6 +52,8 @@ Zazwyczaj takie trasy należy umieszczać poza grupą oprogramowania pośrednicz
         ];
     }
 
+> {tip} Środowisko programowe CSRF jest automatycznie wyłączane, gdy [uruchomione testy](/docs/{{version}}/testing).
+
 <a name="csrf-x-csrf-token"></a>
 ## X-CSRF-TOKEN
 

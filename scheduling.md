@@ -6,6 +6,7 @@
     - [Scheduling Queued Jobs - Planowanie zadań w kolejce](#scheduling-queued-jobs)
     - [Scheduling Shell Commands - Planowanie poleceń powłoki](#scheduling-shell-commands)
     - [Schedule Frequency Options - Zaplanuj opcje częstotliwości](#schedule-frequency-options)
+    - [Timezones - Strefy czasowe](#timezones)
     - [Preventing Task Overlaps - Zapobieganie nakładaniu się zadań](#preventing-task-overlaps)
     - [Running Tasks On One Server](#running-tasks-on-one-server)
     - [Maintenance Mode - Tryb konserwacji](#maintenance-mode)
@@ -95,7 +96,7 @@ Oczywiście istnieje wiele harmonogramów, które możesz przypisać do swojego 
 
 Metoda  | Opis
 ------------- | -------------
-`->cron('* * * * * *');`  |  Uruchom zadanie w niestandardowym harmonogramie Cron
+`->cron('* * * * *');`  |  Uruchom zadanie w niestandardowym harmonogramie Cron
 `->everyMinute();`  |  Uruchom zadanie co minutę
 `->everyFiveMinutes();`  |  Uruchom zadanie co pięć minut
 `->everyTenMinutes();`  |  Uruchom zadanie co dziesięć minut
@@ -172,6 +173,17 @@ Metoda `skip` może być postrzegana jako odwrotność `when`. Jeśli metoda `sk
 
 W przypadku użycia połączonych metod `when`, zaplanowane polecenie zostanie wykonane, jeśli wszystkie warunki `when` zwrócą `true`.
 
+<a name="timezones"></a>
+### Timezones - Strefy czasowe
+
+Korzystając z metody `timezone` możesz określić, że czas zaplanowanego zadania powinien być interpretowany w obrębie danej strefy czasowej:
+
+    $schedule->command('report:generate')
+             ->timezone('America/New_York')
+             ->at('02:00')
+
+> {note} Pamiętaj, że niektóre strefy czasowe wykorzystują czas letni. Gdy wystąpią zmiany czasu letniego, zaplanowane zadanie może zostać uruchomione dwukrotnie lub w ogóle nie działać. Z tego powodu zalecamy unikanie planowania stref czasowych, gdy jest to możliwe.
+
 <a name="preventing-task-overlaps"></a>
 ### Preventing Task Overlaps - Zapobieganie nakładaniu się zadań
 
@@ -228,7 +240,7 @@ Korzystając z metody `emailOutputTo`, możesz wysłać wiadomość e-mail z dan
              ->sendOutputTo($filePath)
              ->emailOutputTo('foo@example.com');
 
-> {note} Metody `emailOutputTo`, `sendOutputTo` i `appendOutputTo` są wyłącznie dla metody `command` i nie są obsługiwane dla `call`.
+> {note} Metody `emailOutputTo`, `sendOutputTo` i `appendOutputTo` są wyłącznie dla metod `command` i `exec`.
 
 <a name="task-hooks"></a>
 ## Task Hooks - Haczyki zadań

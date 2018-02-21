@@ -215,7 +215,7 @@ Funkcja `array_collapse` zwija tablicę tablic w jedną tablicę:
 
 Funkcja `array_divide` zwraca dwie tablice, jedną zawierającą klucze, a drugą zawierającą wartości danej tablicy:
 
-    list($keys, $values) = array_divide(['name' => 'Desk']);
+    [$keys, $values] = array_divide(['name' => 'Desk']);
 
     // $keys: ['name']
 
@@ -385,7 +385,6 @@ W razie potrzeby możesz określić klucz, który powinien zostać użyty dla wa
 #### `array_pull()`- weż i usuń po k/w {#collection-method}
 
 Funkcja `array_pull` zwraca i usuwa parę klucz / wartość z tablicy:
-
 
     $array = ['name' => 'Desk', 'price' => 100];
 
@@ -804,8 +803,7 @@ Funkcja `str_before` zwraca wszystko przed podaną wartością w ciągu znaków:
 <a name="method-str-contains"></a>
 #### `str_contains()` - pasujący ciąg {#collection-method}
 
-The `str_contains` function determines if the given string contains the given value:
-Funkcja `str_contains` określa, czy podany łańcuch zawiera daną wartość:
+Funkcja `str_contains` określa, czy podany łańcuch zawiera podaną wartość (wielkość liter ma znaczenie):
 
     $contains = str_contains('This is my name', 'my');
 
@@ -1297,7 +1295,6 @@ Funkcja `env` pobiera wartość [zmiennej środowiskowej](/docs/{{version}}/conf
 
 > {note} Jeśli wykonasz komendę `config:cache` podczas procesu wdrażania, powinieneś być pewien, że wywołujesz funkcję `env` z plików konfiguracyjnych. Gdy konfiguracja została zbuforowana, plik `.env` nie zostanie załadowany, a wszystkie wywołania funkcji `env` zwrucą `null`.
 
-
 <a name="method-event"></a>
 #### `event()` - wywołuje zdarzenie {#collection-method}
 
@@ -1395,7 +1392,6 @@ Funkcja `optional` akceptuje dowolny argument i umożliwia dostęp do właściwo
 <a name="method-policy"></a>
 #### `policy()` - polityka {#collection-method}
 
-The `policy` method retrieves a [policy](/docs/{{version}}/authorization#creating-policies) instance for a given class:
 Metoda `policy` pobiera instancję [polityki](/docs/{{version}}/authorization#creating-policies) dla danej klasy:
 
     $policy = policy(App\User::class);

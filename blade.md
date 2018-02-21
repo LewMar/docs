@@ -131,6 +131,26 @@ Czasami może być konieczne przekazanie dodatkowych danych do komponentu. Z teg
         ...
     @endcomponent
 
+#### Aliasing Components - Aliasowanie komponentów
+
+Jeśli twoje komponenty Blade są przechowywane w podkatalogu, możesz je aliasować w celu łatwiejszego dostępu. Na przykład wyobraź sobie komponent Blade przechowywany w `resources/views/components/alert.blade.php`. Możesz użyć metody `component` do aliasowania komponentu z `components.alert` do `alert`. Zwykle powinno się to robić w metodzie `boot` twojego `AppServiceProvider`:
+
+    use Illuminate\Support\Facades\Blade;
+
+    Blade::component('components.alert', 'alert');
+
+Po aliasowaniu komponentu możesz renderować go za pomocą dyrektywy:
+
+    @alert(['type' => 'danger'])
+        You are not allowed to access this resource!
+    @endalert
+
+Możesz pominąć parametry komponentu, jeśli nie ma żadnych dodatkowych gniazd:
+
+    @alert
+        You are not allowed to access this resource!
+    @endalert
+
 <a name="displaying-data"></a>
 ## Displaying Data - Wyświetlanie danych
 

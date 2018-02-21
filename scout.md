@@ -17,6 +17,7 @@
 - [Searching - Wyszukiwanie](#searching)
     - [Where Clauses - Klauzura Gdzie](#where-clauses)
     - [Pagination - Paginacja](#pagination)
+    - [Soft Deleting - Miękie usuwanie](#soft-deleting)
 - [Custom Engines - Niestandardowe silniki](#custom-engines)
 
 <a name="introduction"></a>
@@ -279,6 +280,23 @@ Po pobraniu wyników możesz wyświetlić wyniki i wyrenderować łącza do stro
     </div>
 
     {{ $orders->links() }}
+
+<a name="soft-deleting"></a>
+### Soft Deleting - Miękkie usuwanie
+
+Jeśli twoje indeksowane modele to [miękkie usuwanie](/docs/{{version}}/eloquent#soft-deleting) i musisz przeszukać swoje miękkie usunięte modele, ustaw opcję `soft_delete` w `config/scout.php` plik konfiguracyjny do `true`:
+
+    'soft_delete' => true,
+
+Gdy ta opcja konfiguracji ma wartość `true`, Scout nie usunie z indeksu wyszukiwania modeli z miękkim usunięciem. Zamiast tego ustawi ukryty atrybut `__soft_deleted` w rekordzie indeksowanym. Następnie możesz użyć metod `withTrashed` lub `onlyTrashed` w celu pobrania miękkich usuniętych rekordów podczas wyszukiwania:
+
+    // Include trashed records when retrieving results...
+    $orders = App\Order::withTrashed()->search('Star Trek')->get();
+
+    // Only include trashed records when retrieving results...
+    $orders = App\Order::onlyTrashed()->search('Star Trek')->get();
+
+> {tip} Kiedy usunięty program jest trwale usuwany przy użyciu opcji `forceDelete`, Scout usunie go automatycznie z indeksu wyszukiwania.
 
 <a name="custom-engines"></a>
 ## Custom Engines - Niestandardowe silniki

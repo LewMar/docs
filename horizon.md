@@ -46,7 +46,7 @@ Strategia `auto` dostosowuje liczbę procesów roboczych na kolejkę w oparciu o
 <a name="dashboard-authentication"></a>
 ### Dashboard Authentication - Uwierzytelnianie pulpitu nawigacyjnego
 
-Horizon odsłania pulpitą w `/horizon`. Domyślnie dostęp do tego pulpitu będzie możliwy tylko w środowisku `local`. Aby zdefiniować bardziej szczegółową politykę dostępu do pulpitu, należy użyć metody `Horizon::auth`. Metoda `auth` akceptuje wywołanie zwrotne, które powinno zwracać wartość `true` lub `false`, wskazując, czy użytkownik powinien mieć dostęp do pulpitu programu Horizon:
+Horizon odsłania pulpit w `/horizon`. Domyślnie dostęp do tego pulpitu będzie możliwy tylko w środowisku `local`. Aby zdefiniować bardziej szczegółową politykę dostępu do pulpitu, należy użyć metody `Horizon::auth`. Metoda `auth` akceptuje wywołanie zwrotne, które powinno zwracać wartość `true` lub `false`, wskazując, czy użytkownik powinien mieć dostęp do pulpitu programu Horizon. Zazwyczaj powinieneś wywoływać `Horizon::auth` w metodzie `boot` twojego `AppServiceProvider`:
 
     Horizon::auth(function ($request) {
         // return true / false;
@@ -60,7 +60,6 @@ Po skonfigurowaniu pracowników w pliku konfiguracyjnym `config/horizon.php` mo�
     php artisan horizon
 
 Możesz wstrzymać proces Horizon i poinstruować go, aby kontynuował przetwarzanie zadań za pomocą poleceń `horizon:pause` i` horizon:continue` Artisan:
-
 
     php artisan horizon:pause
 

@@ -14,9 +14,10 @@
     - [Generating Markdown Mailables - Generowanie wiadomości Markdown](#generating-markdown-mailables)
     - [Writing Markdown Messages - Pisanie wiadomości Markdown](#writing-markdown-messages)
     - [Customizing The Components - Dostosowywanie komponentów](#customizing-the-components)
-- [Previewing Mailables In The Browser - Wyświetlanie podglądu wiadomości w przeglądarce](#previewing-mailables-in-the-browser)
 - [Sending Mail - Wysyłanie maila](#sending-mail)
     - [Queueing Mail - Usługa kolejkowania poczty](#queueing-mail)
+- [Rendering Mailables - Rendorowanie podglądu wiadomości](#rendering-mailables)
+    - [Previewing Mailables In The Browser - Wyświetlanie podglądu wiadomości w przeglądarce](#previewing-mailables-in-the-browser)
 - [Mail & Local Development - Mail i rozwój lokalny](#mail-and-local-development)
 - [Events - Zdarzenia](#events)
 
@@ -419,17 +420,6 @@ Po wyeksportowaniu komponentów katalog `resources/views/vendor/mail/html/themes
 
 > {tip} Jeśli chcesz zbudować całkowicie nowy motyw komponentów Markdown, napisz nowy plik CSS w katalogu `html/themes` i zmień opcję `theme` w pliku konfiguracyjnym `mail`.
 
-<a name="previewing-mailables-in-the-browser"></a>
-## Previewing Mailables In The Browser - Wyświetlanie podglądu wiadomości w przeglądarce
-
-Podczas projektowania szablonu wiadomości e-mail wygodnie jest szybko wyświetlić podgląd renderowanego pliku pocztowego w przeglądarce jak typowy szablon Blade. Z tego powodu Laravel pozwala na zwrot wszelkiej korespondencji bezpośrednio z Closure trasy lub kontrolera. Po zwróceniu pliku pocztowego zostanie on wyrenderowany i wyświetlony w przeglądarce, co umożliwi szybki podgląd jego projektu bez konieczności wysyłania go na rzeczywisty adres e-mail:
-
-    Route::get('/mailable', function () {
-        $invoice = App\Invoice::find(1);
-
-        return new App\Mail\InvoicePaid($invoice);
-    });
-
 <a name="sending-mail"></a>
 ## Sending Mail - Wysyłanie maila
 
@@ -470,6 +460,26 @@ Oczywiście nie ogranicza się tylko do określania odbiorców "to" podczas wysy
         ->cc($moreUsers)
         ->bcc($evenMoreUsers)
         ->send(new OrderShipped($order));
+
+<a name="rendering-mailables"></a>
+## Rendering Mailables - Renderowanie podglądu wiadomości.
+
+Czasami możesz chcieć przechwycić zawartość HTML w mailach bez wysyłania jej. Aby to osiągnąć, możesz wywołać metodę `render` pliku mailable. Ta metoda zwróci oszacowaną zawartość pliku mailable jako ciąg:
+
+    $invoice = App\Invoice::find(1);
+
+    return (new App\Mail\InvoicePaid($invoice))->render();
+
+<a name="previewing-mailables-in-the-browser"></a>
+### Previewing Mailables In The Browser - Wyświetlanie podglądu wiadomości w przeglądarce
+
+Podczas projektowania szablonu wiadomości e-mail wygodnie jest szybko wyświetlić podgląd renderowanego pliku pocztowego w przeglądarce jak typowy szablon Blade. Z tego powodu Laravel pozwala na zwrot wszelkiej korespondencji bezpośrednio z closure trasy lub kontrolera. Po zwróceniu pliku pocztowego zostanie on wyrenderowany i wyświetlony w przeglądarce, co umożliwi szybki podgląd jego projektu bez konieczności wysyłania go na rzeczywisty adres e-mail:
+
+    Route::get('/mailable', function () {
+        $invoice = App\Invoice::find(1);
+
+        return new App\Mail\InvoicePaid($invoice);
+    });
 
 <a name="queueing-mail"></a>
 ### Queueing Mail - Usługa kolejkowania poczty

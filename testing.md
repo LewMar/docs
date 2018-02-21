@@ -20,6 +20,8 @@ Podczas testowania za pomocą `phpunit`, Laravel automatycznie ustawi środowisk
 
 Możesz dowolnie definiować inne wartości konfiguracji środowiska testowego. Zmienne środowiskowe `testing` mogą być skonfigurowane w pliku `phpunit.xml`, ale pamiętaj o wyczyszczeniu pamięci podręcznej konfiguracji za pomocą polecenia `config:clear` Artisan przed uruchomieniem testów!
 
+Ponadto możesz utworzyć plik `.env.testing` w katalogu głównym projektu. Ten plik zastąpi zmienne pliku `.env` podczas uruchamiania testów PHPUnit lub wykonywania poleceń Artisan za pomocą przełącznika `--env=testing`.
+
 <a name="creating-and-running-tests"></a>
 ## Creating & Running Tests - Tworzenie i uruchamianie testów
 

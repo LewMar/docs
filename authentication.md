@@ -75,7 +75,9 @@ Gdy użytkownik zostanie pomyślnie uwierzytelniony, zostanie przekierowany do i
 
     protected $redirectTo = '/';
 
-Jeśli ścieżka przekierowania wymaga logiki generowania niestandardowego, możesz zdefiniować metodę `redirectTo` zamiast właściwości `redirectTo`:
+Następnie należy zmodyfikować metodę `handle` oprogramowania pośredniego `RedirectIfAuthenticated`, aby użyć nowego identyfikatora URI podczas przekierowywania użytkownika.
+
+Jeśli ścieżka przekierowania wymaga logiki generowania niestandardowego, możesz zdefiniować metodę `redirectTo` zamiast właściwości` redirectTo`:
 
     protected function redirectTo()
     {
@@ -173,6 +175,21 @@ Oczywiście, jeśli używasz [kontrolerów](/docs/{{version}}/controllers), moż
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+#### Redirecting Unauthenticated Users - Przekierowywanie nieuwierzytelnionych użytkowników
+
+Gdy oprogramowanie pośredniczące `auth` wykryje nieautoryzowanego użytkownika, zwróci odpowiedź JSON `401` lub, jeśli żądanie nie jest żądaniem AJAX, przekieruje użytkownika do `login` [nazwanej trasy](/docs/{{version}}/routing#named-routes).
+
+Możesz zmodyfikować to zachowanie, definiując funkcję `unauthenticated` w pliku `app/Exceptions/Hander.php`:
+
+    use Illuminate\Auth\AuthenticationException;
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return $request->expectsJson()
+                    ? response()->json(['message' => $exception->getMessage()], 401)
+                    : redirect()->guest(route('login'));
     }
 
 #### Specifying A Guard - Określanie Strażnika

@@ -13,12 +13,6 @@ Podczas odwoływania się do frameworka Laravel lub jego komponentów z aplikacj
 
 Przesunięcia paradygmatu są rozdzielane przez wiele lat i stanowią fundamentalne przesunięcia w architekturze i konwencjach architektury. Obecnie nie ma opracowywanej zmiany paradygmatu.
 
-#### Why Doesn't Laravel Use Semantic Versioning? - Dlaczego Laravel nie używa wersji semantycznej?
-
-Z jednej strony wszystkie opcjonalne komponenty Laravel (Cashier, Dusk, Valet, Socialite itp.) **wykorzystują** semantyczną wersję. Jednak sama struktura Laravel nie. Powodem tego jest to, że semantyczne wersjonowanie jest "redukcjonistycznym" sposobem określania, czy dwa kawałki kodu są kompatybilne. Nawet jeśli używasz semantycznego wersjonowania, nadal musisz zainstalować uaktualniony pakiet i uruchomić swój automatyczny zestaw testów, aby dowiedzieć się, czy coś jest **faktycznie** niezgodne z bazą kodu.
-
-Zamiast tego, struktura Laravel używa schematu wersjonowania, który jest bardziej komunikatywny dla faktycznego zakresu wydania. Co więcej, skoro pomniejsze wydania **nigdy** nie zawierają intencjonalnych zmian łamania, nigdy nie powinieneś otrzymywać zmian łamania, o ile ograniczenia wersji są zgodne z konwencją `paradigm.major.*`.
-
 <a name="support-policy"></a>
 ## Support Policy - Zasady pomocy technicznej
 
@@ -27,11 +21,11 @@ W przypadku wydań LTS, takich jak Laravel 5.5, poprawki są dostarczane przez 2
 <a name="laravel-5.6"></a>
 ## Laravel 5.6
 
-Laravel 5.6 kontynuuje ulepszenia wprowadzone w Laravel 5.5 poprzez dodanie ulepszonego systemu rejestrowania, planowania zadań na pojedynczym serwerze, ulepszeń serializacji modeli, dynamicznego ograniczania szybkości, klas kanałów rozgłaszania, generowania kontrolera zasobów API, ulepszonych ulepszeń formatowania dat, wsparcia hashowania Argon2, włączenie pakietu Collision i więcej. Ponadto wszystkie rusztowania frontowe zostały zaktualizowane do Bootstrap 4.
+Laravel 5.6 kontynuuje ulepszenia wprowadzone w Laravel 5.5, dodając ulepszony system rejestrowania, planowanie zadań na pojedynczym serwerze, ulepszenia serializacji modeli, dynamiczne ograniczanie szybkości, klasy kanałów rozgłaszania, generowanie kontrolera zasobów API, wymyślne ulepszanie formatowania daty, aliasy komponentów Blade, Argon2 obsługa hashowania hasła, włączenie pakietu Collision i wiele więcej. Ponadto wszystkie rusztowania frontowe zostały zaktualizowane do Bootstrap 4.
 
 Wszystkie podstawowe składniki Symfony używane przez Laravel zostały uaktualnione do serii wydań Symfony `~ 4.0`.
 
-Wydanie Laravel 5.6 zbiega się z wydaniem [Spark 6.0](https://spark.laravel.com), pierwszego dużego uaktualnienia Laravel Spark od czasu wydania. Spark 6.0 wprowadza ceny poszczególnych pasowań dla obsługi Stripe i Braintree, lokalizacji, Bootstrap 4, ulepszonego interfejsu użytkownika i elementów paskowych.
+Wydanie Laravel 5.6 zbiega się z wydaniem [Spark 6.0](https://spark.laravel.com), pierwszego dużego uaktualnienia Laravel Spark od czasu jego wydania. Spark 6.0 wprowadza ceny poszczególnych pasowań dla obsługi Stripe i Braintree, lokalizacji, Bootstrap 4, ulepszonego interfejsu użytkownika i elementów paskowych.
 
 > {tip} W tej dokumentacji podsumowano najważniejsze ulepszenia w framework-u; jednak bardziej szczegółowe dzienniki zmian są zawsze dostępne [na GitHubie](https://github.com/laravel/framework/blob/5.6/CHANGELOG-5.6.md).
 
@@ -54,12 +48,12 @@ Ponadto teraz łatwiej jest dostosować istniejące kanały dziennika przy użyc
 
 Jeśli twoja aplikacja działa na wielu serwerach, możesz teraz ograniczyć zaplanowane zadanie do wykonania tylko na jednym serwerze. Załóżmy na przykład, że masz zaplanowane zadanie, które generuje nowy raport w każdy piątek wieczorem. Jeśli program do planowania zadań działa na trzech serwerach roboczych, zaplanowane zadanie zostanie uruchomione na wszystkich trzech serwerach i wygeneruje raport trzy razy. Niedobrze!
 
-Aby wskazać, że zadanie powinno działać tylko na jednym serwerze, podczas definiowania zaplanowanego zadania można użyć metody `onOneServer`. Pierwszy serwer, który uzyska zadanie, zabezpieczy blokadę atomową przed zadaniem, aby uniemożliwić innym serwerom wykonywanie tego samego zadania w tym samym czasie:
+Aby wskazać, że zadanie powinno działać tylko na jednym serwerze, podczas definiowania zaplanowanego zadania można użyć metody `onOneServer`. Pierwszy serwer, który uzyska zadanie, zabezpieczy blokadę atomową przed zadaniem, aby uniemożliwić innym serwerom wykonywanie tego samego zadania w tym samym cyklu Cron:
 
     $schedule->command('report:generate')
-                    ->fridays()
-                    ->at('17:00')
-                    ->onOneServer();
+             ->fridays()
+             ->at('17:00')
+             ->onOneServer();
 
 ### Dynamic Rate Limiting - Ograniczanie szybkości dynamicznej
 
@@ -144,7 +138,25 @@ Możesz teraz indywidualnie dostosować format kolumn Eroquent Date Cast. Aby ro
         'joined_at' => 'datetime:Y-m-d H:00',
     ];
 
-### Argon2 Password Hashing - Haszowanie haseł Argon2
+### Blade Component Aliases
+
+Jeśli komponenty Blade są przechowywane w podkatalogu, możesz teraz je aliasować w celu łatwiejszego dostępu. Na przykład wyobraź sobie komponent Blade przechowywany w `resources/views/components/alert.blade.php`. Możesz użyć metody `component` do aliasowania komponentu z `components.alert` do `alert`:
+
+    Blade::component('components.alert', 'alert');
+
+Po aliasowaniu komponentu możesz renderować go za pomocą dyrektywy:
+
+    @alert('alert', ['type' => 'danger'])
+        You are not allowed to access this resource!
+    @endalert
+
+Możesz pominąć parametry komponentu, jeśli nie ma żadnych dodatkowych gniazd:
+
+    @alert
+        You are not allowed to access this resource!
+    @endalert
+
+### Argon2 Password Hashing
 
 Jeśli budujesz aplikację na PHP 7.2.0 lub nowszym, Laravel obsługuje teraz haszowanie hasła za pomocą algorytmu Argon2. Domyślny sterownik skrótu dla twojej aplikacji jest kontrolowany przez nowy plik konfiguracyjny `config/hashing.php`.
 

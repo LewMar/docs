@@ -15,7 +15,7 @@ Laravel 5.6 wymaga PHP 7.1.3 lub wyszej.
 
 ### Updating Dependencies - Aktualizacja zależności
 
-Zaktualizuj zależność `laravel/framework` do `5.6.*` W pliku `composer.json`.
+Zaktualizuj zależność `laravel/framework` do `5.6.*` i twoją zależność `fideloper/proxy` od `~ 4.0` w twoim pliku `composer.json`.
 
 Ponadto, jeśli używasz następujących pakietów Laravel, należy uaktualnić je do najnowszej wersji:
 
@@ -31,6 +31,10 @@ Oczywiście, nie zapomnij sprawdzić żadnych pakietów zewnętrznych używanych
 
 Wszystkie podstawowe składniki Symfony używane przez Laravel zostały uaktualnione do serii wydań Symfony `~ 4.0`. Jeśli bezpośrednio wchodzisz w interakcję z komponentami Symfony w swojej aplikacji, powinieneś przejrzeć [Dziennik zmian w Symfony](https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md).
 
+#### PHPUnit
+
+Powinieneś zaktualizować zależność `phpunit/phpunit` twojej aplikacji na `~ 7.0`.
+
 ### Arrays
 
 #### The `Arr::wrap` Method - Metoda `Arr::wrap`
@@ -41,7 +45,7 @@ Przekazanie `null` do metody `Arr::wrap` zwróci teraz pustą tablicę.
 
 #### The `optimize` Command - Komenda `optimize`
 
-Poprzednio wycofane polecenie `optimize` Artisan zostało usunięte. Dzięki ostatnim ulepszeniom samego PHP, w tym OPcache, komenda `optimize` nie zapewnia już żadnych istotnych korzyści związanych z wydajnością.
+Poprzednio wycofane polecenie `optimize` Artisan zostało usunięte. Dzięki ostatnim ulepszeniom samego PHP, w tym OPcache, komenda `optimize` nie zapewnia już żadnych istotnych korzyści związanych z wydajnością. Dlatego możesz usunąć `php artisan optimize` z `scripts` w swoim pliku `composer.json`.
 
 ### Blade
 
@@ -129,6 +133,12 @@ Klasa `Illuminate\Log\Writer` została zmieniona na `Illuminate\Log\Logger`. Je�
 
 Ten interfejs został usunięty, ponieważ interfejs ten był całkowitym powieleniem interfejsu `Psr\Log\LoggerInterface`. Zamiast tego wpisz-podpowiedz interfejs `Psr\Log\LoggerInterface`.
 
+### Mail - Poczta
+
+#### `withSwiftMessage` Callbacks
+
+W poprzednich wersjach Laravel, wywołania zwrotne Swift Messages, zarejestrowane za pomocą `withSwiftMessage`, były nazywane _after_ treść była już zakodowana i dodana do wiadomości. Te wywołania zwrotne są teraz nazywane _before_ zawartość jest dodawana, co pozwala w razie potrzeby dostosować kodowanie lub inne opcje wiadomości.
+
 ### Pagination - Paginacja
 
 #### Bootstrap 4
@@ -169,7 +179,7 @@ Podczas zwracania nowo utworzonego modelu Eloquent bezpośrednio z trasy, status
 
 ### Trusted Proxies - Zaufani pośrednicy
 
-Ze względu na zmiany w zaufanej funkcjonalności serwera proxy Symfony HttpFoundation, należy wprowadzić niewielkie zmiany w oprogramowaniu pośredniczącym `TrustProxies` aplikacji.
+Ze względu na zmiany w zaufanej funkcjonalności serwera proxy Symfony HttpFoundation, należy wprowadzić niewielkie zmiany w oprogramowaniu pośredniczącym `App\Http\Middleware\TrustProxies` aplikacji.
 
 Właściwość `$headers`, która poprzednio była tablicą, jest obecnie właściwością bitową, która przyjmuje kilka różnych wartości. Na przykład, aby ufać wszystkim przekazywanym nagłówkom, możesz zaktualizować właściwość `$headers` do następującej wartości:
 
@@ -189,3 +199,7 @@ Aby uzyskać więcej informacji na temat dostępnych wartości `$headers`, przej
 #### The `ValidatesWhenResolved` Interface - Interfejs `ValidatesWhenResolved`
 
 Metoda `validate` interfejsu / atrybutów `ValidatesWhenResolved` została zmieniona na `validateResolved` w celu uniknięcia konfliktów z metodą `$request->validate()`.
+
+### Miscellaneous - Różne
+
+Zachęcamy również do przeglądania zmian w `laravel/laravel` [repozytorium GitHub](https://github.com/laravel/laravel). Chociaż wiele z tych zmian nie jest wymaganych, możesz chcieć synchronizować te pliki z aplikacją. Niektóre z tych zmian zostaną omówione w tym przewodniku aktualizacji, ale inne, takie jak zmiany w plikach konfiguracyjnych lub komentarzach, nie będą. Możesz łatwo przeglądać zmiany za pomocą [narzędzia porównywania GitHub](https://github.com/laravel/laravel/compare/5.5...master) i wybrać, które aktualizacje są dla Ciebie ważne.

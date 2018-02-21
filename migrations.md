@@ -349,6 +349,8 @@ Możesz upuścić wiele kolumn z tabeli, przekazując tablicę nazw kolumn do me
 
 #### Available Command Aliases - Dostępne aliasy poleceń
 
+Każda metoda indeksu akceptuje opcjonalny drugi argument określający nazwę indeksu. Jeśli zostanie pominięty, nazwa będzie pochodziła od nazw tabeli i kolumn.
+
 Komenda  |  Opis
 -------  |  -----------
 `$table->dropRememberToken();`  |  Usuń kolumnę `remember_token`.

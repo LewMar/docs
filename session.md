@@ -59,7 +59,6 @@ Możesz użyć polecenia `session: table` Artisan, aby wygenerować tę migracj�
 
 #### Redis
 
-Before using Redis sessions with Laravel, you will need to install the `predis/predis` package (~1.0) via Composer. You may configure your Redis connections in the `database` configuration file. In the `session` configuration file, the `connection` option may be used to specify which Redis connection is used by the session.
 Przed rozpoczęciem korzystania z sesji Redis za pomocą Laravel, musisz zainstalować pakiet `predis/predis` (~ 1.0) za pośrednictwem Composer. Możesz skonfigurować połączenia Redis w pliku konfiguracyjnym `database`. W pliku konfiguracyjnym `session` opcja` connection` może być użyta do określenia, które połączenie Redis jest używane przez sesję.
 
 <a name="using-the-session"></a>
@@ -94,7 +93,7 @@ Istnieją dwa główne sposoby pracy z danymi sesji w Laravel: globalny pomocnik
         }
     }
 
-Po pobraniu wartości z sesji można również przekazać wartość domyślną jako drugi argument metody `get`. Ta wartość domyślna zostanie zwrócona, jeśli określony klucz nie istnieje w sesji. Jeśli przekażesz `Closure` jako domyślną wartość metody `get`, a żądany klucz nie istnieje, `Closure` zostanie wykonane i jego wynik zostanie zwrócony:
+Po pobraniu elementu z sesji można również przekazać wartość domyślną jako drugi argument metody `get`. Ta wartość domyślna zostanie zwrócona, jeśli określony klucz nie istnieje w sesji. Jeśli przekażesz `Closure` jako domyślną wartość metody `get`, a żądany klucz nie istnieje, `Closure` zostanie wykonane i jego wynik zostanie zwrócony:
 
     $value = $request->session()->get('key', 'default');
 
@@ -127,13 +126,13 @@ Jeśli chcesz odzyskać wszystkie dane z sesji, możesz użyć metody "all":
 
 #### Determining If An Item Exists In The Session - Ustalenie, czy dana pozycja istnieje w sesji
 
-Aby ustalić, czy wartość jest obecna w sesji, możesz użyć metody `has`. Metoda `has` zwraca `true`, jeśli wartość jest obecna i nie ma wartości `null`:
+Aby ustalić, czy element jest obecny w sesji, możesz użyć metody `has`. Metoda `has` zwraca` true`, jeśli element jest obecny i nie ma wartości `null`:
 
     if ($request->session()->has('users')) {
         //
     }
 
-Aby ustalić, czy wartość jest obecna w sesji, nawet jeśli jej wartość wynosi `null`, możesz użyć metody` exists`. Metoda `exists` zwraca `true`, jeśli wartość jest obecna:
+Aby określić, czy element jest obecny w sesji, nawet jeśli jego wartość to `null`, możesz użyć metody `exist`. Metoda `exists` zwraca `true`, jeśli element jest obecny:
 
     if ($request->session()->exists('users')) {
         //
@@ -199,7 +198,6 @@ Laravel automatycznie generuje ponownie identyfikator sesji podczas uwierzytelni
 <a name="implementing-the-driver"></a>
 #### Implementing The Driver - Wdrażanie sterownika
 
-Your custom session driver should implement the `SessionHandlerInterface`. This interface contains just a few simple methods we need to implement. A stubbed MongoDB implementation looks something like this:
 Twój niestandardowy sterownik sesji powinien implementować `SessionHandlerInterface`. Ten interfejs zawiera tylko kilka prostych metod, które musimy wdrożyć. Wycinek implementacja MongoDB wygląda mniej więcej tak:
 
     <?php
@@ -231,8 +229,6 @@ Ponieważ cel tych metod nie jest łatwy do zrozumienia, szybko omówmy, co każ
 
 <a name="registering-the-driver"></a>
 #### Registering The Driver - Rejestrowanie sterownika
-
-Once your driver has been implemented, you are ready to register it with the framework. To add additional drivers to Laravel's session backend, you may use the `extend` method on the `Session` [facade](/docs/{{version}}/facades). You should call the `extend` method from the `boot` method of a [service provider](/docs/{{version}}/providers). You may do this from the existing `AppServiceProvider` or create an entirely new provider:
 
 Po zaimplementowaniu sterownika jesteś gotowy do zarejestrowania go w framework-u. Aby dodać dodatkowe sterowniki do zaplecza sesji Laravel, możesz użyć metody `extend` na `Session` [elewacji(fasady)](/ docs/{{version}}/fasady). Powinieneś wywołać metodę `extend` z metody` boot` [dostawcy usług](/ docs/{{version}}/providers). Możesz to zrobić z istniejącego `AppServiceProvider` lub stworzyć całkowicie nowego dostawcę:
 

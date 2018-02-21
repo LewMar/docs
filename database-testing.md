@@ -92,6 +92,8 @@ W ramach Closure, które służy jako definicja fabryczna, możesz zwrócić dom
 
 Możesz także utworzyć dodatkowe pliki fabryczne dla każdego modelu dla lepszej organizacji. Na przykład możesz utworzyć pliki `UserFactory.php` i `CommentFactory.php` w swoim katalogu `database/factories`. Wszystkie pliki w katalogu `factories` zostaną automatycznie załadowane przez Laravel.
 
+> {tip} Możesz ustawić lokalne ustawienia Fakera, dodając opcję `faker_locale` do pliku konfiguracyjnego` config app.php`.
+
 <a name="factory-states"></a>
 ### Factory States - Stany fabryki
 

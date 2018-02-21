@@ -159,7 +159,6 @@ Jeśli chciałbyś otrzymać prośbę o potwierdzenie przed uruchomieniem danego
     @endtask
 
 <a name="notifications"></a>
-<a name="hipchat-notifications"></a>
 ## Notifications - Powiadomienia
 
 <a name="slack"></a>
@@ -177,4 +176,3 @@ Możesz podać jeden z następujących argumentów jako argument kanału:
 - To send the notification to a channel: `#channel`
 - To send the notification to a user: `@user`
 </div>
-

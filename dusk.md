@@ -32,9 +32,10 @@
     - [Generating Components - Generowanie komponentów](#generating-components)
     - [Using Components - Używanie komponentów](#using-components)
 - [Continuous Integration - Ciągła integracja](#continuous-integration)
-    - [Travis CI](#running-tests-on-travis-ci)
     - [CircleCI](#running-tests-on-circle-ci)
     - [Codeship](#running-tests-on-codeship)
+    - [Heroku CI](#running-tests-on-heroku-ci)
+    - [Travis CI](#running-tests-on-travis-ci)
 
 <a name="introduction"></a>
 ## Introduction - Wprowadzenie
@@ -365,6 +366,8 @@ Do dołączenia pliku do elementu wejściowego `file` można użyć metody `atta
 
     $browser->attach('photo', __DIR__.'/photos/me.png');
 
+> {note} Funkcja dołączania wymaga, aby rozszerzenie PHP `Zip` zostało zainstalowane i włączone na twoim serwerze.
+
 <a name="using-the-keyboard"></a>
 ### Using The Keyboard - Korzystanie z klawiatury
 
@@ -558,9 +561,9 @@ Twierdzenia  | Opis
 `$browser->assertPathIs('/home')`  |  Twierdzimy, że obecna ścieżka pasuje do podanej ścieżki.
 `$browser->assertPathIsNot('/home')`  |  Twierdzimy, że obecna ścieżka nie pasuje do podanej ścieżki.
 `$browser->assertRouteIs($name, $parameters)`  |  Twierdzimy, że bieżący adres URL pasuje do podanego adresu URL danej trasy.
+`$browser->assertQueryStringHas($name)`  |  Twierdzenie, że podany parametr ciągu zapytania jest obecny.
 `$browser->assertQueryStringHas($name, $value)`  |  Twierdzimy, że podany parametr ciągu zapytania jest obecny i ma określoną wartość.
 `$browser->assertQueryStringMissing($name)`  |  Twierdzimy, że jest brak podanego parametru ciągu zapytania.
-`$browser->assertHasQueryStringParameter($name)`  |  Twierdzimy, że podany parametr ciągu zapytania jest obecny.
 `$browser->assertHasCookie($name)`  |  Twierdzimy, że podany plik ciasteczka jest obecny.
 `$browser->assertCookieMissing($name)`  |  Twierdzimy, że podany plik ciasteczka nie jest obecne.
 `$browser->assertCookieValue($name, $value)`  |  Twierdzimy, że plik ciasteczka ma określoną wartość.
@@ -843,28 +846,6 @@ Po zdefiniowaniu komponentu możemy łatwo wybrać datę z selektora daty z dowo
 <a name="continuous-integration"></a>
 ## Continuous Integration - Ciągła integracja
 
-<a name="running-tests-on-travis-ci"></a>
-### Travis CI
-
-Aby uruchomić testy Dusk na Travis CI, będziemy musieli użyć środowiska "Ubuntu 14.04 (Trusty)" z obsługą sudo. Ponieważ Travis CI nie jest środowiskiem graficznym, konieczne będzie podjęcie dodatkowych kroków w celu uruchomienia przeglądarki Chrome. Ponadto użyjemy `php artisan serve` do uruchomienia wbudowanego serwera WWW PHP:
-
-    sudo: required
-    dist: trusty
-
-    addons:
-       chrome: stable
-
-    install:
-       - cp .env.testing .env
-       - travis_retry composer install --no-interaction --prefer-dist --no-suggest
-
-    before_script:
-       - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-       - php artisan serve &
-
-    script:
-       - php artisan dusk
-
 <a name="running-tests-on-circle-ci"></a>
 ### CircleCI
 
@@ -872,12 +853,12 @@ Aby uruchomić testy Dusk na Travis CI, będziemy musieli użyć środowiska "Ub
 
 Jeśli używasz CircleCI 1.0 do uruchamiania testów Dusk, możesz użyć tego pliku konfiguracyjnego jako punktu wyjścia. Podobnie jak TravisCI, użyjemy polecenia `php artisan serve` do uruchomienia wbudowanego serwera WWW PHP:
 
-	dependencies:
-	  pre:
-	      - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-	      - sudo dpkg -i google-chrome.deb
-	      - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
-	      - rm google-chrome.deb
+    dependencies:
+      pre:
+          - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          - sudo dpkg -i google-chrome.deb
+          - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
+          - rm google-chrome.deb
 
     test:
         pre:
@@ -930,3 +911,45 @@ Aby uruchomić testy Dusk w [Codeship](https://codeship.com), dodaj następując
     nohup bash -c "./vendor/laravel/dusk/bin/chromedriver-linux 2>&1 &"
     nohup bash -c "php artisan serve 2>&1 &" && sleep 5
     php artisan dusk
+
+<a name="running-tests-on-heroku-ci"></a>
+### Heroku CI
+
+To run Dusk tests on [Heroku CI](https://www.heroku.com/continuous-integration), add the following Google Chrome buildpack and scripts to your Heroku `app.json` file:
+
+    {
+      "environments": {
+        "test": {
+          "buildpacks": [
+            { "url": "heroku/php" },
+            { "url": "https://github.com/heroku/heroku-buildpack-google-chrome" }
+          ],
+          "scripts": {
+            "test-setup": "cp .env.testing .env",
+            "test": "nohup bash -c './vendor/laravel/dusk/bin/chromedriver-linux > /dev/null 2>&1 &' && nohup bash -c 'php artisan serve > /dev/null 2>&1 &' && php artisan dusk"
+          }
+        }
+      }
+    }
+
+<a name="running-tests-on-travis-ci"></a>
+### Travis CI
+
+To run your Dusk tests on Travis CI, we will need to use the "sudo-enabled" Ubuntu 14.04 (Trusty) environment. Since Travis CI is not a graphical environment, we will need to take some extra steps in order to launch a Chrome browser. In addition, we will use `php artisan serve` to launch PHP's built-in web server:
+
+    sudo: required
+    dist: trusty
+
+    addons:
+       chrome: stable
+
+    install:
+       - cp .env.testing .env
+       - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+    before_script:
+       - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+       - php artisan serve &
+
+    script:
+       - php artisan dusk

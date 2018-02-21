@@ -428,9 +428,9 @@ Aby lepiej zrozumieć, kiedy chcesz użyć metody `toOthers`, wyobraźmy sobie a
             this.tasks.push(response.data);
         });
 
-Pamiętaj jednak, że nadawaliśmy także tworzenie tego zadania. Jeśli twoja aplikacja JavaScript nasłuchuje tego zdarzenia w celu dodania zadań do listy zadań, będziesz mieć zduplikowane zadania na liście: jedną z punktu końcowego i jedną z transmisji.
+Pamiętaj jednak, że nadawaliśmy także tworzenie tego zadania. Jeśli twoja aplikacja JavaScript nasłuchuje tego zdarzenia, aby dodać zadania do listy zadań, będziesz mieć zduplikowane zadania na liście: jedną z punktu końcowego i jedną z transmisji. Możesz rozwiązać ten problem, używając metody `toOthers`, aby poinstruować nadawcę, aby nie transmitował zdarzenia do bieżącego użytkownika.
 
-Możesz rozwiązać ten problem, używając metody `toOthers`, aby poinstruować nadawcę, aby nie transmitował zdarzenia do bieżącego użytkownika.
+> {note} Twoje zdarzenie musi użyć cechy `Illuminate\Broadcasting\InteractsWithSockets`, aby wywołać metodę `toOthers`.
 
 #### Configuration - Konfiguracja
 

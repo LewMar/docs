@@ -629,6 +629,10 @@ Eloquent pozwala również definiować globalne zakresy przy użyciu Closures, c
 Jeśli chcesz usunąć zasięg globalny dla danego zapytania, możesz użyć metody `withoutGlobalScope`. Metoda przyjmuje nazwę klasy globalnego zakresu jako jedyny argument:
 
     User::withoutGlobalScope(AgeScope::class)->get();
+    
+Lub, jeśli zdefiniowałeś zasięg globalny przy użyciu Closure:
+
+    User::withoutGlobalScope('age')->get();
 
 Jeśli chcesz usunąć kilka lub nawet wszystkie globalne zakresy, możesz użyć metody `withoutGlobalScopes`:
 

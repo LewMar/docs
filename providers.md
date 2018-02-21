@@ -124,7 +124,7 @@ Jeśli Twój dostawca usług rejestruje wiele prostych powiązań, możesz chcie
          * @var array
          */
         public $singletons = [
-            DowntimeNotifier::class => PingdomDowntimeNotifier,
+            DowntimeNotifier::class => PingdomDowntimeNotifier::class,
         ];
     }
 

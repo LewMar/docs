@@ -253,7 +253,7 @@ File  |  [Illuminate\Filesystem\Filesystem](http://laraveldoc.test/api/5.5/Illum
 Gate  |  [Illuminate\Contracts\Auth\Access\Gate](http://laraveldoc.test/api/5.5/Illuminate/Contracts/Auth/Access/Gate.html)  |  &nbsp;
 Hash  |  [Illuminate\Contracts\Hashing\Hasher](http://laraveldoc.test/api/5.5/Illuminate/Contracts/Hashing/Hasher.html)  |  `hash`
 Lang  |  [Illuminate\Translation\Translator](http://laraveldoc.test/api/5.5/Illuminate/Translation/Translator.html)  |  `translator`
-Log  |  [Illuminate\Log\Writer](http://laraveldoc.test/api/5.5/Illuminate/Log/Writer.html)  |  `log`
+Log  |  [Illuminate\Log\Logger](http://laraveldoc.test/api/5.5/Illuminate/Log/Logger.html)  |  `log`
 Mail  |  [Illuminate\Mail\Mailer](http://laraveldoc.test/api/5.5/Illuminate/Mail/Mailer.html)  |  `mailer`
 Notification  |  [Illuminate\Notifications\ChannelManager](http://laraveldoc.test/api/5.5/Illuminate/Notifications/ChannelManager.html)  |  &nbsp;
 Password  |  [Illuminate\Auth\Passwords\PasswordBrokerManager](http://laraveldoc.test/api/5.5/Illuminate/Auth/Passwords/PasswordBrokerManager.html)  |  `auth.password`

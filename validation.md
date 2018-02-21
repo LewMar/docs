@@ -22,6 +22,7 @@
 - [Validating Arrays - Sprawdzanie poprawności tablic](#validating-arrays)
 - [Custom Validation Rules - Niestandardowe reguły sprawdzania poprawności](#custom-validation-rules)
     - [Using Rule Objects - Korzystanie z obiektów reguł](#using-rule-objects)
+    - [Using Closures - Uzywanie Closure](#using-closures)
     - [Using Extensions - Używanie rozszerzeń](#using-extensions)
 
 <a name="introduction"></a>
@@ -432,7 +433,6 @@ W tym przykładzie element zastępujący `:attribute` zostanie zastąpiony rzecz
 
 Czasami możesz chcieć określić niestandardowe komunikaty o błędach tylko dla określonego pola. Możesz to zrobić za pomocą notacji "kropka". Podaj najpierw nazwę atrybutu, a następnie regułę:
 
-
     $messages = [
         'email.required' => 'We need to know your e-mail address!',
     ];
@@ -451,7 +451,6 @@ W większości przypadków prawdopodobnie określisz własne komunikaty w pliku 
 #### Specifying Custom Attributes In Language Files - Określanie atrybutów niestandardowych w plikach językowych
 
 Jeśli chcesz, aby część komunikatu ":atrybut" została zamieniona na niestandardową nazwę atrybutu, możesz określić niestandardową nazwę w tablicy `attributes` pliku `resources/lang/xx/validation.php` :
-
 
     'attributes' => [
         'email' => 'email address',
@@ -870,7 +869,6 @@ Pole w trakcie sprawdzania poprawności musi być obecne, a nie puste, tylko wte
 <a name="rule-same"></a>
 #### same:_field_
 
-The given _field_ must match the field under validation.
 Podane pole _field_ musi pasować do pola w trakcie sprawdzania poprawności.
 
 <a name="rule-size"></a>
@@ -907,7 +905,6 @@ Czasami może być konieczne ustawienie niestandardowego połączenia dla zapyta
 
 Czasami możesz zignorować dany identyfikator podczas wyjątkowej kontroli. Rozważmy na przykład ekran "profilu aktualizacji", który zawiera nazwę użytkownika, adres e-mail i lokalizację. Oczywiście będziesz chciał sprawdzić, czy adres e-mail jest unikatowy. Jeśli jednak użytkownik zmienia tylko pole nazwy, a nie pole e-mail, nie chcesz, aby błąd sprawdzania poprawności został zgłoszony, ponieważ użytkownik jest już właścicielem adresu e-mail.
 
-To instruct the validator to ignore the user's ID, we'll use the `Rule` class to fluently define the rule. In this example, we'll also specify the validation rules as an array instead of using the `|` character to delimit the rules:
 Aby polecić walidatorowi zignorowanie identyfikatora użytkownika, użyjemy klasy `Rule` do płynnego zdefiniowania reguły. W tym przykładzie określimy również reguły sprawdzania poprawności jako tablicę, zamiast używać znaku `|` do rozdzielania reguł:
 
     use Illuminate\Validation\Rule;
@@ -1059,6 +1056,23 @@ Po zdefiniowaniu reguły możesz dołączyć ją do walidatora, przekazując ins
 
     $request->validate([
         'name' => ['required', new Uppercase],
+    ]);
+
+<a name="using-closures"></a>
+### Using Closures - Używanie Closure
+
+Jeśli potrzebujesz tylko funkcji reguły niestandardowej tylko raz w swojej aplikacji, możesz użyć closure zamiast obiektu reguły. Closure otrzymuje nazwę atrybutu, wartość atrybutu i wywołanie zwrotne `$fail`, które powinno zostać wywołane, jeśli sprawdzanie poprawności nie powiedzie się:
+
+    $validator = Validator::make($request->all(), [
+        'title' => [
+            'required',
+            'max:255',
+            function($attribute, $value, $fail) {
+                if ($value === 'foo') {
+                    return $fail($attribute.' is invalid.');
+                }
+            },
+        ],
     ]);
 
 <a name="using-extensions"></a>

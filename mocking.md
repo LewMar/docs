@@ -79,6 +79,10 @@ Zamiast szyderstwa możesz użyć metody `fake` fasady `Event`, aby zapobiec wyk
                 return $e->order->id === $order->id;
             });
 
+            // Assert an event was dispatched twice...
+            Event::assertDispatched(OrderShipped::class, 2);
+
+            // Assert an event was not dispatched...
             Event::assertNotDispatched(OrderFailedToShip::class);
         }
     }

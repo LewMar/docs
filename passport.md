@@ -164,7 +164,7 @@ Podczas wdrażania usługi Passport na serwerach produkcyjnych po raz pierwszy n
 <a name="token-lifetimes"></a>
 ### Token Lifetimes - Życia Tokenów
 
-Domyślnie w usłudze Passport wydawane są długoterminowe tokeny dostępu, które nigdy nie muszą być odświeżane. Jeśli chcesz skonfigurować krótszy okres istnienia tokenu, możesz użyć metod `tokensExpireIn` i `refreshTokensExpireIn`. Te metody powinny być wywoływane z metody `boot` twojego `AuthServiceProvider`:
+Domyślnie usługa Passport wydaje żetony dostępu długoterminowego, które wygasają po roku. Jeśli chcesz skonfigurować dłuższy / krótszy okres ważności tokenu, możesz użyć metod `tokensExpireIn` i` refreshTokensExpireIn`. Te metody powinny być wywoływane z metody `boot` twojego` AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -279,7 +279,6 @@ Po utworzeniu klienta programiści mogą używać swojego identyfikatora klienta
     });
 
 > {tip} Pamiętaj, że trasa `/oauth/authorize` jest już zdefiniowana metodą  `Passport::routes`. Nie musisz ręcznie definiować tej trasy.
-
 
 #### Approving The Request - Zatwierdzenie wniosku
 
@@ -592,7 +591,6 @@ Jeśli wydajesz osobiste tokeny dostępu za pomocą metody `createToken` modelu 
 <a name="checking-scopes"></a>
 ### Checking Scopes - Sprawdzanie zakresów
 
-Passport includes two middleware that may be used to verify that an incoming request is authenticated with a token that has been granted a given scope. To get started, add the following middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
 Paszport zawiera dwa oprogramowania pośrednie, które mogą być używane do sprawdzania, czy przychodzące żądanie jest uwierzytelniane za pomocą tokena,a któremu przyznano dany zakres. Aby rozpocząć, dodaj następujące oprogramowanie pośrednie do właściwości `$routeMiddleware` pliku `app/Http/Kernel.php`:
 
     'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
@@ -631,7 +629,7 @@ Po wprowadzeniu do aplikacji żądania uwierzytelnionego tokena dostępu możesz
 
 Podczas tworzenia interfejsu API niezwykle przydatna może być możliwość korzystania z własnego API z aplikacji JavaScript. Takie podejście do rozwoju API pozwala Twojej własnej aplikacji korzystać z tego samego API, z którego dzielisz się ze światem. To samo API może być używane przez twoją aplikację internetową, aplikacje mobilne, aplikacje innych firm i wszelkie pakiety SDK, które możesz publikować na różnych menedżerach pakietów.
 
-Zwykle, jeśli chcesz korzystać z interfejsu API z aplikacji JavaScript, musisz ręcznie przesłać token dostępu do aplikacji i przekazać go przy każdym żądaniu do aplikacji. Jednak usługa Passport obejmuje oprogramowanie pośrednie, które może obsłużyć to za Ciebie. Wszystko, co musisz zrobić, to dodać oprogramowanie pośredniczące `CreateFreshApiToken` do `web` swojej grupy oprogramowania pośredniego:
+Zwykle, jeśli chcesz korzystać z interfejsu API z aplikacji JavaScript, musisz ręcznie przesłać token dostępu do aplikacji i przekazać go przy każdym żądaniu do aplikacji. Jednak usługa Passport obejmuje oprogramowanie pośrednie, które może obsłużyć to za Ciebie. Wszystko, co musisz zrobić, to dodać oprogramowanie pośredniczące `CreateFreshApiToken` do `web` swojej grupy oprogramowania pośredniego w pliku `app/Http/Kernel.php`:
 
     'web' => [
         // Other middleware...

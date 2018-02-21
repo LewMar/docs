@@ -67,6 +67,8 @@ Możesz użyć metody `withHeaders` w celu dostosowania nagłówków żądania p
         }
     }
 
+> {tip} Środowisko CSRF jest automatycznie wyłączane podczas uruchamiania testów.
+
 <a name="session-and-authentication"></a>
 ## Session / Authentication - Sesja / uwierzytelnianie
 

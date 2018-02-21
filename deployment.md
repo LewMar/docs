@@ -78,6 +78,8 @@ Podczas wdrażania aplikacji do produkcji powinieneś upewnić się, że uruchom
 To polecenie połączy wszystkie pliki konfiguracyjne Laravel w pojedynczy buforowany plik, co znacznie zmniejszy liczbę podróży, które framework musi wykonać w systemie plików podczas ładowania wartości konfiguracyjnych.
 
 
+> {note} Jeśli wykonasz komendę `config:cache` podczas procesu wdrażania, powinieneś być pewien, że wywołujesz funkcję `env` tylko z plików konfiguracyjnych. Po buforowaniu konfiguracji, plik `.env` nie zostanie załadowany, a wszystkie wywołania funkcji `env` zwrócą `null`.
+
 <a name="optimizing-route-loading"></a>
 ### Optimizing Route Loading - Optymalizacja ładowania trasy
 

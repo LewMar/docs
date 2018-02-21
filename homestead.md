@@ -96,7 +96,7 @@ Powinieneś sprawdzić oznaczoną wersję Homestead, ponieważ gałąź `master`
     cd ~/Homestead
 
     // Clone the desired release...
-    git checkout v7.0.1
+    git checkout v7.1.2
 
 Po sklonowaniu repozytorium Homestead, uruchom komendę `bash init.sh` z katalogu Homestead, aby utworzyć plik konfiguracyjny `Homestead.yaml`. Plik `Homestead.yaml` zostanie umieszczony w katalogu Homestead:
 
@@ -133,7 +133,6 @@ Jeśli tworzysz tylko kilka witryn, to ogólne mapowanie będzie działało dobr
           to: /home/vagrant/code/project2
 
 Aby włączyć [NFS](https://www.vagrantup.com/docs/synced-folders/nfs.html), wystarczy dodać prostą flagę do konfiguracji zsynchronizowanego folderu:
-
 
     folders:
         - map: ~/code
@@ -251,7 +250,6 @@ Czasami możesz chcieć `vagrant up` swoją maszynę Homestead z dowolnego miejs
     }
 
 Upewnij się, że zmieniłeś ścieżkę `~/Homestead` w funkcji na lokalizację twojej aktualnej instalacji Homestead. Po zainstalowaniu tej funkcji możesz uruchamiać komendy takie jak `homestead up` lub `homestead ssh` z dowolnego miejsca w systemie.
-
 
 #### Windows
 
@@ -429,6 +427,7 @@ Ponadto możesz używać dowolnej obsługiwanej wersji PHP za pośrednictwem int
 ### Web Servers
 
 Homestead domyślnie korzysta z serwera WWW Nginx. Jednak może zainstalować Apache, jeśli `apache` jest określony jako typ witryny. Chociaż oba serwery internetowe mogą być instalowane w tym samym czasie, nie mogą jednocześnie *działać*. Polecenie powłoki `flip` jest dostępne, aby ułatwić proces przełączania między serwerami WWW. Polecenie `flip` automatycznie określa, który serwer WWW działa, wyłącza go, a następnie uruchamia drugi serwer. Aby użyć tego polecenia, SSH do komputera Homestead i uruchom polecenie w swoim terminalu:
+
     flip
 
 <a name="network-interfaces"></a>
@@ -481,7 +480,8 @@ Domyślnie Homestead konfiguruje ustawienie `natdnshostresolver` na `on`. Dzięk
 
 #### Symbolic Links On Windows - Linki symboliczne w systemie Windows
 
-Jeśli linki symboliczne nie działają poprawnie na komputerze z systemem Windows, może być konieczne dodanie następującego bloku do pliku `Vagrantfile`:
+Jeśli dowiązania symboliczne nie działają poprawnie na komputerze z systemem Windows, może być konieczne dodanie następującego bloku do pliku `Vagrantfile`:
+
     config.vm.provider "virtualbox" do |v|
         v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end

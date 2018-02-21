@@ -374,6 +374,7 @@ Możesz użyć dyrektywy Blade `@method` do wygenerowania wejścia `_method`:
 
     <form action="/foo/bar" method="POST">
         @method('PUT')
+        @csrf
     </form>
 
 <a name="accessing-the-current-route"></a>

@@ -185,11 +185,11 @@ Ponieważ formularze HTML nie mogą tworzyć żądań typu `PUT`, `PATCH`, or `D
 
 Podczas deklarowania trasy zasobu możesz określić podzestaw działań, które kontroler ma obsłużyć zamiast pełnego zestawu domyślnych działań:
 
-    Route::resource('photo', 'PhotoController', ['only' => [
+    Route::resource('photos', 'PhotoController', ['only' => [
         'index', 'show'
     ]]);
 
-    Route::resource('photo', 'PhotoController', ['except' => [
+    Route::resource('photos', 'PhotoController', ['except' => [
         'create', 'store', 'update', 'destroy'
     ]]);
 
@@ -197,7 +197,7 @@ Podczas deklarowania trasy zasobu możesz określić podzestaw działań, które
 
 Podczas deklarowania tras zasobów, które będą używane przez interfejsy API, zwykle chcesz wykluczyć trasy, które przedstawiają szablony HTML, takie jak `create` i `edit`. Dla wygody możesz użyć metody `apiResource`, aby automatycznie wykluczyć te dwie trasy:
 
-    Route::apiResource('photo', 'PhotoController');
+    Route::apiResource('photos', 'PhotoController');
 
 Możesz zarejestrować wiele kontrolerów zasobów API jednocześnie, przekazując tablicę do metody `apiResources`:
 
@@ -215,8 +215,8 @@ Aby szybko wygenerować kontroler zasobów API, który nie zawiera metod `create
 
 Domyślnie wszystkie akcje kontrolera zasobów mają nazwę trasy; możesz jednak zastąpić te nazwy, przekazując tablicę `names` z opcjami:
 
-    Route::resource('photo', 'PhotoController', ['names' => [
-        'create' => 'photo.build'
+    Route::resource('photos', 'PhotoController', ['names' => [
+        'create' => 'photos.build'
     ]]);
 
 <a name="restful-naming-resource-route-parameters"></a>
