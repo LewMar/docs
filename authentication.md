@@ -181,7 +181,7 @@ Oczywiście, jeśli używasz [kontrolerów](/docs/{{version}}/controllers), moż
 
 Gdy oprogramowanie pośredniczące `auth` wykryje nieautoryzowanego użytkownika, zwróci odpowiedź JSON `401` lub, jeśli żądanie nie jest żądaniem AJAX, przekieruje użytkownika do `login` [nazwanej trasy](/docs/{{version}}/routing#named-routes).
 
-Możesz zmodyfikować to zachowanie, definiując funkcję `unauthenticated` w pliku `app/Exceptions/Hander.php`:
+Możesz zmodyfikować to zachowanie, definiując funkcję `unauthenticated` w pliku `app/Exceptions/Handler.php`:
 
     use Illuminate\Auth\AuthenticationException;
 
